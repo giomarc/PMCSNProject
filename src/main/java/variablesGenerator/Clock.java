@@ -6,7 +6,9 @@ public class Clock {
 
     private double arrival; /* Last arrival time*/
     private double current; /* Current time*/
-    private double next; /*Next-Event time*/
+    private double next; /*Next-event time*/
+
+
 
     private Clock(){
         this.current = 0.0;

@@ -6,8 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="PMCSN" />
         <module name="ProgettoPMCSN" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="PMCSN" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -5,6 +5,7 @@ import org.apache.commons.csv.CSVPrinter;
 import variablesGenerator.InitGenerator;
 
 import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,22 +27,21 @@ public class Simulation {
            double p = init.poisson(6.0, 1);
            pois.add(p);
        }
-        System.out.println(expo.toString());
-        System.out.println(pois.toString());
 
-       try{
-           BufferedWriter writer1 = Files.newBufferedWriter(Paths.get("./TESTPOISSON.csv"));
-           BufferedWriter writer2 = Files.newBufferedWriter(Paths.get("./TESTEXPO.csv"));
-
-           CSVPrinter csvPrinter1 = new CSVPrinter(writer1, CSVFormat.DEFAULT.withHeader("Arrival"));
-           CSVPrinter csvPrinter21 = new CSVPrinter(writer2, CSVFormat.DEFAULT.withHeader("Service"));
-           csvPrinter1.printRecord(pois);
-           csvPrinter21.printRecord(expo);
-           csvPrinter1.flush();
-           csvPrinter21.flush();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+        try {
+            BufferedWriter writerexpo = new BufferedWriter(new FileWriter("./expo.txt"));
+            BufferedWriter writerpois = new BufferedWriter(new FileWriter("./pois.txt"));
+            for (Double j : expo) {
+                writerexpo.write(j.toString() + " ");
+            }
+            for (Double j : pois) {
+                writerpois.write(j.toString() + " ");
+            }
+            writerexpo.flush();
+            writerpois.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }

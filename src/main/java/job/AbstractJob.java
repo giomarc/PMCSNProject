@@ -2,9 +2,10 @@ package job;
 
 public abstract class AbstractJob {
 
-    protected  double arrival;
-    protected double service;
-    protected double probabilityOfBeingClass;
+    private double arrival;
+    private double service;
+    private double completion;
+    private int servedBy;
 
 
     public AbstractJob(){

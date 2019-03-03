@@ -23,9 +23,11 @@ public class Simulation {
        ArrayList<Double> pois = new ArrayList<Double>();
        Integer i;
        for(i = 0; i<1000;i++) {
-           double e = init.exponential(0.25, 0);
+           double poisrate = 25;
+           double exporate = 0.25;
+           double e = init.exponential(exporate, 0);
            expo.add(e);
-           double p = init.poisson(6.0, 1);
+           double p = init.poisson(poisrate, 1);
            pois.add(p);
        }
 

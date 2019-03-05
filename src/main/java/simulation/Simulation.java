@@ -60,7 +60,7 @@ public class Simulation {
         Cloudlet c = new Cloudlet(3);
         double packetsloss = 0.0;
         double allpackets = 0.0;
-        for(int i = 0; i < 1000; i++){
+        for(int i = 0; i < 20; i++){
             if(!c.putEvent(new Event(1, Arrivals.getInstance().getArrival()))){
                 packetsloss++;
             }
@@ -68,6 +68,8 @@ public class Simulation {
         }
         System.out.println("ploss = " + packetsloss/allpackets);
         c.printStatus();
+        //IMPORTANTE, STAMPARE SOLO SE IL NUMERO DI EVENTI è BASSO
+        c.printEventList();
     }
 
 

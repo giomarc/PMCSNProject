@@ -100,7 +100,6 @@ public class Server {
     }
 
     public void setCurrentCompletionTime(Double currentCompletionTime) {
-        totalTimeBusy += currentCompletionTime;
         this.currentCompletionTime = currentCompletionTime;
     }
 

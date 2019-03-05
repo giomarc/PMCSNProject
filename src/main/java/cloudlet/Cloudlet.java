@@ -12,11 +12,14 @@ public class Cloudlet {
 
     //array dove vengono salvati i server
     private ArrayList<Server> serverList;
-    //lista degli eventi, al momento inutilizzata
-    private HashMap<Integer, Double> cloudletEventList;
+    //lista degli eventi. Notare come ogni volta che avviene una partenza o un arrivo l'evento viene inserito qui dentro
+    private ArrayList<Event> cloudletEventList;
     //numero di job di entrambe le classi, al momento non utilizzate
     private Integer n1; /*number of class 1 jobs*/
     private Integer n2; /*number of class 2 jobs*/
+
+    //mantiene un clock globale dalla creazione dei server alla fine
+    private double globalTime;
 
 
     /**
@@ -28,9 +31,10 @@ public class Cloudlet {
         this.serverList = new ArrayList<>();
         this.n1 = 0;
         this.n2 = 0;
-        this.cloudletEventList = new HashMap<>();
+        this.globalTime = 0.0;
+        this.cloudletEventList = new ArrayList<>();
         for (int i = 0; i<numServer; i++)
-            serverList.add(new Server(i, 2.0, 3.0));
+            serverList.add(new Server(i, 0.25, 0.25));
         for(Server i: serverList)
             System.out.println("Server " + i.getIdServer() + " OK");
     }
@@ -66,6 +70,7 @@ public class Cloudlet {
                 //System.out.println("entro qui dove id: " + id);
                 for (Server i : serverList) {
                     if (i.getIdServer() == id) {
+                        cloudletEventList.add(new Event(0, globalTime + i.getCurrentCompletionTime()));
                         i.setBusy(false);
                         i.setCurrentCompletionTime(0.0);
                         minTime=0;
@@ -89,18 +94,21 @@ public class Cloudlet {
                 i.setCurrentCompletionTime(i.getCurrentCompletionTime() - event.getTime());
             }
         }
+        globalTime += event.getTime();
         boolean rejected = true;
         for(Server i: serverList){
             if(!(i.isBusy())) {
                 i.setBusy(true);
                 i.setCurrentCompletionTime(event.getTime() + Services.getInstance().getServiceTime());
+                cloudletEventList.add(new Event(1, globalTime));
                 rejected = false;
                 break;
             }
         }
-        /*if (rejected) {
-            System.out.println("pacchetto rigettato");
-        }*/
+        if (rejected) {
+            //System.out.println("pacchetto rigettato");
+            cloudletEventList.add(new Event(-1, globalTime));
+        }
         //printStatus();
         return !rejected;
     }
@@ -110,6 +118,10 @@ public class Cloudlet {
         for(Server i: serverList)
             System.out.println("\t" + i.getIdServer() + "\t|\t" + i.getTotalTimeBusy() + "\t|\t" + i.getNumberCompletion1());
         System.out.println("\n");
+    }
+
+    public void printEventList(){
+        for (Event event : cloudletEventList) System.out.println(event.getType() + " | " + event.getTime());
     }
     /*
      * Return number of class 1 jobs

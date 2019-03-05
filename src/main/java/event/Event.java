@@ -1,8 +1,13 @@
 package event;
 
-public abstract class Event {
+public class Event {
     private int type;
     private double time;
+
+    public Event(int type, double time){
+        this.type = type;
+        this.time = time;
+    }
 
     public int getType() {
         return type;

@@ -24,6 +24,7 @@ public class Server {
         this.numberCompletion2 = 0;
         this.utilization = 0;
         this.avgNumberOfJobs = 0;
+        this.currentCompletionTime = 0.0;
         this.busy = false;
     }
 

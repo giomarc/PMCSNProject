@@ -1,7 +1,11 @@
 package simulation;
 
+import cloudlet.Cloudlet;
+import event.ArrivalEvent;
+import event.Event;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import variablesGenerator.Arrivals;
 import variablesGenerator.InitGenerator;
 
 import java.io.BufferedWriter;
@@ -17,7 +21,7 @@ public class Simulation {
 
     //classe che implementerà il metodo run per avviare la simulazione
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
        InitGenerator init =  InitGenerator.getInstance();
        ArrayList<Double> expo = new ArrayList<Double>();
        ArrayList<Double> pois = new ArrayList<Double>();
@@ -50,6 +54,21 @@ public class Simulation {
         }
 
 
+    }*/
+
+    public static void main(String[] args) {
+        Cloudlet c = new Cloudlet(3);
+        double packetsloss = 0.0;
+        double allpackets = 0.0;
+        for(int i = 0; i < 1000; i++){
+            if(!c.putEvent(new Event(1, Arrivals.getInstance().getArrival()))){
+                packetsloss++;
+            }
+            allpackets ++;
+        }
+        System.out.println("ploss = " + packetsloss/allpackets);
     }
+
+
 
 }

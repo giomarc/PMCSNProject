@@ -4,17 +4,25 @@ import config.SystemConfiguration;
 
 public class Arrivals {
 
-    private InitGenerator initGenerator;
+    private static InitGenerator init;
 
-    public Arrivals() {
-        initGenerator = InitGenerator.getInstance();
+    private static Arrivals instance = new Arrivals();
+
+    private Arrivals(){
+        init =  InitGenerator.getInstance();
+    }
+
+    public static Arrivals getInstance(){
+        return instance;
     }
 
 
     /**
      * Return arrival times
      */
-    public static void getArrival(){
+    public double getArrival(){
+        double exporate = 0.25;
+        return init.exponential(exporate, 0);
     }
 }
 

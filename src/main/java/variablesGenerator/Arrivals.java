@@ -21,7 +21,7 @@ public class Arrivals {
      * Return arrival times
      */
     public double getArrival(){
-        double exporate = 0.25;
+        double exporate = 0.1;
         return init.exponential(exporate, 0);
     }
 }

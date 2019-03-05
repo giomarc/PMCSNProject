@@ -15,6 +15,7 @@ public class Server {
     private double utilization;
     private int avgNumberOfJobs;
     private boolean busy;
+    private double totalTimeBusy;
 
     public Server(int idServer, double serviceRate1, double serviceRate2){
         this.idServer = idServer;
@@ -89,6 +90,8 @@ public class Server {
     }
 
     public void setBusy(boolean busy) {
+        if(!busy)
+            numberCompletion1++;
         this.busy = busy;
     }
 
@@ -97,6 +100,15 @@ public class Server {
     }
 
     public void setCurrentCompletionTime(Double currentCompletionTime) {
+        totalTimeBusy += currentCompletionTime;
         this.currentCompletionTime = currentCompletionTime;
+    }
+
+    public double getTotalTimeBusy() {
+        return totalTimeBusy;
+    }
+
+    public void setTotalTimeBusy(double totalTimeBusy) {
+        this.totalTimeBusy = totalTimeBusy;
     }
 }

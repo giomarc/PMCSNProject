@@ -60,7 +60,7 @@ public class Simulation {
         Cloudlet c = new Cloudlet(3);
         double packetsloss = 0.0;
         double allpackets = 0.0;
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < 1000; i++){
             if(!c.putEvent(new Event(1, Arrivals.getInstance().getArrival()))){
                 packetsloss++;
             }

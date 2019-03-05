@@ -56,8 +56,15 @@ public class Cloudlet {
                 //printStatus();
             }
         }
-        for(Server i: serverList)
-            i.setCurrentCompletionTime(i.getCurrentCompletionTime()-event.getTime());
+        for(Server i: serverList) {
+            if(!i.getCurrentCompletionTime().equals(0.0)) {
+                if (i.getCurrentCompletionTime() < event.getTime()) {
+                    System.out.println("ERROR");
+                    System.exit(-1);
+                }
+                i.setCurrentCompletionTime(i.getCurrentCompletionTime() - event.getTime());
+            }
+        }
         boolean rejected = true;
         for(Server i: serverList){
             if(!(i.isBusy())) {

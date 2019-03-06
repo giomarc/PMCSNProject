@@ -99,7 +99,7 @@ public class Cloudlet {
         for(Server i: serverList){
             if(!(i.isBusy())) {
                 i.setBusy(true);
-                i.setCurrentCompletionTime(event.getTime() + Services.getInstance().getServiceTime());
+                i.setCurrentCompletionTime(Services.getInstance().getServiceTime());
                 cloudletEventList.add(new Event(1, globalTime));
                 rejected = false;
                 break;
@@ -120,28 +120,8 @@ public class Cloudlet {
         System.out.println("\n");
     }
 
-    public void printEventList(){
-        for (Event event : cloudletEventList) System.out.println(event.getType() + " | " + event.getTime());
+    public ArrayList<Event> getCloudletEventList(){
+        return this.cloudletEventList;
     }
-    /*
-     * Return number of class 1 jobs
-     */
-    public Integer getN1(){
-        return n1;
-    }
-
-    /*
-     * Return number of class 2 jobs
-     */
-    public Integer getN2(){
-        return n2;
-    }
-
-
-
-
-
-
-
 
 }

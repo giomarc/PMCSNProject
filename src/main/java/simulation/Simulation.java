@@ -60,7 +60,7 @@ public class Simulation {
         Cloudlet c = new Cloudlet(3);
         double packetsloss = 0.0;
         double allpackets = 0.0;
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < 2000000; i++){
             if(!c.putEvent(new Event(1, Arrivals.getInstance().getArrival()))){
                 packetsloss++;
             }
@@ -69,7 +69,23 @@ public class Simulation {
         System.out.println("ploss = " + packetsloss/allpackets);
         c.printStatus();
         //IMPORTANTE, STAMPARE SOLO SE IL NUMERO DI EVENTI è BASSO
-        c.printEventList();
+        //c.printEventList();
+        //saveEventsOnCSV(c);
+    }
+
+    private static void saveEventsOnCSV(Cloudlet c){
+        File file1 = new File("./events.txt");
+        if(file1.delete()) System.out.println("files deleted");
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./events.txt"));
+            for(Event e : c.getCloudletEventList()) {
+                if(e.getType()==1)
+                    writer.write(String.valueOf(e.getTime()) + ", ");
+            }
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

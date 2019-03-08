@@ -1,5 +1,7 @@
 package server;
 
+import variablesGenerator.Services;
+
 /**
  * Author : Simone D'Aniello
  * Date :  03-Mar-19.
@@ -8,8 +10,6 @@ public class Server {
 
     private int idServer;
     private Double currentCompletionTime;
-    private double serviceRate1;
-    private double serviceRate2;
     private int numberCompletion1;
     private int numberCompletion2;
     private double utilization;
@@ -17,10 +17,8 @@ public class Server {
     private boolean busy;
     private double totalTimeBusy;
 
-    public Server(int idServer, double serviceRate1, double serviceRate2){
+    public Server(int idServer){
         this.idServer = idServer;
-        this.serviceRate1 = serviceRate1;
-        this.serviceRate2 = serviceRate2;
         this.numberCompletion1 = 0;
         this.numberCompletion2 = 0;
         this.utilization = 0;
@@ -35,22 +33,6 @@ public class Server {
 
     public void setIdServer(int idServer) {
         this.idServer = idServer;
-    }
-
-    public double getServiceRate1() {
-        return serviceRate1;
-    }
-
-    public void setServiceRate1(double serviceRate1) {
-        this.serviceRate1 = serviceRate1;
-    }
-
-    public double getServiceRate2() {
-        return serviceRate2;
-    }
-
-    public void setServiceRate2(double serviceRate2) {
-        this.serviceRate2 = serviceRate2;
     }
 
     public int getNumberCompletion1() {
@@ -99,8 +81,21 @@ public class Server {
         return currentCompletionTime;
     }
 
-    public void setCurrentCompletionTime(Double currentCompletionTime) {
-        this.currentCompletionTime = currentCompletionTime;
+    public void setCurrentCompletionTime(int eventType) {
+        if(eventType == 1)
+            this.currentCompletionTime = Services.getInstance().getServiceTime(1);
+        else if(eventType == 2)
+            this.currentCompletionTime = Services.getInstance().getServiceTime(2);
+        else if(eventType == -1)
+            this.currentCompletionTime = 0.0;
+        else{
+            System.out.println("event not recognized");
+            System.exit(-1);
+        }
+    }
+
+    public void decreaseTime(double time){
+        this.currentCompletionTime -= time;
     }
 
     public double getTotalTimeBusy() {

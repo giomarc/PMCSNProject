@@ -5,8 +5,6 @@ import server.Server;
 import variablesGenerator.Services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class Cloudlet {
 
@@ -34,7 +32,7 @@ public class Cloudlet {
         this.globalTime = 0.0;
         this.cloudletEventList = new ArrayList<>();
         for (int i = 0; i<numServer; i++)
-            serverList.add(new Server(i, 0.25, 0.25));
+            serverList.add(new Server(i));
         for(Server i: serverList)
             System.out.println("Server " + i.getIdServer() + " OK");
     }
@@ -72,7 +70,7 @@ public class Cloudlet {
                     if (i.getIdServer() == id) {
                         cloudletEventList.add(new Event(0, globalTime + i.getCurrentCompletionTime()));
                         i.setBusy(false);
-                        i.setCurrentCompletionTime(0.0);
+                        i.setCurrentCompletionTime(-1);
                         minTime=0;
                         id=-1;
                         break;
@@ -91,7 +89,7 @@ public class Cloudlet {
                     System.out.println("ERROR");
                     System.exit(-1);
                 }
-                i.setCurrentCompletionTime(i.getCurrentCompletionTime() - event.getTime());
+                i.decreaseTime(event.getTime());
             }
         }
         globalTime += event.getTime();
@@ -99,7 +97,7 @@ public class Cloudlet {
         for(Server i: serverList){
             if(!(i.isBusy())) {
                 i.setBusy(true);
-                i.setCurrentCompletionTime(Services.getInstance().getServiceTime());
+                i.setCurrentCompletionTime(event.getType());
                 cloudletEventList.add(new Event(1, globalTime));
                 rejected = false;
                 break;

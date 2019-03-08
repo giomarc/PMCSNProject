@@ -57,11 +57,12 @@ public class Simulation {
     }*/
 
     public static void main(String[] args) {
+        int type = 1;
         Cloudlet c = new Cloudlet(3);
         double packetsloss = 0.0;
         double allpackets = 0.0;
         for(int i = 0; i < 2000000; i++){
-            if(!c.putEvent(new Event(1, Arrivals.getInstance().getArrival()))){
+            if(!c.putEvent(new Event(type, Arrivals.getInstance().getArrival(type)))){
                 packetsloss++;
             }
             allpackets ++;

@@ -63,11 +63,13 @@ public class Simulation {
         Cloudlet c = new Cloudlet(3);
         double packetsloss = 0.0;
         double allpackets = 0.0;
-        for(int i = 0; i < 2000000; i++){
-            int job_class = Arrivals.getInstance().getComingJobClass();
+        for(int i = 0; i < 20000000; i++){
+            double arrival_time = Arrivals.getInstance().getArrival();
+            int job_class = Arrivals.getInstance().determineJobClass();
             Job job = new Job(job_class);
+
             //if(!c.putEvent(new Event(job_class, Arrivals.getInstance().getArrival(job.getJobclass())))){
-            if(!c.putEvent(new Event(job,Arrivals.getInstance().getArrival(job_class)))){
+            if(!c.putEvent(new Event(job,arrival_time))){
                 packetsloss++;
             }
             allpackets ++;

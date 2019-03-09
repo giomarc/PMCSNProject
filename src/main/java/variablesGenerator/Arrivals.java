@@ -40,7 +40,7 @@ public class Arrivals {
     }*/
 
 
-    public double getArrival(int job_class){
+    /*public double getArrival(int job_class){
         double arrival_rate = 0.0;
         if(job_class == 1)
             arrival_rate = SystemConfiguration.ARRIVAL_RATE_1;
@@ -53,10 +53,34 @@ public class Arrivals {
             System.exit(-1);
         }
         return init.getInstance().exponential(arrival_rate, 0);
+    }*/
+
+    public double getTotalRate(){
+        return SystemConfiguration.ARRIVAL_RATE_1 + SystemConfiguration.ARRIVAL_RATE_2;
     }
 
 
-    public int getComingJobClass(){
+
+    public double getArrival(){
+        double total_rate = getTotalRate();
+        return init.getInstance().exponential(total_rate, 0);
+    }
+
+
+    public int determineJobClass(){
+        double p1 = SystemConfiguration.ARRIVAL_RATE_1/getTotalRate();
+        double p = init.getInstance().uniform();
+
+        if(p <= p1)
+            return 1;
+        else
+            return 2;
+    }
+
+
+
+
+    /*public int getComingJobClass(){
 
         double rate_class1 = SystemConfiguration.ARRIVAL_RATE_1;
         double rate_class2 = SystemConfiguration.ARRIVAL_RATE_2;
@@ -70,7 +94,7 @@ public class Arrivals {
             return 1;
         else
             return 2;
-    }
+    }*/
 
 
 

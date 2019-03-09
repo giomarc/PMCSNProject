@@ -1,11 +1,11 @@
 package simulation;
 
-
 import cloud.Cloud;
 import cloudlet.Cloudlet_NEW;
 import config.SystemConfiguration;
 import event.Event;
 import job.Job;
+import system.CSVlogger;
 import system.PerformanceLogger;
 import system.Printer;
 import variablesGenerator.Arrivals;
@@ -24,6 +24,8 @@ public class Simulation {
     public static void run(){
         SystemConfiguration.getConfigParams();
 
+        CSVlogger.getInstance().createFileIfNotExists("Response_time.csv",
+                "Trhoughput.csv", "AVG_jobs.csv");
         if(SystemConfiguration.VERBOSE) {
             printInitialConfiguration();
             PerformanceLogger.getInstance().startTest();

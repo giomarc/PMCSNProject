@@ -9,34 +9,11 @@ import java.util.Properties;
 
 public class Arrivals {
 
-    private static InitGenerator init;
-    private double arrivalRate1;
-    private double arrivalRate2;
+    private static InitGenerator init  = null;
 
     private static Arrivals instance = new Arrivals();
 
-    private Arrivals(){
-        Properties prop = new Properties();
-        InputStream input = null;
-        try {
-            input = new FileInputStream("src/main/resources/config.properties");
-            prop.load(input);
-            arrivalRate1 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_1"));
-            arrivalRate2 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_2"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        init =  InitGenerator.getInstance();
-    }
+    private Arrivals(){}
 
     public static Arrivals getInstance(){
         return instance;
@@ -46,17 +23,56 @@ public class Arrivals {
     /**
      * Return arrival times
      */
-    public double getArrival(int i){
-        double exporate = 0;
-        if(i == 1)
-            exporate = arrivalRate1;
-        else if (i == 2)
-            exporate = arrivalRate2;
+    /*public double getArrival(int job_class){
+        double arrival_rate = 0.0;
+        //int job_class = getComingJobClass();
+        if(job_class == 1)
+            arrival_rate = SystemConfiguration.ARRIVAL_RATE_1;
+
+        else if (job_class == 2)
+            arrival_rate = SystemConfiguration.ARRIVAL_RATE_2;
+
         else{
             System.out.println("packet not recognized");
             System.exit(-1);
         }
-        return init.exponential(exporate, 0);
+        return init.getInstance().exponential(arrival_rate, 0);
+    }*/
+
+
+    public double getArrival(int job_class){
+        double arrival_rate = 0.0;
+        if(job_class == 1)
+            arrival_rate = SystemConfiguration.ARRIVAL_RATE_1;
+
+        else if (job_class == 2)
+            arrival_rate = SystemConfiguration.ARRIVAL_RATE_2;
+
+        else{
+            System.out.println("packet not recognized");
+            System.exit(-1);
+        }
+        return init.getInstance().exponential(arrival_rate, 0);
     }
+
+
+    public int getComingJobClass(){
+
+        double rate_class1 = SystemConfiguration.ARRIVAL_RATE_1;
+        double rate_class2 = SystemConfiguration.ARRIVAL_RATE_2;
+        double total_rate = rate_class1 + rate_class2;
+        double prob_class1 = (rate_class1/total_rate);
+        double prob_class2 = (rate_class2/total_rate);
+        //new arrival is of class 2?
+        double p = init.getInstance().uniform();
+        if(p <= prob_class1)
+            //is a class 1 job
+            return 1;
+        else
+            return 2;
+    }
+
+
+
 }
 

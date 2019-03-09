@@ -8,16 +8,14 @@ import java.util.ArrayList;
 
 public class Cloudlet {
 
-    //array dove vengono salvati i server
-    private ArrayList<Server> serverList;
-    //lista degli eventi. Notare come ogni volta che avviene una partenza o un arrivo l'evento viene inserito qui dentro
-    private ArrayList<Event> cloudletEventList;
-    //numero di job di entrambe le classi, al momento non utilizzate
-    private Integer n1; /*number of class 1 jobs*/
-    private Integer n2; /*number of class 2 jobs*/
 
-    //mantiene un clock globale dalla creazione dei server alla fine
-    private double globalTime;
+    private ArrayList<Server> serverList;        /*array containing servers composing cloudlet*/
+    private ArrayList<Event> cloudletEventList;  /*cloudlet event list: saves any kind of new event that occurrs*/
+    private Integer n1;                          /*number of class 1 jobs*/
+    private Integer n2;                          /*number of class 2 jobs*/
+    private double globalTime;                   /*global clock, initializated since servers creation*/
+    //private double minTime;
+    //private double id;
 
 
     /**
@@ -43,42 +41,47 @@ public class Cloudlet {
      * @return
      */
     public boolean putEvent(Event event){
-        /*booleano che serve per il ciclo. Durante un ciclo isOk è uguale a false se devono essere
-        liberati ancora dei server. Supponiamo di avere un arrivo al tempo t1. isOK è false se ci
-        sono dei completamenti con t2 < t1 (ovvero non è ancora giunto quel momento). Una volta che
-        isOk è a true, allora l'arrivo può essere effettivamente processato*/
-        boolean isOk = false;
-        //id e tempo minimo tra i prossimi completamenti dei server
-        double minTime = 0;
+        /*
+            serversAreNotBusy: durante un ciclo serversAreNotBusy è:
+            - false se devono essere liberati ancora dei server: ad esempio, supponiamo di avere un arrivo al tempo t1, allora serversAreNotBusy è false se ci
+            sono dei completamenti con t2 < t1 (ovvero non è ancora giunto quel momento).
+            - true se l'arrivo può essere effettivamente processato
+        */
+        boolean serversAreNotBusy = false;
+        double minTime = 0.0;
         int id = -1;
+
         //prendo il server che ha tempo di completamento minimo (se esiste)
-        while(!isOk){
+        while(!serversAreNotBusy){
+
             for(Server i: serverList){
                 if(!i.getCurrentCompletionTime().equals(0.0) && (i.getCurrentCompletionTime() < minTime || minTime == 0)) {
                     minTime = i.getCurrentCompletionTime();
                     id = i.getIdServer();
                 }
             }
+
             //se sono tutti vuoti o il completamento è successivo all'arrivo, esco
             if(id == -1 || minTime > event.getTime()) {
-                isOk = true;
+                serversAreNotBusy = true;
             }
+
             //altrimenti completo il job e svuoto il server
             else {
-                //System.out.println("entro qui dove id: " + id);
                 for (Server i : serverList) {
                     if (i.getIdServer() == id) {
-                        cloudletEventList.add(new Event(0, globalTime + i.getCurrentCompletionTime()));
+                        //cloudletEventList.add(new Event(0, globalTime + i.getCurrentCompletionTime()));
+                        cloudletEventList.add(new Event(event.getType(), globalTime + i.getCurrentCompletionTime()));
                         i.setBusy(false);
                         i.setCurrentCompletionTime(-1);
-                        minTime=0;
-                        id=-1;
+                        minTime = 0;
+                        id = -1;
                         break;
                     }
                 }
-                //printStatus();
             }
         }
+
         /*vengono aggiornati i tempi di completamento di tutti i server con completamento successivo all'arrivo
         * ad esempio se un server ha completamento 10 e l'arrivo è 8, dopo questo ciclo for il tempo di completamento
         * rimasto è pari a 2 (ed è una modifica importantissima al fine del prossimo ciclo)
@@ -98,16 +101,16 @@ public class Cloudlet {
             if(!(i.isBusy())) {
                 i.setBusy(true);
                 i.setCurrentCompletionTime(event.getType());
-                cloudletEventList.add(new Event(1, globalTime));
+                cloudletEventList.add(new Event(event.getType(), globalTime));
                 rejected = false;
                 break;
             }
         }
         if (rejected) {
-            //System.out.println("pacchetto rigettato");
+            //System.out.println("pacchetto rifiutato");
             cloudletEventList.add(new Event(-1, globalTime));
         }
-        //printStatus();
+        //System.out.println("pacchetto accettato");
         return !rejected;
     }
 
@@ -121,5 +124,9 @@ public class Cloudlet {
     public ArrayList<Event> getCloudletEventList(){
         return this.cloudletEventList;
     }
+
+
+
+
 
 }

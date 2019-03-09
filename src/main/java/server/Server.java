@@ -83,9 +83,9 @@ public class Server {
 
     public void setCurrentCompletionTime(int eventType) {
         if(eventType == 1)
-            this.currentCompletionTime = Services.getInstance().getServiceTime(1);
+            this.currentCompletionTime = Services.getInstance().getCloudletServiceTime(1);
         else if(eventType == 2)
-            this.currentCompletionTime = Services.getInstance().getServiceTime(2);
+            this.currentCompletionTime = Services.getInstance().getCloudletServiceTime(2);
         else if(eventType == -1)
             this.currentCompletionTime = 0.0;
         else{
@@ -102,7 +102,8 @@ public class Server {
         return totalTimeBusy;
     }
 
-    public void setTotalTimeBusy(double totalTimeBusy) {
-        this.totalTimeBusy = totalTimeBusy;
+    public void setTotalTimeBusy(double partialBusyTime) {
+
+        this.totalTimeBusy += partialBusyTime;
     }
 }

@@ -29,6 +29,7 @@ public class SystemConfiguration {
             prop.load(inputStream);
             SETUP_TIME = Double.parseDouble(prop.getProperty("SETUP_TIME"));
             ARRIVAL_RATE_1 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_1"));
+            System.out.println("Arrival rate 1 " + ARRIVAL_RATE_1);
             ARRIVAL_RATE_2 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_2"));
             CLOUDLET_M1 = Double.parseDouble(prop.getProperty("CLOUDLET_M1"));
             CLOUDLET_M2 = Double.parseDouble(prop.getProperty("CLOUDLET_M2"));
@@ -36,7 +37,7 @@ public class SystemConfiguration {
             CLOUD_M2 = Double.parseDouble(prop.getProperty("CLOUD_M2"));
             START = Double.parseDouble(prop.getProperty("START"));
             STOP = Double.parseDouble(prop.getProperty("STOP"));
-            S = Integer.parseInt(prop.getProperty("S"));
+            //S = Integer.parseInt(prop.getProperty("S"));
             N = Integer.parseInt(prop.getProperty("N"));
             //BATCH_SIZE = Integer.parseInt(prop.getProperty("BATCH_SIZE"));
             //NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));

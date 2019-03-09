@@ -1,8 +1,10 @@
 package simulation;
 
 import cloudlet.Cloudlet;
+import config.SystemConfiguration;
 import event.ArrivalEvent;
 import event.Event;
+import job.Job;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import variablesGenerator.Arrivals;
@@ -57,12 +59,15 @@ public class Simulation {
     }*/
 
     public static void main(String[] args) {
-        int type = 1;
+        SystemConfiguration.getConfigParams();
         Cloudlet c = new Cloudlet(3);
         double packetsloss = 0.0;
         double allpackets = 0.0;
         for(int i = 0; i < 2000000; i++){
-            if(!c.putEvent(new Event(type, Arrivals.getInstance().getArrival(type)))){
+            int job_class = Arrivals.getInstance().getComingJobClass();
+            Job job = new Job(job_class);
+            //if(!c.putEvent(new Event(job_class, Arrivals.getInstance().getArrival(job.getJobclass())))){
+            if(!c.putEvent(new Event(job,Arrivals.getInstance().getArrival(job_class)))){
                 packetsloss++;
             }
             allpackets ++;
@@ -80,7 +85,8 @@ public class Simulation {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("./events.txt"));
             for(Event e : c.getCloudletEventList()) {
-                if(e.getType()==1)
+                //if(e.getType()==1)
+                if(e.getJobEvent().getJobclass()==1)
                     writer.write(String.valueOf(e.getTime()) + ", ");
             }
             writer.flush();

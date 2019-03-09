@@ -42,9 +42,9 @@ public class InitGenerator {
         return this.rvgs.exponential(1/rate);
     }
 
-    public double poisson( double rate, int stream){
-        selectStream(stream);
-        return this.rvgs.poisson(rate);
+    public double uniform(){
+        selectStream(15);
+        return this.rvgs.uniform(0.0,1.0);
     }
 
 

@@ -21,12 +21,15 @@ public class SystemConfiguration {
     //public static int NUM_BATCH = 64;
     //public static boolean TEST_S = false;
     public static long SEED = 0;
+    public static long ITERATIONS = 0;
 
     public static void getConfigParams() {
         try {
+
             Properties prop = new Properties();
             FileInputStream inputStream = new FileInputStream(FILENAME);
             prop.load(inputStream);
+
             SETUP_TIME = Double.parseDouble(prop.getProperty("SETUP_TIME"));
             ARRIVAL_RATE_1 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_1"));
             ARRIVAL_RATE_2 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_2"));
@@ -42,8 +45,11 @@ public class SystemConfiguration {
             //NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));
             //TEST_S = Boolean.valueOf(prop.getProperty("TEST_S"));
             SEED = Long.parseLong(prop.getProperty("SEED"));
+            ITERATIONS = Long.parseLong((prop.getProperty("ITERATIONS")));
+
         }
         catch (Exception e) {
+
             e.printStackTrace();
         }
     }

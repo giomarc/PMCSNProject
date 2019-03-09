@@ -32,7 +32,7 @@ public class PerformanceLogger implements Runnable {
         son.start();
     }
 
-    public void endTest(){
+    public void endTest(double simulationTime){
         stop = true;
         end = Instant.now();
         duration = Duration.between(start, end);
@@ -40,9 +40,15 @@ public class PerformanceLogger implements Runnable {
         long minutes = duration.toMinutes();
         long seconds = duration.getSeconds();
         long millis = duration.toMillis();
-        System.out.println("Simulation time");
+
+        long s_hours = (long) Math.floor(simulationTime/3600);
+        long s_minutes = (long) Math.floor(simulationTime/60);
+        long s_seconds = (long) Math.floor(simulationTime);
+        System.out.println("Real time");
         System.out.println(hours + " hours, " + (minutes - 60*hours) + " min, " + (seconds - 60*minutes) + " seconds, " + (millis - 1000*seconds) + " millis");
         System.out.println("AVG RAM usage:  " + (calculateAverage(memoryUsages)) + " MB");
+        System.out.println("Simulation time");
+        System.out.println(s_hours + " hours, " + (s_minutes - 60*s_hours) + " min, " + (s_seconds - 60*s_minutes) + " seconds");
     }
 
 

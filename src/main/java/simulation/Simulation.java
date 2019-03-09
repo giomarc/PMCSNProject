@@ -1,13 +1,13 @@
 package simulation;
 
-import cloudlet.Cloudlet_DEPRECATED;
+
+import cloud.Cloud;
 import cloudlet.Cloudlet_NEW;
 import config.SystemConfiguration;
 import event.Event;
 import job.Job;
 import system.PerformanceLogger;
 import variablesGenerator.Arrivals;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -16,69 +16,43 @@ import java.io.IOException;
 
 public class Simulation {
 
-    //classe che implementerà il metodo run per avviare la simulazione
-
-    /*public static void main(String[] args) {
-       InitGenerator init =  InitGenerator.getInstance();
-       ArrayList<Double> expo = new ArrayList<Double>();
-       ArrayList<Double> pois = new ArrayList<Double>();
-       Integer i;
-       for(i = 0; i<1000;i++) {
-           double poisrate = 25;
-           double exporate = 0.25;
-           double e = init.exponential(exporate, 0);
-           expo.add(e);
-           double p = init.poisson(poisrate, 1);
-           pois.add(p);
-       }
-
-        try {
-            File file1 = new File("./expo.txt");
-            File file2 = new File("./pois.txt");
-            if(file1.delete() && file2.delete()) System.out.println("files deleted");
-            BufferedWriter writerexpo = new BufferedWriter(new FileWriter("./expo.txt"));
-            BufferedWriter writerpois = new BufferedWriter(new FileWriter("./pois.txt"));
-            for (Double j : expo) {
-                writerexpo.write(j.toString() + " ");
-            }
-            for (Double j : pois) {
-                writerpois.write(j.toString() + " ");
-            }
-            writerexpo.flush();
-            writerpois.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }*/
-
     public static void main(String[] args) {
+            run();
+    }
+
+
+
+    public static void run(){
         PerformanceLogger.getInstance().startTest();
         SystemConfiguration.getConfigParams();
         Cloudlet_NEW c = new Cloudlet_NEW(3);
-        double packetsloss = 0.0;
-        double allpackets = 0.0;
-        for(int i = 0; i < 5000000; i++){
+        Cloud cloud = new Cloud();
+        StatisticsGenerator statistics = new StatisticsGenerator();
+
+        for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
+
             double arrival_time = Arrivals.getInstance().getArrival();
             int job_class = Arrivals.getInstance().determineJobClass();
             Job job = new Job(job_class);
-
-            //if(!c.putEvent(new Event(job_class, Arrivals.getInstance().getArrival(job.getJobclass())))){
-            if(!c.putEvent(new Event(job,arrival_time))){
-                packetsloss++;
+            Event e = new Event(job,arrival_time);
+            if(!c.putEvent(e)){
+                statistics.increasePacketLoss();
+                cloud.processArrivals(e);
             }
-            allpackets ++;
+            statistics.increaseAllPackets();
+            if(i%1000 == 0)
+                System.out.println(i);
         }
-        System.out.println("ploss = " + packetsloss/allpackets);
+        System.out.println("ploss = " + statistics.calculatePLoss());
+        System.out.println("throughput = " + statistics.getCloudletThroughput());
+        System.out.println("Second thoughput = " + statistics.getSecondThroughput(c));
         c.printStatus();
-        PerformanceLogger.getInstance().endTest();
-        //IMPORTANTE, STAMPARE SOLO SE IL NUMERO DI EVENTI è BASSO
-        //c.printEventList();
-        //saveEventsOnCSV(c);
+        PerformanceLogger.getInstance().endTest(c.getSimulationTime());
     }
 
-    private static void saveEventsOnCSV(Cloudlet_DEPRECATED c){
+
+
+    private static void saveEventsOnCSV(Cloudlet_NEW c){
         File file1 = new File("./events.txt");
         if(file1.delete()) System.out.println("files deleted");
         try {
@@ -93,4 +67,7 @@ public class Simulation {
             e.printStackTrace();
         }
     }
+
+
+
 }

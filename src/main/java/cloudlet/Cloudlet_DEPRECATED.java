@@ -126,7 +126,9 @@ public class Cloudlet_DEPRECATED {
     }
 
 
-
+    public double getGlobalTime(){
+        return this.globalTime;
+    }
 
 
 }

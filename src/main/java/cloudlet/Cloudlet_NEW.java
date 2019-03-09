@@ -156,7 +156,9 @@ public class Cloudlet_NEW {
     }
 
 
-
+    public double getSimulationTime(){
+        return globalTime;
+    }
 
 
 }

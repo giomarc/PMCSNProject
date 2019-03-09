@@ -1,6 +1,7 @@
 package variablesGenerator;
 
 import config.SystemConfiguration;
+import server.Server;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,15 +11,17 @@ import java.util.Properties;
 
 public class Services {
 
-    private static InitGenerator init;
+    private static InitGenerator init = null;
+    private static Services instance = null;
 
-    private static Services instance = new Services();
 
-    private Services(){}
 
     public static Services getInstance(){
+        if(instance == null)
+            instance = new Services();
         return instance;
     }
+
 
     /**
      * Return cloudlet service times

@@ -3,7 +3,7 @@ package event;
 import job.Job;
 
 public class Event {
-    private int type; //0 arrival, 1 completion cloudlet, 2 completion cloud
+    private int type; //0 arrival, 1 completion cloudlet, 2 completion cloud?
     private double time;
     private Job jobEvent;
 

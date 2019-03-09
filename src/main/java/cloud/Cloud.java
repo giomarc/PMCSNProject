@@ -1,14 +1,9 @@
 package cloud;
 
 import event.Event;
-import variablesGenerator.Arrivals;
 import variablesGenerator.Services;
-
-import javax.swing.text.html.HTMLDocument;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.TreeSet;
 
 public class Cloud {
 
@@ -34,9 +29,12 @@ public class Cloud {
 
         int removed = 0;
         putNewArrival(event.getTime());
-        for(Double s : remainingComplitionTime) {
-            s -= event.getTime();
-            if (s < 0) {
+
+        for(int i = 0; i < remainingComplitionTime.size(); i++){
+
+            Double new_value = remainingComplitionTime.get(i) - event.getTime();
+            remainingComplitionTime.set(i,new_value );
+            if (remainingComplitionTime.get(i) < 0) {
                 removed++;
                 increaseComplitions();
             }

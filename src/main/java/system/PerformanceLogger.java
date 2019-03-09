@@ -12,7 +12,6 @@ public class PerformanceLogger implements Runnable {
     private Instant end;
     private Duration duration;
     private static ArrayList<Long> memoryUsages;
-    private long startMemory;
     private static boolean stop;
     private Thread son;
 
@@ -41,14 +40,17 @@ public class PerformanceLogger implements Runnable {
         long seconds = duration.getSeconds();
         long millis = duration.toMillis();
 
+        long s_days = (long) Math.floor(simulationTime/(3600 * 24));
         long s_hours = (long) Math.floor(simulationTime/3600);
         long s_minutes = (long) Math.floor(simulationTime/60);
         long s_seconds = (long) Math.floor(simulationTime);
-        System.out.println("Real time");
+        Printer.getInstance().print("\nTIME", "yellow");
+        Printer.getInstance().print("Real time", "green");
         System.out.println(hours + " hours, " + (minutes - 60*hours) + " min, " + (seconds - 60*minutes) + " seconds, " + (millis - 1000*seconds) + " millis");
+        Printer.getInstance().print("Simulation time", "green");
+        System.out.println(s_days + " days, " + (s_hours - 24*s_days)+ " hours, " + (s_minutes - 60*s_hours) + " min, " + (s_seconds - 60*s_minutes) + " seconds");
+        Printer.getInstance().print("\nSYSTEM", "yellow");
         System.out.println("AVG RAM usage:  " + (calculateAverage(memoryUsages)) + " MB");
-        System.out.println("Simulation time");
-        System.out.println(s_hours + " hours, " + (s_minutes - 60*s_hours) + " min, " + (s_seconds - 60*s_minutes) + " seconds");
     }
 
 

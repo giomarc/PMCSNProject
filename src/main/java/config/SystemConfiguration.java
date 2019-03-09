@@ -17,6 +17,7 @@ public class SystemConfiguration {
     public static double CLOUD_M2 = 0.0;
     public static double START = 0.0;
     public static double STOP = 0.0;
+    public static boolean VERBOSE = true;
     //public static int BATCH_SIZE = 256;
     //public static int NUM_BATCH = 64;
     //public static boolean TEST_S = false;
@@ -46,6 +47,7 @@ public class SystemConfiguration {
             //TEST_S = Boolean.valueOf(prop.getProperty("TEST_S"));
             SEED = Long.parseLong(prop.getProperty("SEED"));
             ITERATIONS = Long.parseLong((prop.getProperty("ITERATIONS")));
+            VERBOSE = Boolean.parseBoolean(prop.getProperty("VERBOSE"));
 
         }
         catch (Exception e) {

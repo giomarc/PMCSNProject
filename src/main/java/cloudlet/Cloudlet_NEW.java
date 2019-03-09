@@ -60,7 +60,7 @@ public class Cloudlet_NEW {
     private void initServers(int numServer){
         for (int i = 0; i<numServer; i++) {
             serverList.add(new Server(i));
-            System.out.println("Server " + serverList.get(i).getIdServer() + " OK");
+            //System.out.println("Server " + serverList.get(i).getIdServer() + " OK");
         }
     }
 

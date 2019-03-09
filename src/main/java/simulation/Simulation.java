@@ -1,7 +1,7 @@
 package simulation;
 
 import cloud.Cloud;
-import cloudlet.Cloudlet_NEW;
+import cloudlet.Cloudlet;
 import system.SystemConfiguration;
 import event.Event;
 import job.Job;
@@ -30,7 +30,7 @@ public class Simulation {
             printInitialConfiguration();
             PerformanceLogger.getInstance().startTest();
         }
-        Cloudlet_NEW c = new Cloudlet_NEW(SystemConfiguration.N);
+        Cloudlet c = new Cloudlet(SystemConfiguration.N);
         Cloud cloud = new Cloud();
         StatisticsGenerator statistics = new StatisticsGenerator();
 
@@ -51,7 +51,7 @@ public class Simulation {
 
 
 
-    private static void saveEventsOnCSV(Cloudlet_NEW c){
+    private static void saveEventsOnCSV(Cloudlet c){
         File file1 = new File("./events.txt");
         if(file1.delete()) System.out.println("files deleted");
         try {
@@ -84,7 +84,7 @@ public class Simulation {
         System.out.println(SystemConfiguration.SEED);
     }
 
-    private static void printFinalResults(StatisticsGenerator statistics, Cloudlet_NEW c){
+    private static void printFinalResults(StatisticsGenerator statistics, Cloudlet c){
         Printer.getInstance().print("\nP_LOSS", "yellow");
         System.out.println(statistics.calculatePLoss());
         if(SystemConfiguration.VERBOSE) {

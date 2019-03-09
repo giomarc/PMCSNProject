@@ -1,7 +1,6 @@
 package simulation;
 
-import cloud.Cloud;
-import cloudlet.Cloudlet_NEW;
+import cloudlet.Cloudlet;
 import variablesGenerator.Arrivals;
 
 public class StatisticsGenerator {
@@ -41,9 +40,9 @@ public class StatisticsGenerator {
         return X;
     }
 
-    public double getSecondThroughput(Cloudlet_NEW cloudlet_new){
+    public double getSecondThroughput(Cloudlet cloudlet){
 
-        double X = (allpackets - packetloss)/ cloudlet_new.getSimulationTime();
+        double X = (allpackets - packetloss)/ cloudlet.getSimulationTime();
         return X;
     }
 

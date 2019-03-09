@@ -2,7 +2,7 @@ package cloudlet;
 
 public class CloudletController {
 
-    Cloudlet_DEPRECATED cloudlet;
+    Cloudlet cloudlet;
 
     /**
      * Algorithm 1

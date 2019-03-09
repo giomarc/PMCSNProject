@@ -4,7 +4,7 @@ import event.Event;
 
 import java.util.ArrayList;
 
-public class Cloudlet_NEW {
+public class Cloudlet {
 
 
     private ArrayList<Server> serverList;        /*array containing servers composing cloudlet*/
@@ -19,7 +19,7 @@ public class Cloudlet_NEW {
      * Prende in input il numero di server per crearli ed inserirli nella lista del cloudlet
      * @param numServer
      */
-    public Cloudlet_NEW(int numServer){
+    public Cloudlet(int numServer){
         this.serverList = new ArrayList<>();
         this.globalTime = 0.0;
         this.cloudletEventList = new ArrayList<>();

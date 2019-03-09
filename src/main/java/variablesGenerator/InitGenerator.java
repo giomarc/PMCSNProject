@@ -1,8 +1,8 @@
 package variablesGenerator;
 
-import config.SystemConfiguration;
-import library.Rvgs;
-import library.Rngs;
+import system.SystemConfiguration;
+import variablesGenerator.library.Rvgs;
+import variablesGenerator.library.Rngs;
 
 public class InitGenerator {
 

@@ -1,11 +1,6 @@
 package variablesGenerator;
 
-import config.SystemConfiguration;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import system.SystemConfiguration;
 
 public class Arrivals {
 

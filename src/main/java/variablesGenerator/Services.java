@@ -1,13 +1,6 @@
 package variablesGenerator;
 
-import config.SystemConfiguration;
-import server.Server;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import system.SystemConfiguration;
 
 public class Services {
 

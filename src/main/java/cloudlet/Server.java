@@ -1,6 +1,8 @@
-package server;
+package cloudlet;
 
 import variablesGenerator.Services;
+
+import java.util.ArrayList;
 
 /**
  * Author : Simone D'Aniello
@@ -11,11 +13,12 @@ public class Server {
     private int idServer;
     private Double currentCompletionTime;
     private int numberCompletion1;
-    private int numberCompletion2;
-    private double utilization;
-    private int avgNumberOfJobs;
     private boolean busy;
     private double totalTimeBusy;
+    private double utilization;
+    private int avgNumberOfJobs;
+    private int numberCompletion2;
+
 
     public Server(int idServer){
         this.idServer = idServer;
@@ -27,44 +30,27 @@ public class Server {
         this.busy = false;
     }
 
+
+    /**
+     * Method that initialized a server list
+     * @param numServer
+     */
+    public static void initServers(ArrayList<Server> serverList, int numServer){
+        for (int i = 0; i<numServer; i++) {
+            serverList.add(new Server(i));
+        }
+    }
+
+
+    /**
+     * Getter and Setters
+     */
     public int getIdServer() {
         return idServer;
     }
 
-    public void setIdServer(int idServer) {
-        this.idServer = idServer;
-    }
-
     public int getNumberCompletion1() {
         return numberCompletion1;
-    }
-
-    public void setNumberCompletion1(int numberCompletion1) {
-        this.numberCompletion1 = numberCompletion1;
-    }
-
-    public int getNumberCompletion2() {
-        return numberCompletion2;
-    }
-
-    public void setNumberCompletion2(int numberCompletion2) {
-        this.numberCompletion2 = numberCompletion2;
-    }
-
-    public double getUtilization() {
-        return utilization;
-    }
-
-    public void setUtilization(double utilization) {
-        this.utilization = utilization;
-    }
-
-    public int getAvgNumberOfJobs() {
-        return avgNumberOfJobs;
-    }
-
-    public void setAvgNumberOfJobs(int avgNumberOfJobs) {
-        this.avgNumberOfJobs = avgNumberOfJobs;
     }
 
     public boolean isBusy() {
@@ -89,7 +75,7 @@ public class Server {
         else if(eventType == -1)
             this.currentCompletionTime = 0.0;
         else{
-            System.out.println("event not recognized");
+            System.out.println("Event not recognized");
             System.exit(-1);
         }
     }

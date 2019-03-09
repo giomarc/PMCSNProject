@@ -1,5 +1,5 @@
-package library;/* --------------------------------------------------------------------------
- * This is a Java library for generating random variates from six discrete 
+package variablesGenerator.library;/* --------------------------------------------------------------------------
+ * This is a Java variablesGenerator.library for generating random variates from six discrete
  * distributions
  *
  *      Generator         Range (x)     Mean         Variance
@@ -33,9 +33,6 @@ package library;/* -------------------------------------------------------------
  * Latest Revision   : 7-1-04
  * --------------------------------------------------------------------------
  */
-
-import java.math.*;
-import java.io.*;
 
 public class Rvgs{
     

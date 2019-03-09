@@ -2,7 +2,7 @@ package simulation;
 
 import cloud.Cloud;
 import cloudlet.Cloudlet_NEW;
-import config.SystemConfiguration;
+import system.SystemConfiguration;
 import event.Event;
 import job.Job;
 import system.CSVlogger;
@@ -40,7 +40,7 @@ public class Simulation {
             int job_class = Arrivals.getInstance().determineJobClass();
             Job job = new Job(job_class);
             Event e = new Event(job,arrival_time);
-            if(!c.putEvent(e)){
+            if(!c.putArrivalEvent(e)){
                 statistics.increasePacketLoss();
                 cloud.processArrivals(e);
             }
@@ -57,9 +57,8 @@ public class Simulation {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("./events.txt"));
             for(Event e : c.getCloudletEventList()) {
-                //if(e.getType()==1)
                 if(e.getJobEvent().getJobclass()==1)
-                    writer.write(String.valueOf(e.getTime()) + ", ");
+                    writer.write(e.getTime() + ", ");
             }
             writer.flush();
         } catch (IOException e) {
@@ -93,7 +92,6 @@ public class Simulation {
             System.out.println(statistics.getCloudletThroughput());
             Printer.getInstance().print("\nEMPIRICAL THROUGHPUT", "yellow");
             System.out.println(statistics.getSecondThroughput(c));
-            //c.printStatus();
             PerformanceLogger.getInstance().endTest(c.getSimulationTime());
         }
     }

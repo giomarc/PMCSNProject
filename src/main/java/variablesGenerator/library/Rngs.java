@@ -1,9 +1,9 @@
-package library;/* -------------------------------------------------------------------------
- * This is an Java library for multi-stream random number generation.
- * The use of this library is recommended as a replacement for the Java
+package variablesGenerator.library;/* -------------------------------------------------------------------------
+ * This is an Java variablesGenerator.library for multi-stream random number generation.
+ * The use of this variablesGenerator.library is recommended as a replacement for the Java
  * class Random, particularly in simulation applications where the
  * statistical 'goodness' of the random number generator is important.
- * The library supplies 256 streams of random numbers; use
+ * The variablesGenerator.library supplies 256 streams of random numbers; use
  * selectStream(s) to switch between streams indexed s = 0,1,...,255.
  *
  * The streams must be initialized.  The recommended way to do this is by
@@ -15,7 +15,7 @@ package library;/* -------------------------------------------------------------
  *    if x < 0 then the state is obtained from the system clock
  *    if x = 0 then the state is to be supplied interactively.
  *
- * The generator used in this library is a so-called 'Lehmer random number
+ * The generator used in this variablesGenerator.library is a so-called 'Lehmer random number
  * generator' which returns a pseudo-random number uniformly distributed
  * 0.0 and 1.0.  The period is (m - 1) where m = 2,147,483,647 and the
  * smallest and largest possible values are (1 / m) and 1 - (1 / m)

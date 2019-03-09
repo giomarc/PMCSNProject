@@ -1,7 +1,6 @@
 package cloudlet;
 
 import event.Event;
-import server.Server;
 
 import java.util.ArrayList;
 
@@ -11,57 +10,30 @@ public class Cloudlet_NEW {
     private ArrayList<Server> serverList;        /*array containing servers composing cloudlet*/
     private ArrayList<Event> cloudletEventList;  /*cloudlet event list: saves any kind of new event that occurrs*/
     private double globalTime;                   /*global clock, initializated since servers creation*/
+    private int n1; //number of class 1 jobs
+    private int n2; //number of class 2 jobs
 
 
     /**
-     * Costruttore del cloudlet. Prende in input il numero di server. Questi server vengono creati e inseriti
-     * nella lista del cloudlet. Al termine della funzione vengono stampati gli id dei server creati
+     * Costruttore del cloudlet
+     * Prende in input il numero di server per crearli ed inserirli nella lista del cloudlet
      * @param numServer
      */
     public Cloudlet_NEW(int numServer){
         this.serverList = new ArrayList<>();
         this.globalTime = 0.0;
         this.cloudletEventList = new ArrayList<>();
-        initServers(numServer);
+        Server.initServers(serverList,numServer);
     }
 
     /**
      * Funzione che gestisce gli arrivi
      * @param event
-     * @return
      */
-    public boolean putEvent(Event event){
-
+    public boolean putArrivalEvent(Event event){
         removeCompletedJobsFromServers(event.getType(), event.getTime()); /* rimuovo i job che hanno terminato il loro servizio */
-
         updateRemainingServiceTimes(event.getTime()); /*aggiorno il tempo rimanente dei job ancora in servizio*/
-
         return processCurrentJob(event.getType(), event.getTime());
-    }
-
-
-
-
-    public void printStatus(){
-        System.out.println("\tID\t|\tTotal Busy Time\t|\tNumber Completition");
-        for(Server i: serverList)
-            System.out.println("\t" + i.getIdServer() + "\t|\t" + i.getTotalTimeBusy() + "\t|\t" + i.getNumberCompletion1());
-        System.out.println("\n");
-    }
-
-    public ArrayList<Event> getCloudletEventList(){
-        return this.cloudletEventList;
-    }
-
-    /**
-     * inizializzo i server
-     * @param numServer
-     */
-    private void initServers(int numServer){
-        for (int i = 0; i<numServer; i++) {
-            serverList.add(new Server(i));
-            //System.out.println("Server " + serverList.get(i).getIdServer() + " OK");
-        }
     }
 
     /**
@@ -156,8 +128,16 @@ public class Cloudlet_NEW {
     }
 
 
+    /**
+     * Getter and Setter
+     */
+
     public double getSimulationTime(){
         return globalTime;
+    }
+
+    public ArrayList<Event> getCloudletEventList(){
+        return this.cloudletEventList;
     }
 
 

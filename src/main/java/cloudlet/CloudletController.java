@@ -1,10 +1,8 @@
 package cloudlet;
 
-import config.SystemConfiguration;
-
 public class CloudletController {
 
-    Cloudlet cloudlet;
+    Cloudlet_DEPRECATED cloudlet;
 
     /**
      * Algorithm 1

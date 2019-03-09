@@ -6,7 +6,7 @@ import variablesGenerator.Services;
 
 import java.util.ArrayList;
 
-public class Cloudlet {
+public class Cloudlet_DEPRECATED {
 
 
     private ArrayList<Server> serverList;        /*array containing servers composing cloudlet*/
@@ -23,7 +23,7 @@ public class Cloudlet {
      * nella lista del cloudlet. Al termine della funzione vengono stampati gli id dei server creati
      * @param numServer
      */
-    public Cloudlet(int numServer){
+    public Cloudlet_DEPRECATED(int numServer){
         this.serverList = new ArrayList<>();
         this.n1 = 0;
         this.n2 = 0;

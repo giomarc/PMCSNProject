@@ -1,22 +1,17 @@
 package simulation;
 
-import cloudlet.Cloudlet;
+import cloudlet.Cloudlet_DEPRECATED;
+import cloudlet.Cloudlet_NEW;
 import config.SystemConfiguration;
-import event.ArrivalEvent;
 import event.Event;
 import job.Job;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
+import system.PerformanceLogger;
 import variablesGenerator.Arrivals;
-import variablesGenerator.InitGenerator;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 
 
 public class Simulation {
@@ -59,11 +54,12 @@ public class Simulation {
     }*/
 
     public static void main(String[] args) {
+        PerformanceLogger.getInstance().startTest();
         SystemConfiguration.getConfigParams();
-        Cloudlet c = new Cloudlet(3);
+        Cloudlet_NEW c = new Cloudlet_NEW(3);
         double packetsloss = 0.0;
         double allpackets = 0.0;
-        for(int i = 0; i < 20000000; i++){
+        for(int i = 0; i < 5000000; i++){
             double arrival_time = Arrivals.getInstance().getArrival();
             int job_class = Arrivals.getInstance().determineJobClass();
             Job job = new Job(job_class);
@@ -76,12 +72,13 @@ public class Simulation {
         }
         System.out.println("ploss = " + packetsloss/allpackets);
         c.printStatus();
+        PerformanceLogger.getInstance().endTest();
         //IMPORTANTE, STAMPARE SOLO SE IL NUMERO DI EVENTI è BASSO
         //c.printEventList();
         //saveEventsOnCSV(c);
     }
 
-    private static void saveEventsOnCSV(Cloudlet c){
+    private static void saveEventsOnCSV(Cloudlet_DEPRECATED c){
         File file1 = new File("./events.txt");
         if(file1.delete()) System.out.println("files deleted");
         try {
@@ -96,7 +93,4 @@ public class Simulation {
             e.printStackTrace();
         }
     }
-
-
-
 }

@@ -1,5 +1,6 @@
 package cloudlet;
 
+import cloud.Cloud;
 import event.Event;
 
 import java.util.ArrayList;
@@ -140,6 +141,21 @@ public class Cloudlet {
         return this.cloudletEventList;
     }
 
+    public int getN1(){
+        return this.n1;
+    }
+
+    public int getN2(){
+        return this.n2;
+    }
+
+    public void incrementN1(){
+        this.n1++;
+    }
+
+    public void incrementN2(){
+        this.n2++;
+    }
 
 }
 

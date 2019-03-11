@@ -7,11 +7,18 @@ public class StatisticsGenerator {
 
     double packetloss;
     double allpackets;
+    private static StatisticsGenerator instance = null;
 
-
-    public StatisticsGenerator(){
+    private StatisticsGenerator(){
         this.allpackets = 0.0;
         this.packetloss = 0.0;
+    }
+
+    public static StatisticsGenerator getInstance(){
+        if(instance == null){
+           instance = new StatisticsGenerator();
+        }
+        return instance;
     }
 
     public double calculatePLoss(){

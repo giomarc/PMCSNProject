@@ -2,13 +2,13 @@ package simulation;
 
 import cloud.Cloud;
 import cloudlet.Cloudlet;
+import cloudlet.CloudletController;
+import event.ArrivalEvent;
 import system.SystemConfiguration;
 import event.Event;
-import job.Job;
 import system.CSVlogger;
 import system.PerformanceLogger;
 import system.Printer;
-import variablesGenerator.Arrivals;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,6 +17,11 @@ import java.io.IOException;
 
 public class Simulation {
 
+    private static Cloudlet cloudlet;
+    private static Cloud cloud;
+    private static StatisticsGenerator statistics;
+    private static CloudletController cloudletController;
+
     public static void main(String[] args) {
             run();
     }
@@ -24,29 +29,23 @@ public class Simulation {
     public static void run(){
         SystemConfiguration.getConfigParams();
 
+
         CSVlogger.getInstance().createFileIfNotExists("Response_time.csv",
                 "Trhoughput.csv", "AVG_jobs.csv");
         if(SystemConfiguration.VERBOSE) {
             printInitialConfiguration();
             PerformanceLogger.getInstance().startTest();
         }
-        Cloudlet c = new Cloudlet(SystemConfiguration.N);
-        Cloud cloud = new Cloud();
-        StatisticsGenerator statistics = new StatisticsGenerator();
+
+        initialize();
 
         for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
 
-            double arrival_time = Arrivals.getInstance().getArrival();
-            int job_class = Arrivals.getInstance().determineJobClass();
-            Job job = new Job(job_class);
-            Event e = new Event(job,arrival_time);
-            if(!c.putArrivalEvent(e)){
-                statistics.increasePacketLoss();
-                cloud.processArrivals(e);
-            }
+            ArrivalEvent e = ArrivalEvent.createNewArrivalEvent();
+            cloudletController.dispatchArrivals(e);
             statistics.increaseAllPackets();
         }
-        printFinalResults(statistics, c);
+        printFinalResults(statistics, cloudlet);
     }
 
 
@@ -94,6 +93,13 @@ public class Simulation {
             System.out.println(statistics.getSecondThroughput(c));
             PerformanceLogger.getInstance().endTest(c.getSimulationTime());
         }
+    }
+
+    public static void initialize(){
+        cloudlet = new Cloudlet(SystemConfiguration.N);
+        cloud = new Cloud();
+        statistics = StatisticsGenerator.getInstance();
+        cloudletController = new CloudletController(cloudlet,cloud);
     }
 
 

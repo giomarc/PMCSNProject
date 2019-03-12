@@ -1,6 +1,7 @@
 package cloud;
 
 import event.Event;
+import job.Job;
 import variablesGenerator.Services;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,8 +14,6 @@ public class Cloud {
     private ArrayList<Double> arrivalsToCloud;
     private ArrayList<Double> remainingComplitionTime;
 
-    //private TreeSet<Double> remainingComplitionTime;
-
 
     public Cloud(){
         this.n1 = 0;
@@ -25,18 +24,18 @@ public class Cloud {
     }
 
 
-    public void processArrivals(Event event){
+    public void processJobs(Event event){
 
         int removed = 0;
         putNewArrival(event.getTime());
+        incrementPopulation(event.getJobEvent());
 
         for(int i = 0; i < remainingComplitionTime.size(); i++){
-
             Double new_value = remainingComplitionTime.get(i) - event.getTime();
             remainingComplitionTime.set(i,new_value );
             if (remainingComplitionTime.get(i) < 0) {
                 removed++;
-                increaseComplitions();
+                handleComplitions(event.getJobEvent());
             }
         }
         removeFromList();
@@ -55,22 +54,16 @@ public class Cloud {
 
 
 
-    /*
-     * Return number of class 1 jobs
-     */
-    public Integer getN1(){
-        return n1;
-    }
-
-    /*
-     * Return number of class 2 jobs
-     */
-    public Integer getN2(){
-        return n2;
-    }
-
-    public void increaseComplitions(){
+    public void handleComplitions(Job job)
+    {
         this.cloudComplition++;
+        switch (job.getJobclass())
+        {
+            case 1:
+                this.n1--;
+            case 2:
+                this.n2--;
+        }
     }
 
     public void removeFromList(){
@@ -82,5 +75,20 @@ public class Cloud {
             }
         }
     }
+
+    public void incrementPopulation(Job job){
+            switch (job.getJobclass()){
+                case 1:
+                    this.n1++;
+                case 2:
+                    this.n2++;
+            }
+    }
+
+
+
+
+
+
 
 }

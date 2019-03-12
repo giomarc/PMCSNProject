@@ -1,5 +1,7 @@
 package event;
 
+import cloudlet.Server;
+
 public class CloudletCompletionEvent extends Event{
 
     public CloudletCompletionEvent(int type, double time) {
@@ -7,6 +9,7 @@ public class CloudletCompletionEvent extends Event{
     }
 
     public static void createNewCloudletCompletionEvent(){
+
 
     }
 }

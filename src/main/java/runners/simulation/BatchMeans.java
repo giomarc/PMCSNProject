@@ -1,4 +1,4 @@
-package simulation;
+package runners.simulation;
 
 public class BatchMeans {
 }

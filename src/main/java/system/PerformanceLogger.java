@@ -1,5 +1,8 @@
 package system;
 
+import cloudlet.Cloudlet;
+import runners.simulation.StatisticsGenerator;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -53,7 +56,6 @@ public class PerformanceLogger implements Runnable {
         System.out.println("AVG RAM usage:  " + (calculateAverage(memoryUsages)) + " MB");
     }
 
-
     private long calculateAverage(ArrayList<Long> marks) {
         Long sum = 0L;
         if(!marks.isEmpty()) {
@@ -63,6 +65,36 @@ public class PerformanceLogger implements Runnable {
             return (long) (sum.doubleValue() / marks.size());
         }
         return sum;
+    }
+
+    public void printInitialConfiguration(){
+        Printer.getInstance().print("Execution started with VERBOSE=true. To reduce logs start again the execution setting VERBOSE=false", "cyan");
+        Printer.getInstance().print("\nARRIVAL RATES", "yellow");
+        System.out.println("lambda_1 = " + SystemConfiguration.ARRIVAL_RATE_1);
+        System.out.println("lambda_2 = " + SystemConfiguration.ARRIVAL_RATE_2);
+        Printer.getInstance().print("\nSERVICE RATES", "yellow");
+        Printer.getInstance().print("Cloudlet", "green");
+        System.out.println("mu_1 = " + SystemConfiguration.CLOUDLET_M1);
+        System.out.println("mu_2 = " + SystemConfiguration.CLOUDLET_M2);
+        Printer.getInstance().print("Cloud", "green");
+        System.out.println("mu_1 = " + SystemConfiguration.CLOUD_M1);
+        System.out.println("mu_2 = " + SystemConfiguration.CLOUD_M2);
+        Printer.getInstance().print("\n# CLOUDLET", "yellow");
+        System.out.println(SystemConfiguration.N);
+        Printer.getInstance().print("\nSEED", "yellow");
+        System.out.println(SystemConfiguration.SEED);
+    }
+
+    public void printFinalResults(StatisticsGenerator statistics, Cloudlet c){
+        Printer.getInstance().print("\nP_LOSS", "yellow");
+        System.out.println(statistics.calculatePLoss());
+        if(SystemConfiguration.VERBOSE) {
+            Printer.getInstance().print("\nANALYTIC THROUGHPUT", "yellow");
+            System.out.println(statistics.getCloudletThroughput());
+            Printer.getInstance().print("\nEMPIRICAL THROUGHPUT", "yellow");
+            System.out.println(statistics.getSecondThroughput(c));
+            PerformanceLogger.getInstance().endTest(c.getSimulationTime());
+        }
     }
 
 

@@ -1,7 +1,7 @@
 package variablesGenerator.library;/* -------------------------------------------------------------------------
  * This is an Java variablesGenerator.library for multi-stream random number generation.
  * The use of this variablesGenerator.library is recommended as a replacement for the Java
- * class Random, particularly in simulation applications where the
+ * class Random, particularly in runners.simulation applications where the
  * statistical 'goodness' of the random number generator is important.
  * The variablesGenerator.library supplies 256 streams of random numbers; use
  * selectStream(s) to switch between streams indexed s = 0,1,...,255.
@@ -56,11 +56,11 @@ public class Rngs {
 
 //  static long[] seed;                     /* current state of each stream   */
 //  static int  stream        = 0;          /* stream index, 0 is the default */
-//  static int  initialized   = 0;          /* test for stream initialization */
+//  static int  initialized   = 0;          /* runners.test for stream initialization */
 
   long[] seed;                     /* current state of each stream   */
   int  stream        = 0;          /* stream index, 0 is the default */
-  int  initialized   = 0;          /* test for stream initialization */
+  int  initialized   = 0;          /* runners.test for stream initialization */
   /* Barry Lawson 8 Nov 2007 */
   
 
@@ -190,7 +190,7 @@ public class Rngs {
   }
   
 /* ------------------------------------------------------------------
- * Use this (optional) function to test for a correct implementation.
+ * Use this (optional) function to runners.test for a correct implementation.
  * ------------------------------------------------------------------
  */
   public void testRandom() {

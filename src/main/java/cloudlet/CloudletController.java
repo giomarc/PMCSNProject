@@ -2,7 +2,7 @@ package cloudlet;
 
 import cloud.Cloud;
 import event.ArrivalEvent;
-import simulation.StatisticsGenerator;
+import runners.simulation.StatisticsGenerator;
 import system.SystemConfiguration;
 
 public class CloudletController {

@@ -17,6 +17,12 @@ public class InitGenerator {
         rvgs = new Rvgs(this.rngs);
     }
 
+    public void putNewSeed(long seed){
+        rngs = new Rngs();
+        rngs.plantSeeds(SystemConfiguration.SEED);
+        rvgs = new Rvgs(this.rngs);
+    }
+
 
     /**
      * Return singleton instance

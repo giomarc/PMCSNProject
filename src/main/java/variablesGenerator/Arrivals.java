@@ -4,7 +4,7 @@ import system.SystemConfiguration;
 
 public class Arrivals {
 
-    private static InitGenerator init  = null;
+    private static InitGenerator init  = InitGenerator.getInstance();
 
     private static Arrivals instance = new Arrivals();
 
@@ -14,6 +14,10 @@ public class Arrivals {
         return instance;
     }
 
+
+    public void changeDefaultSeed(long seed){
+        init.putNewSeed(seed);
+    }
 
     /**
      * Return total rate
@@ -28,7 +32,7 @@ public class Arrivals {
      */
     public double getArrival(){
         double total_rate = getTotalRate();
-        return init.getInstance().exponential(total_rate, 0);
+        return init.exponential(total_rate, 0);
     }
 
 
@@ -37,7 +41,7 @@ public class Arrivals {
      */
     public int determineJobClass(){
         double p1 = SystemConfiguration.ARRIVAL_RATE_1/getTotalRate();
-        double p = init.getInstance().uniform();
+        double p = init.uniform();
 
         if(p <= p1)
             return 1;

@@ -85,15 +85,15 @@ public class PerformanceLogger implements Runnable {
         System.out.println(SystemConfiguration.SEED);
     }
 
-    public void printFinalResults(StatisticsGenerator statistics, Cloudlet c){
+    public void printFinalResults(StatisticsGenerator statistics, Cloudlet c, double globalTime){
         Printer.getInstance().print("\nP_LOSS", "yellow");
         System.out.println(statistics.calculatePLoss());
         if(SystemConfiguration.VERBOSE) {
             Printer.getInstance().print("\nANALYTIC THROUGHPUT", "yellow");
             System.out.println(statistics.getCloudletThroughput());
             Printer.getInstance().print("\nEMPIRICAL THROUGHPUT", "yellow");
-            System.out.println(statistics.getSecondThroughput(c));
-            PerformanceLogger.getInstance().endTest(c.getSimulationTime());
+            System.out.println(statistics.getSecondThroughput(c, globalTime));
+            PerformanceLogger.getInstance().endTest(globalTime);
         }
     }
 

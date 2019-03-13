@@ -22,6 +22,7 @@ public class Simulation {
     private static Cloud cloud;
     private static StatisticsGenerator statistics;
     private static CloudletController cloudletController;
+    private static double globalTime = 0.0;
 
     public static void main(String[] args) {
         if(args.length == 1)
@@ -46,8 +47,9 @@ public class Simulation {
             ArrivalEvent e = ArrivalEvent.createNewArrivalEvent();
             cloudletController.dispatchArrivals(e);
             statistics.increaseAllPackets();
+            globalTime += e.getTime();
         }
-        PerformanceLogger.getInstance().printFinalResults(statistics, cloudlet);
+        PerformanceLogger.getInstance().printFinalResults(statistics, cloudlet, globalTime);
     }
 
     /**

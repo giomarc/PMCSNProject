@@ -38,10 +38,12 @@ public class CloudletController {
         else
             cloudlet.putArrivalEvent(e);
 
-        /*f(!cloudlet.putArrivalEvent(e)){
+        /*
+        if(!cloudlet.putArrivalEvent(e)){
             statistics.increasePacketLoss();
             cloud.processJobs(e);
-        }*/
+        }
+        */
     }
 
 

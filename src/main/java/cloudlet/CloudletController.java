@@ -11,6 +11,7 @@ public class CloudletController {
     private Cloudlet cloudlet;
     private StatisticsGenerator statistics;
     private Cloud cloud;
+    private int max_population;
     /**
      * Cloudlet controller
      * @param cloudlet cloudlet instance
@@ -20,6 +21,7 @@ public class CloudletController {
         statistics = StatisticsGenerator.getInstance();
         this.cloudlet = cloudlet;
         this.cloud = cloud;
+        this.max_population = SystemConfiguration.N;
     }
 
 
@@ -27,20 +29,20 @@ public class CloudletController {
      * Algorithm 1
      */
     public void dispatchArrivals(ArrivalEvent e){
-        int max_population = SystemConfiguration.N;
+        statistics.increaseAllPackets();
+
+        if(e.getJobEvent().getJobclass() == 1) statistics.increasePacket1();
+        else statistics.increasePacket2();
+
         cloudlet.removeCompletedJobsFromServers(e.getTime());
         cloudlet.updateRemainingServiceTimes(e.getTime());
-        int n1 = cloudlet.getN1();
-        int n2 = cloudlet.getN2();
-        //System.out.println("n1 = " + n1 + " n2 " + n2);
-
-        if(((n1 + n2) >= max_population )) {
-
+        if(((cloudlet.getN1() + cloudlet.getN2()) >= max_population )) {
             statistics.increasePacketLoss();
             cloud.processJobs(e);
         }
-        else
+        else {
             cloudlet.putArrivalEvent(e);
+        }
 
         /*if(!cloudlet.putArrivalEvent(e)){
             statistics.increasePacketLoss();

@@ -84,6 +84,9 @@ public class Server {
 
     public void decreaseTime(double time){
         this.currentCompletionTime -= time;
+        if(currentCompletionTime == 0.0){
+            this.currentCompletionTime = -1.0;
+        }
     }
 
     public double getTotalTimeBusy() {

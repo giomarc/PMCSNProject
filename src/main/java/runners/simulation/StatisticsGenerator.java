@@ -8,10 +8,17 @@ public class StatisticsGenerator {
     private double packetloss;
     private double allpackets;
     private static StatisticsGenerator instance = null;
+    private double globalTime;
+    private double packet1;
+    private double packet2;
+
 
     private StatisticsGenerator(){
         this.allpackets = 0.0;
         this.packetloss = 0.0;
+        this.globalTime = 0.0;
+        this.packet1 = 0.0;
+        this.packet2 = 0.0;
     }
 
     public static StatisticsGenerator getInstance(){
@@ -22,8 +29,9 @@ public class StatisticsGenerator {
     }
 
     public double calculatePLoss(){
-        double ploss = getPacketloss()/getAllpackets();
-        return ploss;
+        System.out.println(packet1/allpackets);
+        System.out.println(packet2/allpackets);
+        return getPacketloss()/getAllpackets();
     }
 
     public void increasePacketLoss(){
@@ -43,13 +51,26 @@ public class StatisticsGenerator {
     }
 
     public double getCloudletThroughput(){
-        double X = Arrivals.getInstance().getTotalRate()*(1-calculatePLoss());
-        return X;
+        return Arrivals.getInstance().getTotalRate()*(1-calculatePLoss());
     }
 
-    public double getSecondThroughput(Cloudlet cloudlet, double globalTime){
-        double X = (allpackets - packetloss)/ globalTime;
-        return X;
+    public double getSecondThroughput(double globalTime){
+        return (allpackets - packetloss)/globalTime;
     }
 
+    public double getGlobalTime() {
+        return globalTime;
+    }
+
+    public void setGlobalTime(double globalTime) {
+        this.globalTime = globalTime;
+    }
+
+    public void increasePacket1(){
+        this.packet1++;
+    }
+
+    public void increasePacket2(){
+        this.packet2++;
+    }
 }

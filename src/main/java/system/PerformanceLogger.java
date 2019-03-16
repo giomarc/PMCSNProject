@@ -7,6 +7,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 public class PerformanceLogger implements Runnable {
 
@@ -85,18 +87,35 @@ public class PerformanceLogger implements Runnable {
         System.out.println(SystemConfiguration.SEED);
     }
 
-    public void printFinalResults(StatisticsGenerator statistics, Cloudlet c, double globalTime){
+    public void printFinalResults(StatisticsGenerator statistics, double globalTime){
         Printer.getInstance().print("\nP_LOSS", "yellow");
         System.out.println(statistics.calculatePLoss());
         if(SystemConfiguration.VERBOSE) {
             Printer.getInstance().print("\nANALYTIC THROUGHPUT", "yellow");
             System.out.println(statistics.getCloudletThroughput());
             Printer.getInstance().print("\nEMPIRICAL THROUGHPUT", "yellow");
-            System.out.println(statistics.getSecondThroughput(c, globalTime));
+            System.out.println(statistics.getSecondThroughput(globalTime));
             PerformanceLogger.getInstance().endTest(globalTime);
         }
     }
 
+    public void printProgress(long total, long current) {
+
+        if(total == 0) total = 1;
+        StringBuilder string = new StringBuilder(140);
+        int percent = (int) (current * 100 / total);
+        string
+                .append('\r')
+                .append(String.join("", Collections.nCopies(percent == 0 ? 2 : 2 - (int) (Math.log10(percent)), " ")))
+                .append(String.format(" %d%% [", percent))
+                .append(String.join("", Collections.nCopies(percent, "=")))
+                .append('>')
+                .append(String.join("", Collections.nCopies(100 - percent, " ")))
+                .append(']')
+                .append(String.join("", Collections.nCopies((int) (Math.log10(total)) - (int) (Math.log10(current)), " ")));
+
+        System.out.print(string);
+    }
 
     @Override
     public void run() {

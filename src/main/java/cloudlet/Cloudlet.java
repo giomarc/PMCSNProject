@@ -11,7 +11,6 @@ public class Cloudlet {
 
     private ArrayList<Server> serverList;        /*array containing servers composing cloudlet*/
     private ArrayList<Event> cloudletEventList;  /*cloudlet event list: saves any kind of new event that occurrs*/
-    private double globalTime;                   /*global clock, initializated since servers creation*/
     private int n1; //number of class 1 jobs
     private int n2; //number of class 2 jobs
 
@@ -24,7 +23,6 @@ public class Cloudlet {
      */
     public Cloudlet(int numServer) {
         this.serverList = new ArrayList<>();
-        this.globalTime = 0.0;
         this.n1 = 0;
         this.n2 = 0;
         this.cloudletEventList = new ArrayList<>();
@@ -122,7 +120,6 @@ public class Cloudlet {
      */
     private boolean processCurrentJob(Job currentJob) {
         //System.out.println(currentJob.getArrival());
-        globalTime += currentJob.getArrival();
         boolean rejected = true;
         for (Server i : serverList) {
             if (!(i.isBusy())) {
@@ -136,8 +133,7 @@ public class Cloudlet {
             }
         }
         if (rejected){
-            cloudletEventList.add(new Event(-1, globalTime));
-            System.out.println("rejected");
+            //System.out.println("rejected");
         }
 
         return !rejected;
@@ -148,23 +144,22 @@ public class Cloudlet {
      * Getter and Setter
      */
 
-    public double getSimulationTime() {
-        return globalTime;
-    }
-
     public ArrayList<Event> getCloudletEventList() {
         return this.cloudletEventList;
     }
 
 
 
-    public void incrementPopulation(int jobclass) {
+    private void incrementPopulation(int jobclass) {
         switch (jobclass) {
             case 1:
                 this.n1++;
                 break;
             case 2:
                 this.n2++;
+                break;
+            default:
+                System.out.println("type not recognized");
                 break;
 
         }

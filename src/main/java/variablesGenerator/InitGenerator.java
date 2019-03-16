@@ -19,7 +19,7 @@ public class InitGenerator {
 
     public void putNewSeed(long seed){
         rngs = new Rngs();
-        rngs.plantSeeds(SystemConfiguration.SEED);
+        rngs.plantSeeds(seed);
         rvgs = new Rvgs(this.rngs);
     }
 
@@ -49,7 +49,7 @@ public class InitGenerator {
     }
 
     public double uniform(){
-        selectStream(15);
+        selectStream(3);
         return this.rvgs.uniform(0.0,1.0);
     }
 

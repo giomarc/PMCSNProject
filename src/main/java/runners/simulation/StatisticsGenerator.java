@@ -5,8 +5,8 @@ import variablesGenerator.Arrivals;
 
 public class StatisticsGenerator {
 
-    double packetloss;
-    double allpackets;
+    private double packetloss;
+    private double allpackets;
     private static StatisticsGenerator instance = null;
 
     private StatisticsGenerator(){
@@ -47,9 +47,8 @@ public class StatisticsGenerator {
         return X;
     }
 
-    public double getSecondThroughput(Cloudlet cloudlet){
-
-        double X = (allpackets - packetloss)/ cloudlet.getSimulationTime();
+    public double getSecondThroughput(Cloudlet cloudlet, double globalTime){
+        double X = (allpackets - packetloss)/ globalTime;
         return X;
     }
 

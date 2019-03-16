@@ -3,47 +3,21 @@ package event;
 import job.Job;
 
 public class Event {
-    private int type; //0 arrival, 1 completion cloudlet, 2 completion cloud?
-    private double time;
-    private Job jobEvent;
 
+    private int type;   // event type. 0 arrival -- 1 cloudlet completion -- 2 cloud completion
+    private Job job;    //event job
 
-    public Event(int type, double time){
+    public Event(int type, Job job){
+        this.job = job;
         this.type = type;
-        this.time = time;
     }
-
-
-    public Event(Job jobEvent, double time){
-        this.jobEvent = jobEvent;
-        this.type = jobEvent.getJobclass();
-        this.time = time;
-    }
-
 
     public int getType() {
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public Job getJob() {
+        return job;
     }
-
-    public double getTime() {
-        return time;
-    }
-
-    public void setTime(double time) {
-        this.time = time;
-    }
-
-    public Job getJobEvent(){
-        return this.jobEvent;
-    }
-
-    public void setJobEvent(Job jobEvent){
-        this.jobEvent = jobEvent;
-    }
-
 
 }

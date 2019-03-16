@@ -29,8 +29,6 @@ public class StatisticsGenerator {
     }
 
     public double calculatePLoss(){
-        System.out.println(packet1/allpackets);
-        System.out.println(packet2/allpackets);
         return getPacketloss()/getAllpackets();
     }
 

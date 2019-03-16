@@ -26,7 +26,7 @@ public class Services {
              service_rate = SystemConfiguration.CLOUDLET_M1;
         else
             service_rate = SystemConfiguration.CLOUDLET_M2;
-        return init.getInstance().exponential(service_rate, job_class);
+        return init.getInstance().exponential(service_rate, 1);
     }
 
     /**
@@ -39,7 +39,7 @@ public class Services {
             service_rate = SystemConfiguration.CLOUD_M1;
         else
             service_rate = SystemConfiguration.CLOUD_M2;
-        return init.getInstance().exponential(service_rate, job_class);
+        return init.getInstance().exponential(service_rate, 2);
     }
 
 

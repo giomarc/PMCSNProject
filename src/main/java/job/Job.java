@@ -2,50 +2,37 @@ package job;
 
 public class Job {
 
-    private double arrival;
-    private double service;
-    private double completion;
-    private int servedBy;
-    private int jobclass;
+    private double  arrivalTime;
+    private double  completionTime;
+    private int     jobClass;
 
-
-    public Job(){
-        this.arrival = 0.0;
-        this.service = 0.0;
+    public Job(int jobClass, double arrivalTime){
+        this.completionTime = 0.0;
+        this.arrivalTime = arrivalTime;
+        this.jobClass = jobClass;
     }
 
-    public Job(double arrival, double service){
-        this.arrival = arrival;
-        this.service = service;
+    public double getArrivalTime() {
+        return arrivalTime;
     }
 
-    public Job(int jobclass){
-        this.arrival = 0.0;
-        this.service = 0.0;
-        this.completion = 0.0;
-        this.jobclass = jobclass;
+    public void setArrivalTime(double arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
-
-
-    /**
-     *  Abstract method to compute completition time
-     */
-
-    public void getCompletitionTime(){};
-
-
-    /**
-     * Getter and Setter
-     */
-    public double getService(){ return service;}
-    public  double getArrival(){
-        return  arrival;
+    public double getCompletionTime() {
+        return completionTime;
     }
-    public  void setArrival(double arrival){ this.arrival = arrival;}
-    public  void setService(double service){this.service = service;}
-    public int getJobclass(){ return jobclass;}
-    public void setJobclass(int jobclass){this.jobclass = jobclass;}
 
+    public void setCompletionTime(double completionTime) {
+        this.completionTime = completionTime;
+    }
 
+    public int getJobClass() {
+        return jobClass;
+    }
+
+    public void setJobClass(int jobClass) {
+        this.jobClass = jobClass;
+    }
 }

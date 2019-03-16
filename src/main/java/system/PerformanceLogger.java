@@ -99,22 +99,16 @@ public class PerformanceLogger implements Runnable {
         }
     }
 
-    public void printProgress(long total, long current) {
-
-        if(total == 0) total = 1;
-        StringBuilder string = new StringBuilder(140);
-        int percent = (int) (current * 100 / total);
-        string
-                .append('\r')
-                .append(String.join("", Collections.nCopies(percent == 0 ? 2 : 2 - (int) (Math.log10(percent)), " ")))
-                .append(String.format(" %d%% [", percent))
-                .append(String.join("", Collections.nCopies(percent, "=")))
-                .append('>')
-                .append(String.join("", Collections.nCopies(100 - percent, " ")))
-                .append(']')
-                .append(String.join("", Collections.nCopies((int) (Math.log10(total)) - (int) (Math.log10(current)), " ")));
-
-        System.out.print(string);
+    public void updateProgress(long current, long max) {
+        double progressPercentage = ((double)current)/((double)max);
+        System.out.print("\r " + (int)(progressPercentage * 100) + "% [");
+        for (int i = 0 ; i <= progressPercentage*100; i++) {
+            System.out.print(".");
+        }
+        for (int i = 0 ; i < 100-(progressPercentage*100); i++) {
+            System.out.print(" ");
+        }
+        System.out.print("]");
     }
 
     @Override

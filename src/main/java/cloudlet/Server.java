@@ -1,5 +1,6 @@
 package cloudlet;
 
+import job.Job;
 import variablesGenerator.Services;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 public class Server {
 
     private int idServer;
+    private Job currentJobInService;
     private Double currentCompletionTime;
     private int numberCompletion1;
     private boolean busy;
@@ -92,4 +94,13 @@ public class Server {
 
         this.totalTimeBusy += partialBusyTime;
     }
+
+    public Job getCurrentJobInService() {
+        return currentJobInService;
+    }
+
+    public void setCurrentJobInService(Job currentJobInService) {
+        this.currentJobInService = currentJobInService;
+    }
+
 }

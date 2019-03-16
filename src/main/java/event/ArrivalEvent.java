@@ -18,6 +18,7 @@ public class ArrivalEvent extends Event {
         double arrival_time = Arrivals.getInstance().getArrival();
         int job_class = Arrivals.getInstance().determineJobClass();
         Job job = new Job(job_class);
+        job.setArrival(arrival_time);
         return new ArrivalEvent(job,arrival_time);
     }
 

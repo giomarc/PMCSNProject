@@ -28,17 +28,21 @@ public class CloudletController {
      */
     public void dispatchArrivals(ArrivalEvent e){
         int max_population = SystemConfiguration.N;
+        cloudlet.removeCompletedJobsFromServers(e.getTime());
+        cloudlet.updateRemainingServiceTimes(e.getTime());
         int n1 = cloudlet.getN1();
         int n2 = cloudlet.getN2();
+        //System.out.println("n1 = " + n1 + " n2 " + n2);
 
-        if(((n1 + n2) > max_population)) {
+        if(((n1 + n2) >= max_population )) {
+
             statistics.increasePacketLoss();
             cloud.processJobs(e);
         }
         else
             cloudlet.putArrivalEvent(e);
 
-        /*f(!cloudlet.putArrivalEvent(e)){
+        /*if(!cloudlet.putArrivalEvent(e)){
             statistics.increasePacketLoss();
             cloud.processJobs(e);
         }*/

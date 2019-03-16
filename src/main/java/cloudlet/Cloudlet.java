@@ -1,6 +1,5 @@
 package cloudlet;
 
-import cloud.Cloud;
 import event.CloudletCompletionEvent;
 import event.Event;
 import job.Job;
@@ -26,6 +25,8 @@ public class Cloudlet {
     public Cloudlet(int numServer) {
         this.serverList = new ArrayList<>();
         this.globalTime = 0.0;
+        this.n1 = 0;
+        this.n2 = 0;
         this.cloudletEventList = new ArrayList<>();
         Server.initServers(serverList, numServer);
     }
@@ -36,18 +37,16 @@ public class Cloudlet {
      * @param event
      */
     public boolean putArrivalEvent(Event event) {
-        removeCompletedJobsFromServers(event.getType(), event.getTime()); /* rimuovo i job che hanno terminato il loro servizio */
-        updateRemainingServiceTimes(event.getTime()); /*aggiorno il tempo rimanente dei job ancora in servizio*/
-        return processCurrentJob(event.getType(), event.getTime());
+        //removeCompletedJobsFromServers(event.getTime()); /* rimuovo i job che hanno terminato il loro servizio */
+        //updateRemainingServiceTimes(event.getTime()); /*aggiorno il tempo rimanente dei job ancora in servizio*/
+        return processCurrentJob(event.getJobEvent());
     }
 
     /**
      * rimuovo i job completati dai server
-     *
-     * @param type
      * @param time
      */
-    private void removeCompletedJobsFromServers(int type, double time) {
+    public void removeCompletedJobsFromServers(double time) {
         /*
             serversAreNotBusy: durante un ciclo serversAreNotBusy è:
             - false se devono essere liberati ancora dei server: ad esempio, supponiamo di avere un arrivo al tempo t1, allora serversAreNotBusy è false se ci
@@ -56,6 +55,7 @@ public class Cloudlet {
         */
         boolean serversAreNotBusy = false;
         double minTime = 0.0;
+        //int position = 0;
         int id = -1;
 
         //prendo il server che ha tempo di completamento minimo (se esiste)
@@ -64,6 +64,7 @@ public class Cloudlet {
             for (Server i : serverList) {
                 if (!i.getCurrentCompletionTime().equals(0.0) && (i.getCurrentCompletionTime() < minTime || minTime == 0)) {
                     minTime = i.getCurrentCompletionTime();
+
                     id = i.getIdServer();
                 }
             }
@@ -77,13 +78,13 @@ public class Cloudlet {
             else {
                 for (Server i : serverList) {
                     if (i.getIdServer() == id) {
-                        Event e = new CloudletCompletionEvent(type, globalTime + i.getCurrentCompletionTime());
-                        cloudletEventList.add(e);
+                        //Event e = new CloudletCompletionEvent(type, globalTime + i.getCurrentCompletionTime());
+                       // cloudletEventList.add(e);
                         i.setBusy(false);
                         i.setCurrentCompletionTime(-1);
                         minTime = 0;
                         id = -1;
-                        handleComplitions(type);
+                        handleComplitions(i.getCurrentJobInService().getJobclass());
                         break;
                     }
                 }
@@ -97,7 +98,7 @@ public class Cloudlet {
      *
      * @param time
      */
-    private void updateRemainingServiceTimes(double time) {
+    public void updateRemainingServiceTimes(double time) {
         /*vengono aggiornati i tempi di completamento di tutti i server con completamento successivo all'arrivo
          * ad esempio se un server ha completamento 10 e l'arrivo è 8, dopo questo ciclo for il tempo di completamento
          * rimasto è pari a 2 (ed è una modifica importantissima al fine del prossimo ciclo)
@@ -116,25 +117,29 @@ public class Cloudlet {
     /**
      * processo il job corrente e ritorna se è stato preso in carico o rifiutato
      *
-     * @param type
-     * @param time
+     * @param currentJob
      * @return
      */
-    private boolean processCurrentJob(int type, double time) {
-        globalTime += time;
+    private boolean processCurrentJob(Job currentJob) {
+        //System.out.println(currentJob.getArrival());
+        globalTime += currentJob.getArrival();
         boolean rejected = true;
         for (Server i : serverList) {
             if (!(i.isBusy())) {
                 i.setBusy(true);
-                i.setCurrentCompletionTime(type);
-                cloudletEventList.add(new Event(type, globalTime));
+                i.setCurrentJobInService(currentJob);
+                i.setCurrentCompletionTime(currentJob.getJobclass());
+                //cloudletEventList.add(new Event(currentJob, globalTime));
                 rejected = false;
-                incrementPopulation(type);
+                incrementPopulation(currentJob.getJobclass());
                 break;
             }
         }
-        if (rejected)
+        if (rejected){
             cloudletEventList.add(new Event(-1, globalTime));
+            System.out.println("rejected");
+        }
+
         return !rejected;
     }
 
@@ -157,9 +162,19 @@ public class Cloudlet {
         switch (jobclass) {
             case 1:
                 this.n1++;
+                break;
             case 2:
                 this.n2++;
+                break;
+
         }
+        /*if(jobclass == 1)
+            this.n1++;
+        else if (jobclass == 2)
+            this.n2 ++ ;
+        else
+            System.out.println("not this job");
+            */
     }
 
 
@@ -167,8 +182,10 @@ public class Cloudlet {
         switch (jobclass) {
             case 1:
                 this.n1--;
+                break;
             case 2:
                 this.n2--;
+                break;
 
         }
     }

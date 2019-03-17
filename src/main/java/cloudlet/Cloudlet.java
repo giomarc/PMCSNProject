@@ -1,11 +1,14 @@
 package cloudlet;
 
 import event.Event;
+import event.EventGenerator;
 import job.Job;
+import runners.simulation.StatisticsGenerator;
 import system.SystemConfiguration;
 import variablesGenerator.Services;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 
 public class Cloudlet {
 
@@ -44,6 +47,7 @@ public class Cloudlet {
             if(s.isBusy()) {
                 if (s.getJobInService().getCompletionTime() <= arrivalTime) {
                     s.setBusy(false);
+                    StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                     decreaseN(s.getJobInService().getJobClass());
                 }
                 else
@@ -82,4 +86,18 @@ public class Cloudlet {
             serverList.add(new Server(i));
         }
     }
+
+    double endSimulation() {
+        double max = 0.0;
+        for(Server s: serverList){
+            if(s.isBusy()) {
+                StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+                s.setBusy(false);
+                if(s.getJobInService().getCompletionTime() > max)
+                    max = s.getJobInService().getCompletionTime();
+            }
+        }
+        return max;
+    }
+
 }

@@ -4,10 +4,12 @@ public class Job {
 
     private double  arrivalTime;
     private double  completionTime;
+    private double  serviceTime;
     private int     jobClass;
 
     public Job(int jobClass, double arrivalTime){
         this.completionTime = 0.0;
+        this.serviceTime = 0.0;
         this.arrivalTime = arrivalTime;
         this.jobClass = jobClass;
     }
@@ -16,15 +18,13 @@ public class Job {
         return arrivalTime;
     }
 
-    public void setArrivalTime(double arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
     public double getCompletionTime() {
         return completionTime;
     }
 
     public void setCompletionTime(double completionTime) {
+        if(this.completionTime == 0.0)
+            serviceTime = completionTime;
         this.completionTime = completionTime;
     }
 
@@ -32,7 +32,7 @@ public class Job {
         return jobClass;
     }
 
-    public void setJobClass(int jobClass) {
-        this.jobClass = jobClass;
+    public double getServiceTime() {
+        return serviceTime;
     }
 }

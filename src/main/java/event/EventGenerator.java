@@ -17,8 +17,11 @@ public class EventGenerator {
         return new Event(0, job);
     }
 
-    public static void generateCompletion(){
-
+    public Event generateCompletion(int cloudletOrCloud, Job job){
+        if(cloudletOrCloud == 1 || cloudletOrCloud == 2)
+            return new Event(cloudletOrCloud, job);
+        else
+            return null;
     }
 
 }

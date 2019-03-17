@@ -1,88 +1,70 @@
 package cloud;
 
+import cloudlet.CloudletController;
 import event.Event;
+import event.EventGenerator;
 import job.Job;
+import runners.simulation.StatisticsGenerator;
 import variablesGenerator.Services;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Cloud {
-//
-//    private Integer n1; /*number of class 1 jobs*/
-//    private Integer n2; /*number of class 2 jobs*/
-//    private int cloudComplition;
-//    private ArrayList<Double> arrivalsToCloud;
-//    private ArrayList<Double> remainingComplitionTime;
-//
-//
-//    public Cloud(){
-//        this.n1 = 0;
-//        this.n2 = 0;
-//        this.arrivalsToCloud = new ArrayList<>();
-//        this.remainingComplitionTime = new ArrayList<>();
-//        //this.remainingComplitionTime = new TreeSet<>();
-//    }
-//
-//
-//    public void processJobs(Event event){
-//
-//        int removed = 0;
-//        putNewArrival(event.getTime());
-//        incrementPopulation(event.getJobEvent());
-//
-//        for(int i = 0; i < remainingComplitionTime.size(); i++){
-//            Double new_value = remainingComplitionTime.get(i) - event.getTime();
-//            remainingComplitionTime.set(i,new_value );
-//            if (remainingComplitionTime.get(i) < 0) {
-//                removed++;
-//                handleComplitions(event.getJobEvent());
-//            }
-//        }
-//        removeFromList();
-//        remainingComplitionTime.add(Services.getInstance().getCloudServiceTime(event.getType()));
-//    }
-//
-//
-//    public void putNewArrival(Double arrivalTime){
-//
-//        arrivalsToCloud.add(arrivalTime);
-//    }
-//
-//    public void putRemainingComplitionTime(Double remainingTime){
-//        remainingComplitionTime.add(remainingTime);
-//    }
-//
-//
-//
-//    public void handleComplitions(Job job)
-//    {
-//        this.cloudComplition++;
-//        switch (job.getJobclass())
-//        {
-//            case 1:
-//                this.n1--;
-//            case 2:
-//                this.n2--;
-//        }
-//    }
-//
-//    public void removeFromList(){
-//        Iterator itr = remainingComplitionTime.iterator();
-//        while(itr.hasNext()){
-//            double x = (Double) itr.next();
-//            if( x < 0 ){
-//                itr.remove();
-//            }
-//        }
-//    }
-//
-//    public void incrementPopulation(Job job){
-//            switch (job.getJobclass()){
-//                case 1:
-//                    this.n1++;
-//                case 2:
-//                    this.n2++;
-//            }
-//    }
+    private static Cloud instance = new Cloud();
+    private static ArrayList<Job> jobsInService;
 
+
+    private Cloud(){
+        jobsInService = new ArrayList<>();
+    }
+
+    public static Cloud getInstance(){ return instance;}
+
+
+    public void processArrival(Event e) {
+        removeCompletedJobs(e);
+        processCurrentJob(e.getJob());
+    }
+
+
+    public void removeCompletedJobs(Event e){
+        double arrivalTime = e.getJob().getArrivalTime();
+        for(Job j: jobsInService){
+            double updated = j.getCompletionTime() - arrivalTime;
+            j.setCompletionTime(updated);
+            if(j.getCompletionTime() < 0){
+                StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
+            }
+        }
+        removeFromList();
+    }
+
+    private void processCurrentJob(Job j){
+        int jobclass = j.getJobClass();
+        j.setCompletionTime(Services.getInstance().getCloudServiceTime(jobclass));
+        jobsInService.add(j);
+    }
+
+
+    public void removeFromList(){
+        Iterator itr = jobsInService.iterator();
+        Job jobExaminated;
+        while(itr.hasNext()){
+            jobExaminated = (Job) itr.next();
+            double x = jobExaminated.getCompletionTime();
+            if( x < 0 ){
+                itr.remove();
+            }
+        }
+    }
+
+    public double endSimulation() {
+        double max = 0.0;
+        for(Job j: jobsInService){
+            if(j.getCompletionTime() > max)
+                max = j.getCompletionTime();
+            StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
+        }
+        return max;
+    }
 }

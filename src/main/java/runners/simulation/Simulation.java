@@ -23,26 +23,17 @@ public class Simulation {
     }
 
     private static void run(){
-        SystemConfiguration.getConfigParams();
-        CSVlogger.getInstance().createFileIfNotExists("Response_time.csv",
-                "Throughput.csv", "AVG_jobs.csv");
-        if(SystemConfiguration.VERBOSE) {
-            PerformanceLogger.getInstance().printInitialConfiguration();
-            PerformanceLogger.getInstance().startTest();
-        }
-
         initialize();
-
+        PerformanceLogger.getInstance().printInitialConfiguration();
         for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
-            if(i%1000 == 0){
-                PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
-            }
+            PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
             Event e = EventGenerator.getInstance().generateArrival();
             cloudletController.dispatchArrivals(e);
             //statistics.increaseAllPackets();
             statistics.setGlobalTime(statistics.getGlobalTime() + e.getJob().getArrivalTime());
         }
-        PerformanceLogger.getInstance().printFinalResults(statistics, statistics.getGlobalTime());
+        statistics.setGlobalTime(statistics.getGlobalTime() + cloudletController.endSimulation());
+        PerformanceLogger.getInstance().printFinalResults(statistics);
     }
 
 
@@ -51,8 +42,11 @@ public class Simulation {
     }
 
     private static void initialize(){
+        SystemConfiguration.getConfigParams();
         statistics = StatisticsGenerator.getInstance();
         cloudletController = CloudletController.getInstance();
+        CSVlogger.getInstance().createFileIfNotExists("Response_time.csv",
+                "Throughput.csv", "AVG_jobs.csv");
     }
 
 

@@ -43,13 +43,13 @@ public class InitGenerator {
     /**
      * Return distributions
      */
-    public double exponential(double rate,int stream){
+    public double exponential(double rate, int stream){
         selectStream(stream);
         return this.rvgs.exponential(1/rate);
     }
 
     public double uniform(){
-        selectStream(3);
+        selectStream(0);
         return this.rvgs.uniform(0.0,1.0);
     }
 

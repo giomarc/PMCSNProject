@@ -32,7 +32,7 @@ public class Arrivals {
      */
     public double getArrival(){
         double total_rate = getTotalRate();
-        return init.exponential(total_rate, 0);
+        return init.exponential(total_rate,0);
     }
 
 
@@ -43,10 +43,14 @@ public class Arrivals {
         double p1 = SystemConfiguration.ARRIVAL_RATE_1/getTotalRate();
         double p = init.uniform();
 
-        if(p <= p1)
+        if(p <= p1){
+            //System.out.println("p1 = " + p1);
             return 1;
-        else
+        }
+        else {
+            //System.out.println("p2 -> class 2");
             return 2;
+        }
     }
 
 }

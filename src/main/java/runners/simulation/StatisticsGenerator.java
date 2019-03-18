@@ -29,6 +29,7 @@ public class StatisticsGenerator {
 
     private double sampleMean;
     private double variance;
+    private int iterations;
 
 
 
@@ -103,6 +104,7 @@ public class StatisticsGenerator {
      */
     public void calculateVariance(double diff, double n){
         variance = variance + ((diff*diff)*(n-1/n));
+        iterations = (int) n;
     }
     /**
      * Getter and Setter
@@ -235,7 +237,7 @@ public class StatisticsGenerator {
     }
 
     public void printVariance(){
-        System.out.println("Variance: " + variance);
+        System.out.println("Variance: " + variance/iterations);
     }
 
     public double getMeanServiceTimeCloudlet() {

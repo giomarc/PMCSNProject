@@ -29,11 +29,12 @@ public class Simulation {
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
             Event e = EventGenerator.getInstance().generateArrival();
             cloudletController.dispatchArrivals(e);
-            //statistics.increaseAllPackets();
             statistics.setGlobalTime(statistics.getGlobalTime() + e.getJob().getArrivalTime());
         }
         statistics.setGlobalTime(statistics.getGlobalTime() + cloudletController.endSimulation());
         PerformanceLogger.getInstance().printFinalResults(statistics);
+        statistics.printSampleMean();
+        statistics.printVariance();
     }
 
 

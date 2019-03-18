@@ -16,10 +16,13 @@ public class Cloudlet {
     private static int n2;
     private static int numberOfServers;
     private static ArrayList<Server> serverList;
+    private int iteration;
+
 
 
     private Cloudlet(){
         numberOfServers = SystemConfiguration.N;
+        iteration = 1;
         initServers();
     }
 
@@ -33,12 +36,14 @@ public class Cloudlet {
         for(Server s: serverList){
             if(!s.isBusy()){
                 increaseN(job.getJobClass());
+                calculateCloudletStatistics((n1+n2),iteration);
                 s.setBusy(true);
                 s.setJobInService(job);
                 s.getJobInService().setCompletionTime(completionTime);
                 break;
             }
         }
+        iteration++;
     }
 
     void removeCompletedJobs(double arrivalTime){
@@ -48,6 +53,7 @@ public class Cloudlet {
                     s.setBusy(false);
                     StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                     decreaseN(s.getJobInService().getJobClass());
+                    //calculateCloudletStatistics((n1+n2),iteration);
                 }
                 else
                     s.getJobInService().setCompletionTime(s.getJobInService().getCompletionTime() - arrivalTime);
@@ -100,7 +106,7 @@ public class Cloudlet {
     }
 
 
-    public static void calculateCloudletStatistics(double actualvalue, boolean stop, int n){
-        StatisticsGenerator.getInstance().calculateSampleMean(actualvalue,stop,n);
+    public static void calculateCloudletStatistics(double actualvalue,int n){
+        StatisticsGenerator.getInstance().calculateSampleMean(actualvalue,n);
     }
 }

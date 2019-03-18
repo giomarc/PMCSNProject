@@ -78,16 +78,12 @@ public class StatisticsGenerator {
     /**
      * sample mean basing on Welford's algorithm
      */
-    public void calculateSampleMean(double actualValue, boolean stop, int n)
+    public void calculateSampleMean(double actualValue, int n)
     {
-        if (!stop) {
-            double diff = (sampleMean - actualValue);
-            calculateVariance(diff, n);
-            sampleMean = sampleMean + (diff / n);
-        } else {
-            printSampleMean();
-            printVariance();
-        }
+        double diff = (actualValue - sampleMean);
+        double i = Double.valueOf(n);
+        calculateVariance(diff, i);
+        sampleMean = sampleMean + (diff / i);
     }
 
     /**
@@ -105,8 +101,8 @@ public class StatisticsGenerator {
      * @param diff: difference between sample mean ad actual value
      * @param n: number of iteration
      */
-    public void calculateVariance(double diff, int n){
-        variance = variance + (diff*diff)*(n-(1/((double)n)));
+    public void calculateVariance(double diff, double n){
+        variance = variance + ((diff*diff)*(n-1/n));
     }
     /**
      * Getter and Setter

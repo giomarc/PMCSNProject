@@ -23,7 +23,8 @@ public class CloudletController {
     public void dispatchArrivals(Event e){
         statistics.increaseAllPackets();
         double arrivalTime = e.getJob().getArrivalTime();
-        if(Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime) >= numberOfServers){
+        double numberOfJobsInCloudlet = Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime);
+        if(numberOfJobsInCloudlet >= numberOfServers){
             statistics.increasePacketLoss();
             Cloud.getInstance().processArrival(e);
         }

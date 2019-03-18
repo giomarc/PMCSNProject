@@ -80,10 +80,12 @@ public class StatisticsGenerator {
      */
     public void calculateSampleMean(double actualValue, int n)
     {
+        double oldmean = sampleMean;
         double diff = (actualValue - sampleMean);
-        double i = Double.valueOf(n);
-        calculateVariance(diff, i);
+        double i = (double) n;
         sampleMean = sampleMean + (diff / i);
+        double newmean = sampleMean;
+        calculateVariance(actualValue, oldmean, newmean, n);
     }
 
     /**
@@ -97,12 +99,11 @@ public class StatisticsGenerator {
     }
 
     /**
-     *
-     * @param diff: difference between sample mean ad actual value
+     * https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm
      * @param n: number of iteration
      */
-    public void calculateVariance(double diff, double n){
-        variance = variance + ((diff*diff)*(n-1/n));
+    private void calculateVariance(double actualValue, double oldmean, double newmean, double n){
+        variance = variance + ((actualValue-oldmean)*(actualValue-newmean) - variance)/n;
     }
     /**
      * Getter and Setter

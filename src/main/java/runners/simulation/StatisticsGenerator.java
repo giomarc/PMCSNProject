@@ -23,6 +23,9 @@ public class StatisticsGenerator {
     private double meanServiceTimeClass1Cloud;
     private double meanServiceTimeClass2Cloud;
 
+    private double sampleMean;
+    private double variance;
+
 
 
     private StatisticsGenerator(){
@@ -40,6 +43,8 @@ public class StatisticsGenerator {
         this.meanServiceTimeClass2Cloudlet  = 0.0;
         this.meanServiceTimeClass1Cloud     = 0.0;
         this.meanServiceTimeClass2Cloud     = 0.0;
+        this.sampleMean = 0.0;
+        this.variance = 0.0;
 
     }
 
@@ -61,6 +66,35 @@ public class StatisticsGenerator {
     public void increaseAllPackets(){
         this.allpackets ++;
     }
+
+    /**
+     * sample mean basing on Welford's algorithm
+     */
+
+    public void calculateSampleMean(double actualValue, boolean stop, int n)
+    {
+        if (!stop) {
+            double diff = (sampleMean - actualValue);
+            calculateVariance(diff, n);
+            sampleMean = sampleMean + (diff / n);
+        } else {
+            printSampleMean();
+            printVariance();
+        }
+    }
+
+    /**
+     *
+     * @param diff: difference between sample mean ad actual value
+     * @param n: number of iteration
+     */
+    public void calculateVariance(double diff, int n){
+        variance = variance + ((diff*diff)*(n-1/n));
+    }
+    /**
+     * Getter and Setter
+     *
+     */
 
     public double getAllpackets(){
         return this.allpackets;
@@ -154,5 +188,13 @@ public class StatisticsGenerator {
 
     public double getMeanServiceTimeClass2Cloud() {
         return meanServiceTimeClass2Cloud;
+    }
+
+    public void printSampleMean(){
+        System.out.println("Sample mean: " + sampleMean);
+    }
+
+    public void printVariance(){
+        System.out.println("Variance: " + variance);
     }
 }

@@ -100,4 +100,8 @@ public class Cloudlet {
         return max;
     }
 
+
+    public static void calculateCloudletStatistics(double actualvalue, boolean stop, int n){
+        StatisticsGenerator.getInstance().calculateSampleMean(actualvalue,stop,n);
+    }
 }

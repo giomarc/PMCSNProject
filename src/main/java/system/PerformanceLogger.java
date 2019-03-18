@@ -113,6 +113,10 @@ public class PerformanceLogger implements Runnable {
             Printer.getInstance().print("\nSERVICE TIME", "yellow");
             Printer.getInstance().print("Mean global service time", "green");
             System.out.println(statistics.getMeanServiceTime());
+            Printer.getInstance().print("Mean Cloudlet service time", "green");
+            System.out.println(statistics.getMeanServiceTimeCloudlet());
+            Printer.getInstance().print("Mean Cloud service time", "green");
+            System.out.println(statistics.getMeanServiceTimeCloud());
             Printer.getInstance().print("Mean class 1 service time", "green");
             System.out.println(statistics.getMeanServiceTimeClass1());
             Printer.getInstance().print("Mean class 2 service time", "green");

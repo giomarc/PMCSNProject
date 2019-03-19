@@ -33,6 +33,8 @@ public class PerformanceLogger implements Runnable {
     }
 
     public void endTest(double simulationTime){
+        //long memoryUsage = (calculateAverage(memoryUsages));
+        long memoryUsage = 0;
         stop = true;
         end = Instant.now();
         duration = Duration.between(start, end);
@@ -51,18 +53,21 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("Simulation time", "green");
         System.out.println(s_days + " days, " + (s_hours - 24*s_days)+ " hours, " + (s_minutes - 60*s_hours) + " min, " + (s_seconds - 60*s_minutes) + " seconds");
         Printer.getInstance().print("\nSYSTEM", "yellow");
-        System.out.println("AVG RAM usage:  " + (calculateAverage(memoryUsages)) + " MB");
+        System.out.println("AVG RAM usage:  " + memoryUsage + " MB");
     }
 
     private long calculateAverage(ArrayList<Long> marks) {
-        Long sum = 0L;
-        if(!marks.isEmpty()) {
-            for (Long mark : marks) {
-                sum += mark;
+        if(marks != null) {
+            Long sum = 0L;
+            if (!marks.isEmpty()) {
+                for (Long mark : marks) {
+                    sum += mark;
+                }
+                return (long) (sum.doubleValue() / marks.size());
             }
-            return (long) (sum.doubleValue() / marks.size());
+            return sum;
         }
-        return sum;
+        else return -1;
     }
 
     public void printInitialConfiguration(){
@@ -131,6 +136,8 @@ public class PerformanceLogger implements Runnable {
             System.out.println(statistics.getMeanServiceTimeClass2Cloud());
 
             PerformanceLogger.getInstance().endTest(statistics.getGlobalTime());
+
+            CSVlogger.getInstance().writeOnFiles(statistics);
         }
     }
 

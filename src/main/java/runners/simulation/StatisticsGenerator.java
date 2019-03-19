@@ -82,7 +82,7 @@ public class StatisticsGenerator {
     public void calculateSampleMean(double actualValue, int n)
     {
         double diff = (actualValue - sampleMean);
-        double i = Double.valueOf(n);
+        double i = (double) n;
         calculateVariance(diff, i);
         sampleMean = sampleMean + (diff / i);
     }
@@ -102,7 +102,7 @@ public class StatisticsGenerator {
      * @param diff: difference between sample mean ad actual value
      * @param n: number of iteration
      */
-    public void calculateVariance(double diff, double n){
+    private void calculateVariance(double diff, double n){
         variance = variance + ((diff*diff)*((n-1)/n));
         iterations = (int) n;
     }

@@ -15,11 +15,14 @@ public class Simulation {
     private static CloudletController cloudletController;
 
     public static void main(String[] args) {
-        if(args.length == 1) {
+        if(args.length == 2) {
             System.out.println("running with custom seed");
-            runWithCustomSeed(Long.parseLong(args[0]));
+            for(int i = 0; i< Integer.parseInt(args[1]); i++){
+                runWithCustomSeed(Long.parseLong(args[0]) + i);
+            }
         }
-        run();
+        else
+            run();
     }
 
     private static void run(){
@@ -39,7 +42,19 @@ public class Simulation {
 
 
     private static void runWithCustomSeed(long customSeed) {
+        initialize();
         InitGenerator.getInstance().putNewSeed(customSeed);
+        PerformanceLogger.getInstance().printInitialConfiguration();
+        for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
+            PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
+            Event e = EventGenerator.getInstance().generateArrival();
+            cloudletController.dispatchArrivals(e);
+            statistics.setGlobalTime(statistics.getGlobalTime() + e.getJob().getArrivalTime());
+        }
+        statistics.setGlobalTime(statistics.getGlobalTime() + cloudletController.endSimulation());
+        PerformanceLogger.getInstance().printFinalResults(statistics);
+        statistics.printSampleMean();
+        statistics.printVariance();
     }
 
     private static void initialize(){

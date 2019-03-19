@@ -21,6 +21,7 @@ public class InitGenerator {
         rngs = new Rngs();
         rngs.plantSeeds(seed);
         rvgs = new Rvgs(this.rngs);
+        SystemConfiguration.SEED = seed;
     }
 
 

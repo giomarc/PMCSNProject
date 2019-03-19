@@ -16,13 +16,13 @@ public class Cloudlet {
     private static int n2;
     private static int numberOfServers;
     private static ArrayList<Server> serverList;
-    private int iteration;
+    //private int iteration;
 
 
 
     private Cloudlet(){
         numberOfServers = SystemConfiguration.N;
-        iteration = 1;
+        //iteration = 1;
         initServers();
     }
 
@@ -36,14 +36,14 @@ public class Cloudlet {
         for(Server s: serverList){
             if(!s.isBusy()){
                 increaseN(job.getJobClass());
-                calculateCloudletStatistics((n1+n2),iteration);
+                //calculateCloudletStatistics((n1+n2),iteration);
                 s.setBusy(true);
                 s.setJobInService(job);
                 s.getJobInService().setCompletionTime(completionTime);
                 break;
             }
         }
-        iteration++;
+        //iteration++;
     }
 
     void removeCompletedJobs(double arrivalTime){

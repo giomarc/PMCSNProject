@@ -103,7 +103,7 @@ public class StatisticsGenerator {
      * @param n: number of iteration
      */
     public void calculateVariance(double diff, double n){
-        variance = variance + ((diff*diff)*(n-1/n));
+        variance = variance + ((diff*diff)*((n-1)/n));
         iterations = (int) n;
     }
     /**

@@ -9,11 +9,13 @@ public class CloudletController {
     private static CloudletController instance = new CloudletController();
     private int numberOfServers;
     private StatisticsGenerator statistics;
+    private int iterations;
 
 
     private CloudletController(){
         numberOfServers = Cloudlet.getInstance().getNumberOfServers();
         statistics = StatisticsGenerator.getInstance();
+        iterations = 1;
     }
 
     public static CloudletController getInstance(){
@@ -31,11 +33,18 @@ public class CloudletController {
         else{
             Cloudlet.getInstance().processArrival(e);
         }
+        statistics.calculateSampleMean(numberOfJobsInCloudlet,iterations);
+        iterations++;
     }
 
     public double endSimulation(){
         double cloudletEndTime = Cloudlet.getInstance().endSimulation();
         double cloudEndTime = Cloud.getInstance().endSimulation();
         return Math.max(cloudletEndTime, cloudEndTime);
+    }
+
+
+    public int getIterations(){
+        return iterations;
     }
 }

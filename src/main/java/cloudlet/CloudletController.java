@@ -26,15 +26,16 @@ public class CloudletController {
         statistics.increaseAllPackets();
         double arrivalTime = e.getJob().getArrivalTime();
         double numberOfJobsInCloudlet = Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime);
+        statistics.calculateSampleMean(numberOfJobsInCloudlet,iterations);
+        iterations++;
         if(numberOfJobsInCloudlet >= numberOfServers){
             statistics.increasePacketLoss();
             Cloud.getInstance().processArrival(e);
-        }
-        else{
+        }else{
             Cloudlet.getInstance().processArrival(e);
         }
-        statistics.calculateSampleMean(numberOfJobsInCloudlet,iterations);
-        iterations++;
+
+
     }
 
     public double endSimulation(){
@@ -46,5 +47,15 @@ public class CloudletController {
 
     public int getIterations(){
         return iterations;
+    }
+
+    public void increaseIterations(){
+        iterations++;
+    }
+
+    public void reset(){
+        numberOfServers = Cloudlet.getInstance().getNumberOfServers();
+        statistics = StatisticsGenerator.getInstance();
+        iterations = 1;
     }
 }

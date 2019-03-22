@@ -67,4 +67,8 @@ public class Cloud {
         }
         return max;
     }
+
+    public void reset(){
+        jobsInService = new ArrayList<>();
+    }
 }

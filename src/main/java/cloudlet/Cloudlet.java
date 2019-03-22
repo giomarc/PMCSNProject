@@ -70,7 +70,11 @@ public class Cloudlet {
         return numberOfServers;
     }
 
-    private void decreaseN(int jobClass){
+    public int getJobInCloudletAfterComplition(){
+        return (n1+n2);
+    }
+
+    public static void decreaseN(int jobClass){
         if(jobClass == 1)
             n1--;
         else
@@ -98,6 +102,7 @@ public class Cloudlet {
             if(s.isBusy()) {
                 StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                 s.setBusy(false);
+
                 if(s.getJobInService().getCompletionTime() > max)
                     max = s.getJobInService().getCompletionTime();
             }
@@ -108,5 +113,13 @@ public class Cloudlet {
 
     public static void calculateCloudletStatistics(double actualvalue,int n){
         StatisticsGenerator.getInstance().calculateSampleMean(actualvalue,n);
+    }
+
+    public void reset(){
+        n1 = 0;
+        n2 = 0;
+        serverList = null;
+        numberOfServers = SystemConfiguration.N;
+        initServers();
     }
 }

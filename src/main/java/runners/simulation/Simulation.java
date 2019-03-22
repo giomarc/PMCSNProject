@@ -1,5 +1,7 @@
 package runners.simulation;
 
+import cloud.Cloud;
+import cloudlet.Cloudlet;
 import cloudlet.CloudletController;
 import event.Event;
 import event.EventGenerator;
@@ -15,14 +17,19 @@ public class Simulation {
     private static CloudletController cloudletController;
 
     public static void main(String[] args) {
+        initialize();
         if(args.length == 2) {
             System.out.println("running with custom seed");
             for(int i = 0; i< Integer.parseInt(args[1]); i++){
                 runWithCustomSeed(Long.parseLong(args[0]) + i);
+                resetAll();
             }
+
+
         }
         else
             run();
+
     }
 
     private static void run(){
@@ -66,5 +73,12 @@ public class Simulation {
     }
 
 
+    public static void resetAll(){
+        initialize();
+        StatisticsGenerator.getInstance().resetStatistics();
+        Cloud.getInstance().reset();
+        Cloudlet.getInstance().reset();
+        CloudletController.getInstance().reset();
+    }
 
 }

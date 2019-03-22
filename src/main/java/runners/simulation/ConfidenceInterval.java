@@ -1,5 +1,7 @@
 package runners.simulation;
 
+import variablesGenerator.InitGenerator;
+
 import java.util.ArrayList;
 
 public class ConfidenceInterval {
@@ -9,9 +11,11 @@ public class ConfidenceInterval {
 
     private ConfidenceInterval(){}
 
-    public ConfidenceInterval getInstance(){
+    public static ConfidenceInterval getInstance(){
         return instance;
     }
+
+    private double confidence = 0.95;
 
 
 
@@ -22,26 +26,43 @@ public class ConfidenceInterval {
      * @param givenNumbers
      * @return int[] - lower, upper
      */
-    private static double[] compute95percentCI(ArrayList<Double> givenNumbers) {
+    public double[] compute95percentCI(ArrayList<Double> givenNumbers) {
 
-        // calculate the mean value (= average)
-        double sum = 0.0;
-        for (double num : givenNumbers) {
-            sum += num;
+        double mean = 0.0;
+        double variance = 0.0;
+        long n = 1;
+        double t_student = 0.0;
+        double width = 0.0;
+
+        for(Double actualValue : givenNumbers){
+            double diff = actualValue - mean;
+            variance += (diff * diff * (n-1)/n);
+            mean += (diff/n);
+            n++;
         }
-        double mean = sum / givenNumbers.size();
-
-        // calculate standard deviation
-        double squaredDifferenceSum = 0.0;
-        for (double num : givenNumbers) {
-            squaredDifferenceSum += (num - mean) * (num - mean);
+        double stddev = Math.sqrt(variance);
+        if(n>1){
+            double u = 1.0 - 0.5*(1-0 - confidence);
+            t_student = InitGenerator.getInstance().idfStudent(n-1,u);
+            width = (t_student*stddev)/Math.sqrt(n-1);
         }
-        double variance = squaredDifferenceSum / givenNumbers.size();
-        double standardDeviation = Math.sqrt(variance);
 
-        // value for 95% confidence interval, source: https://en.wikipedia.org/wiki/Confidence_interval#Basic_Steps
-        double confidenceLevel = 1.96;
-        double temp = confidenceLevel * standardDeviation / Math.sqrt(givenNumbers.size());
-        return new double[]{mean - temp, mean + temp};
+        double[] confidenceInterval = {mean - width, mean + width};
+        findOutliers(mean - width, mean + width,givenNumbers);
+        return confidenceInterval;
+    }
+
+
+
+    private void findOutliers(Double min, Double max, ArrayList<Double> givenNumbers){
+        double outliers = 0.0;
+        double tot = 1.0;
+        for (Double d : givenNumbers){
+            if((d< min) || (d > max))
+                outliers++;
+            tot++;
+        }
+        System.out.println("Outliers = " + outliers);
+        System.out.println("Percentage of outliers = " + outliers/tot);
     }
 }

@@ -1,5 +1,7 @@
 package runners.simulation;
 
+import cloudlet.Cloudlet;
+import cloudlet.CloudletController;
 import event.Event;
 import variablesGenerator.Arrivals;
 
@@ -54,6 +56,7 @@ public class StatisticsGenerator {
         this.meanServiceTimeClass2Cloud     = 0.0;
         this.sampleMean = 0.0;
         this.variance = 0.0;
+        this.iterations = 0;
 
     }
 
@@ -87,13 +90,15 @@ public class StatisticsGenerator {
         sampleMean = sampleMean + (diff / i);
     }
 
+
     /**
      * calculateSampleMean VERSION 2
      */
     private double welfordMean(double valueToUpdate, double currentValueToInsert, int n)
     {
         double diff = (currentValueToInsert -  valueToUpdate);
-        valueToUpdate = valueToUpdate + (diff / n);
+        double i = (double) n;
+        valueToUpdate = valueToUpdate + (diff / i);
         return valueToUpdate;
     }
 
@@ -162,7 +167,7 @@ public class StatisticsGenerator {
     public void receiveCompletion(Event e){
         int jobClass = e.getJob().getJobClass();
         double serviceTime = e.getJob().getServiceTime();
-        if(e.getType() == 1) {          //cloudlet
+        if(e.getType() == 1) {//cloudlet
             completedCloudlet++;
             meanServiceTimeCloudlet = welfordMean(meanServiceTimeCloudlet, serviceTime, (int) completedCloudlet);
             if(jobClass == 1){
@@ -193,7 +198,7 @@ public class StatisticsGenerator {
         else if(jobClass == 2)
             meanServiceTimeClass2 = welfordMean(meanServiceTimeClass2, serviceTime, (int) (packet2Cloudlet + packet2Cloud));
 
-        meanServiceTime = welfordMean(meanServiceTime, serviceTime, (int) (packet1Cloudlet + packet2Cloudlet + packet1Cloudlet + packet2Cloud));
+        meanServiceTime = welfordMean(meanServiceTime, serviceTime, (int) (packet1Cloudlet + packet2Cloudlet + packet1Cloud + packet2Cloud));
     }
 
     public double getPacket1() {
@@ -246,5 +251,29 @@ public class StatisticsGenerator {
 
     public double getMeanServiceTimeCloud() {
         return meanServiceTimeCloud;
+    }
+
+
+    public void resetStatistics(){
+        this.allpackets                     = 0.0;
+        this.packetloss                     = 0.0;
+        this.globalTime                     = 0.0;
+        this.packet1Cloudlet                = 0.0;
+        this.packet1Cloud                   = 0.0;
+        this.packet2Cloudlet                = 0.0;
+        this.packet2Cloud                   = 0.0;
+        this.completedCloud                 = 0.0;
+        this.completedCloudlet              = 0.0;
+        this.meanServiceTime                = 0.0;
+        this.meanServiceTimeCloudlet        = 0.0;
+        this.meanServiceTimeCloud           = 0.0;
+        this.meanServiceTimeClass1          = 0.0;
+        this.meanServiceTimeClass2          = 0.0;
+        this.meanServiceTimeClass1Cloudlet  = 0.0;
+        this.meanServiceTimeClass2Cloudlet  = 0.0;
+        this.meanServiceTimeClass1Cloud     = 0.0;
+        this.meanServiceTimeClass2Cloud     = 0.0;
+        this.sampleMean = 0.0;
+        this.variance = 0.0;
     }
 }

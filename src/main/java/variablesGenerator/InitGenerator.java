@@ -3,6 +3,8 @@ package variablesGenerator;
 import system.SystemConfiguration;
 import variablesGenerator.library.Rvgs;
 import variablesGenerator.library.Rngs;
+import variablesGenerator.library.Rvms;
+
 
 public class InitGenerator {
 
@@ -10,11 +12,15 @@ public class InitGenerator {
 
     private Rvgs rvgs;
     private Rngs rngs;
+    private Rvms rvms;
 
     private  InitGenerator(){
         rngs = new Rngs();
         rngs.plantSeeds(SystemConfiguration.SEED);
+        System.out.println("ora chiedo il cazzo di seed");
         rvgs = new Rvgs(this.rngs);
+
+        rvms = new Rvms();
     }
 
     public void putNewSeed(long seed){
@@ -54,5 +60,8 @@ public class InitGenerator {
         return this.rvgs.uniform(0.0,1.0);
     }
 
+    public double idfStudent(long n, double u){
+        return rvms.idfStudent(n,u);
+    }
 
 }

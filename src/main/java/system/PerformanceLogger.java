@@ -137,6 +137,10 @@ public class PerformanceLogger implements Runnable {
 
             PerformanceLogger.getInstance().endTest(statistics.getGlobalTime());
 
+            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if(statistics.getMeanServiceTimeCloudlet() == 0.0) System.exit(-1);
+            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             CSVlogger.getInstance().writeOnFiles(statistics);
         }
     }
@@ -161,5 +165,14 @@ public class PerformanceLogger implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void reset(){
+        start = null;
+        end = null;
+        duration = null;
+        memoryUsages = null;
+        stop = false;
+        son = null;
     }
 }

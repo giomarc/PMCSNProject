@@ -13,7 +13,7 @@ public class TestConfidenceInterval {
         SystemConfiguration.getConfigParams();
         ReadStatisticsCSV rdc = new ReadStatisticsCSV();
         ArrayList<Double> cg = rdc.getCloudletGeneral();
-        double[] result = ConfidenceInterval.getInstance().compute95percentCI(cg);
+        double[] result = ConfidenceInterval.getInstance().computeConfidenceInterval(cg);
 
         System.out.println("[ " + result[0] + " , " + result[1] + " ]");
     }

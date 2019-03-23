@@ -20,7 +20,7 @@ public class SystemConfiguration {
     public static boolean VERBOSE = true;
     //public static int BATCH_SIZE = 256;
     //public static int NUM_BATCH = 64;
-    //public static boolean TEST_S = false;
+    public static boolean MULTI_RUN = false;
     public static long SEED = 0;
     public static long ITERATIONS = 0;
 
@@ -44,7 +44,7 @@ public class SystemConfiguration {
             N = Integer.parseInt(prop.getProperty("N"));
             //BATCH_SIZE = Integer.parseInt(prop.getProperty("BATCH_SIZE"));
             //NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));
-            //TEST_S = Boolean.valueOf(prop.getProperty("TEST_S"));
+            MULTI_RUN = Boolean.valueOf(prop.getProperty("MULTI_RUN"));
             SEED = Long.parseLong(prop.getProperty("SEED"));
             ITERATIONS = Long.parseLong((prop.getProperty("ITERATIONS")));
             VERBOSE = Boolean.parseBoolean(prop.getProperty("VERBOSE"));

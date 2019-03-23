@@ -117,28 +117,28 @@ public class PerformanceLogger implements Runnable {
 
             Printer.getInstance().print("\nSERVICE TIME", "yellow");
             Printer.getInstance().print("Mean global service time", "green");
-            System.out.println(statistics.getMeanServiceTime());
+            System.out.println(statistics.getMeanResponseTime());
             Printer.getInstance().print("Mean Cloudlet service time", "green");
-            System.out.println(statistics.getMeanServiceTimeCloudlet());
+            System.out.println(statistics.getMeanResponseTimeCloudlet());
             Printer.getInstance().print("Mean Cloud service time", "green");
-            System.out.println(statistics.getMeanServiceTimeCloud());
+            System.out.println(statistics.getMeanResponseTimeCloud());
             Printer.getInstance().print("Mean class 1 service time", "green");
-            System.out.println(statistics.getMeanServiceTimeClass1());
+            System.out.println(statistics.getMeanResponseTimeClass1());
             Printer.getInstance().print("Mean class 2 service time", "green");
-            System.out.println(statistics.getMeanServiceTimeClass2());
+            System.out.println(statistics.getMeanResponseTimeClass2());
             Printer.getInstance().print("Mean cloudlet class 1 service time", "green");
-            System.out.println(statistics.getMeanServiceTimeClass1Cloudlet());
+            System.out.println(statistics.getMeanResponseTimeClass1Cloudlet());
             Printer.getInstance().print("Mean cloudlet class 2 service time", "green");
-            System.out.println(statistics.getMeanServiceTimeClass2Cloudlet());
+            System.out.println(statistics.getMeanResponseTimeClass2Cloudlet());
             Printer.getInstance().print("Mean cloud class 1 service time", "green");
-            System.out.println(statistics.getMeanServiceTimeClass1Cloud());
+            System.out.println(statistics.getMeanResponseTimeClass1Cloud());
             Printer.getInstance().print("Mean cloud class 2 service time", "green");
-            System.out.println(statistics.getMeanServiceTimeClass2Cloud());
+            System.out.println(statistics.getMeanResponseTimeClass2Cloud());
 
             PerformanceLogger.getInstance().endTest(statistics.getGlobalTime());
 
             //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if(statistics.getMeanServiceTimeCloudlet() == 0.0) System.exit(-1);
+            if(statistics.getMeanResponseTimeCloudlet() == 0.0) System.exit(-1);
             //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             CSVlogger.getInstance().writeOnFiles(statistics);

@@ -26,29 +26,30 @@ public class ConfidenceInterval {
      * @param givenNumbers
      * @return int[] - lower, upper
      */
-    public double[] compute95percentCI(ArrayList<Double> givenNumbers) {
+    public double[] computeConfidenceInterval(ArrayList<Double> givenNumbers) {
 
-        double mean = 0.0;
+        double sampleMean = 0.0;
         double variance = 0.0;
-        long n = 1;
-        double t_student = 0.0;
+        double stddev;
+        double t_student;
         double width = 0.0;
+        long n = 1;
 
         for(Double actualValue : givenNumbers){
-            double diff = actualValue - mean;
+            double diff = actualValue - sampleMean;
             variance += (diff * diff * (n-1)/n);
-            mean += (diff/n);
+            sampleMean += (diff/n);
             n++;
         }
-        double stddev = Math.sqrt(variance);
+        stddev = Math.sqrt(variance);
+
         if(n>1){
             double u = 1.0 - 0.5*(1-0 - confidence);
             t_student = InitGenerator.getInstance().idfStudent(n-1,u);
             width = (t_student*stddev)/Math.sqrt(n-1);
         }
-
-        double[] confidenceInterval = {mean - width, mean + width};
-        findOutliers(mean - width, mean + width,givenNumbers);
+        double[] confidenceInterval = {sampleMean - width, sampleMean + width};
+        findOutliers(sampleMean - width, sampleMean + width,givenNumbers);
         return confidenceInterval;
     }
 
@@ -62,7 +63,11 @@ public class ConfidenceInterval {
                 outliers++;
             tot++;
         }
-        System.out.println("Outliers = " + outliers);
         System.out.println("Percentage of outliers = " + outliers/tot);
+        System.out.println("Mean Interval: " + ((min + max) /2));
+        System.out.println("Cloudlet service time" + StatisticsGenerator.getInstance().getMeanResponseTimeCloudlet());
+
     }
+
+
 }

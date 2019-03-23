@@ -61,9 +61,9 @@ public class Cloudlet {
         }
     }
 
-    int numberOfJobsInCloudlet(double arrival){
+    int[] numberOfJobsInCloudlet(double arrival){
         removeCompletedJobs(arrival);
-        return n1 + n2;
+        return new int[]{n1, n2};
     }
 
     public int getNumberOfServers() {

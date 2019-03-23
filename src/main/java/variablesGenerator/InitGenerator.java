@@ -17,7 +17,6 @@ public class InitGenerator {
     private  InitGenerator(){
         rngs = new Rngs();
         rngs.plantSeeds(SystemConfiguration.SEED);
-        System.out.println("ora chiedo il cazzo di seed");
         rvgs = new Rvgs(this.rngs);
 
         rvms = new Rvms();

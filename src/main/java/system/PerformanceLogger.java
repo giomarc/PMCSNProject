@@ -135,11 +135,31 @@ public class PerformanceLogger implements Runnable {
             Printer.getInstance().print("Mean cloud class 2 service time", "green");
             System.out.println(statistics.getMeanResponseTimeClass2Cloud());
 
+            Printer.getInstance().print("\nSERVICE TIME", "yellow");
+            Printer.getInstance().print("Mean global population", "green");
+            System.out.println(statistics.getMeanGlobalPopulation());
+            Printer.getInstance().print("Mean Cloudlet population", "green");
+            System.out.println(statistics.getMeanCloudletPopulation());
+            Printer.getInstance().print("Mean Cloud population", "green");
+            System.out.println(statistics.getMeanCloudPopulation());
+            Printer.getInstance().print("Mean class 1 population", "green");
+            System.out.println("TODO");
+            Printer.getInstance().print("Mean class 2 population", "green");
+            System.out.println("TODO");
+            Printer.getInstance().print("Mean cloudlet class 1 population", "green");
+            System.out.println(statistics.getMeanCloudletPopulationClass1());
+            Printer.getInstance().print("Mean cloudlet class 2 population", "green");
+            System.out.println(statistics.getMeanCloudletPopulationClass2());
+            Printer.getInstance().print("Mean cloud class 1 population", "green");
+            System.out.println(statistics.getMeanCloudPopulationClass1());
+            Printer.getInstance().print("Mean cloud class 2 population", "green");
+            System.out.println(statistics.getMeanCloudPopulationClass1());
+
             PerformanceLogger.getInstance().endTest(statistics.getGlobalTime());
 
-            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if(statistics.getMeanResponseTimeCloudlet() == 0.0) System.exit(-1);
-            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//            if(statistics.getMeanServiceTimeCloudlet() == 0.0) System.exit(-1);
+//            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             CSVlogger.getInstance().writeOnFiles(statistics);
         }

@@ -32,6 +32,7 @@ public class Simulation {
 
     }
 
+    @SuppressWarnings("Duplicates")
     private static void run(){
         initialize();
         PerformanceLogger.getInstance().printInitialConfiguration();
@@ -47,7 +48,7 @@ public class Simulation {
         statistics.printVariance();
     }
 
-
+    @SuppressWarnings("Duplicates")
     private static void runWithCustomSeed(long customSeed) {
         initialize();
         InitGenerator.getInstance().putNewSeed(customSeed);

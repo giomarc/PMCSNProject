@@ -1,5 +1,7 @@
 package runners.simulation;
 
+import cloudlet.Cloudlet;
+import cloudlet.CloudletController;
 import event.Event;
 import variablesGenerator.Arrivals;
 
@@ -16,7 +18,7 @@ public class StatisticsGenerator {
     private double completedCloudlet;
     private double completedCloud;
 
-    //DA COMPLETARE CON WELFORD
+    //SERVICE TIME
     private double meanResponseTime;
     private double meanResponseTimeCloudlet;
     private double meanResponseTimeCloud;
@@ -27,11 +29,59 @@ public class StatisticsGenerator {
     private double meanResponseTimeClass1Cloud;
     private double meanResponseTimeClass2Cloud;
 
+    //POPULATION
+    private double meanGlobalPopulation;
+    private double meanCloudletPopulation;
+
+    private double meanCloudPopulation;
+    private double meanGlobalPopulationClass1;
+    private double meanCloudletPopulationClass1;
+    private double meanCloudPopulationClass1;
+    private double meanGlobalPopulationClass2;
+    private double meanCloudletPopulationClass2;
+    private double meanCloudPopulationClass2;
+
+
     private double sampleMean;
     private double variance;
     private int iterations;
 
 
+    public double getMeanResponseTime() {
+        return meanResponseTime;
+    }
+
+    public double getMeanResponseTimeCloudlet() {
+        return meanResponseTimeCloudlet;
+    }
+
+    public double getMeanResponseTimeCloud() {
+        return meanResponseTimeCloud;
+    }
+
+    public double getMeanResponseTimeClass1() {
+        return meanResponseTimeClass1;
+    }
+
+    public double getMeanResponseTimeClass2() {
+        return meanResponseTimeClass2;
+    }
+
+    public double getMeanResponseTimeClass1Cloudlet() {
+        return meanResponseTimeClass1Cloudlet;
+    }
+
+    public double getMeanResponseTimeClass2Cloudlet() {
+        return meanResponseTimeClass2Cloudlet;
+    }
+
+    public double getMeanResponseTimeClass1Cloud() {
+        return meanResponseTimeClass1Cloud;
+    }
+
+    public double getMeanResponseTimeClass2Cloud() {
+        return meanResponseTimeClass2Cloud;
+    }
 
     private StatisticsGenerator(){
         this.allpackets                     = 0.0;
@@ -43,19 +93,27 @@ public class StatisticsGenerator {
         this.packet2Cloud                   = 0.0;
         this.completedCloud                 = 0.0;
         this.completedCloudlet              = 0.0;
-        this.meanResponseTime = 0.0;
-        this.meanResponseTimeCloudlet = 0.0;
-        this.meanResponseTimeCloud = 0.0;
-        this.meanResponseTimeClass1 = 0.0;
-        this.meanResponseTimeClass2 = 0.0;
+        this.meanResponseTime               = 0.0;
+        this.meanResponseTimeCloudlet       = 0.0;
+        this.meanResponseTimeCloud          = 0.0;
+        this.meanResponseTimeClass1         = 0.0;
+        this.meanResponseTimeClass2         = 0.0;
         this.meanResponseTimeClass1Cloudlet = 0.0;
         this.meanResponseTimeClass2Cloudlet = 0.0;
-        this.meanResponseTimeClass1Cloud = 0.0;
-        this.meanResponseTimeClass2Cloud = 0.0;
-        this.sampleMean = 0.0;
-        this.variance = 0.0;
-        this.iterations = 0;
-
+        this.meanResponseTimeClass1Cloud    = 0.0;
+        this.meanResponseTimeClass2Cloud    = 0.0;
+        this.sampleMean                     = 0.0;
+        this.variance                       = 0.0;
+        this.iterations                     = 0;
+        this.meanGlobalPopulation           = 0;
+        this.meanCloudletPopulation         = 0;
+        this.meanCloudPopulation            = 0;
+        this.meanGlobalPopulationClass1     = 0;
+        this.meanCloudletPopulationClass1   = 0;
+        this.meanCloudPopulationClass1      = 0;
+        this.meanGlobalPopulationClass2     = 0;
+        this.meanCloudletPopulationClass2   = 0;
+        this.meanCloudPopulationClass2      = 0;
     }
 
     public static StatisticsGenerator getInstance(){
@@ -92,11 +150,12 @@ public class StatisticsGenerator {
     /**
      * calculateSampleMean VERSION 2
      */
-    private double welfordMean(double valueToUpdate, double currentValueToInsert, int n)
+    private double welfordMean(double valueToUpdate, double currentValueToInsert, long n)
     {
         double diff = (currentValueToInsert -  valueToUpdate);
         double i = (double) n;
-        valueToUpdate = valueToUpdate + (diff / i);
+        if(i!=0)
+            valueToUpdate = valueToUpdate + (diff / i);
         return valueToUpdate;
     }
 
@@ -109,10 +168,6 @@ public class StatisticsGenerator {
         variance = variance + ((diff*diff)*((n-1)/n));
         iterations = (int) n;
     }
-    /**
-     * Getter and Setter
-     *
-     */
 
     public double getAllpackets(){
         return this.allpackets;
@@ -153,6 +208,7 @@ public class StatisticsGenerator {
     public void increasePacket2Cloudlet(){
         this.packet2Cloudlet++;
     }
+
     public void increasePacket1Cloud(){
         this.packet1Cloud++;
     }
@@ -199,6 +255,51 @@ public class StatisticsGenerator {
         meanResponseTime = welfordMean(meanResponseTime, serviceTime, (int) (packet1Cloudlet + packet2Cloudlet + packet1Cloud + packet2Cloud));
     }
 
+    public void updatePopulationMeans(int type,
+                                      int jobClass,
+                                      int cloudletPopulation,
+                                      int cloudPopulation,
+                                      int cloudletPopulationClass1,
+                                      int cloudPopulationClass1,
+                                      int cloudletPopulationClass2,
+                                      int cloudPopulationClass2){
+
+        // aggiornamento della popolazione media senza considerare la classe
+        long globalIteration = (long) (packet1Cloud + packet2Cloud + packet1Cloudlet + packet2Cloudlet);
+        this.meanGlobalPopulation = welfordMean(this.meanGlobalPopulation, cloudletPopulation + cloudPopulation, globalIteration);
+        if(type == 1){
+            long iterationValueCloudlet = (int) (packet1Cloudlet + packet2Cloudlet);
+            this.meanCloudletPopulation = welfordMean(this.meanCloudletPopulation, cloudletPopulation, iterationValueCloudlet);
+        }
+        else if(type == 2){
+            long iterationValueCloud = (int) (packet1Cloud + packet2Cloud);
+            this.meanCloudPopulation = welfordMean(this.meanCloudPopulation, cloudPopulation, iterationValueCloud);
+        }
+
+        //aggiornamento della popolazione media per la classe 1
+        if(jobClass == 1) {
+            if (type == 1) {
+                long iterationCloudletClass1 = (long) packet1Cloudlet;
+                this.meanCloudletPopulationClass1 = welfordMean(this.meanCloudletPopulationClass1, cloudletPopulationClass1, iterationCloudletClass1);
+            } else if (type == 2) {
+                long iterationCloudClass1 = (long) packet1Cloud;
+                this.meanCloudPopulationClass1 = welfordMean(this.meanCloudPopulationClass1, cloudPopulationClass1, iterationCloudClass1);
+            }
+        }
+
+        //aggiornamento della popolazione media per la classe 2
+        else if(jobClass == 2){
+            if(type == 1){
+                long iterationCloudletClass2 = (long) packet2Cloudlet;
+                this.meanCloudletPopulationClass2 = welfordMean(this.meanCloudletPopulationClass2, cloudletPopulationClass2, iterationCloudletClass2);
+            }
+            else if(type == 2){
+                long iterationCloudClass2 = (long) packet2Cloud;
+                this.meanCloudPopulationClass2 = welfordMean(this.meanCloudPopulationClass2, cloudPopulationClass2, iterationCloudClass2);
+            }
+        }
+    }
+
     public double getPacket1() {
         return packet1Cloudlet + packet1Cloud;
     }
@@ -207,32 +308,40 @@ public class StatisticsGenerator {
         return packet2Cloudlet + packet2Cloud;
     }
 
-    public double getMeanResponseTime() {
-        return meanResponseTime;
+    public double getMeanGlobalPopulation() {
+        return meanGlobalPopulation;
     }
 
-    public double getMeanResponseTimeClass1() {
-        return meanResponseTimeClass1;
+    public double getMeanCloudletPopulation() {
+        return meanCloudletPopulation;
     }
 
-    public double getMeanResponseTimeClass2() {
-        return meanResponseTimeClass2;
+    public double getMeanCloudPopulation() {
+        return meanCloudPopulation;
     }
 
-    public double getMeanResponseTimeClass1Cloudlet() {
-        return meanResponseTimeClass1Cloudlet;
+    public double getMeanGlobalPopulationClass1() {
+        return meanGlobalPopulationClass1;
     }
 
-    public double getMeanResponseTimeClass2Cloudlet() {
-        return meanResponseTimeClass2Cloudlet;
+    public double getMeanCloudletPopulationClass1() {
+        return meanCloudletPopulationClass1;
     }
 
-    public double getMeanResponseTimeClass1Cloud() {
-        return meanResponseTimeClass1Cloud;
+    public double getMeanCloudPopulationClass1() {
+        return meanCloudPopulationClass1;
     }
 
-    public double getMeanResponseTimeClass2Cloud() {
-        return meanResponseTimeClass2Cloud;
+    public double getMeanGlobalPopulationClass2() {
+        return meanGlobalPopulationClass2;
+    }
+
+    public double getMeanCloudletPopulationClass2() {
+        return meanCloudletPopulationClass2;
+    }
+
+    public double getMeanCloudPopulationClass2() {
+        return meanCloudPopulationClass2;
     }
 
     public void printSampleMean(){
@@ -241,14 +350,6 @@ public class StatisticsGenerator {
 
     public void printVariance(){
         System.out.println("Variance: " + variance/iterations);
-    }
-
-    public double getMeanResponseTimeCloudlet() {
-        return meanResponseTimeCloudlet;
-    }
-
-    public double getMeanResponseTimeCloud() {
-        return meanResponseTimeCloud;
     }
 
 
@@ -262,15 +363,15 @@ public class StatisticsGenerator {
         this.packet2Cloud                   = 0.0;
         this.completedCloud                 = 0.0;
         this.completedCloudlet              = 0.0;
-        this.meanResponseTime = 0.0;
-        this.meanResponseTimeCloudlet = 0.0;
-        this.meanResponseTimeCloud = 0.0;
-        this.meanResponseTimeClass1 = 0.0;
-        this.meanResponseTimeClass2 = 0.0;
-        this.meanResponseTimeClass1Cloudlet = 0.0;
-        this.meanResponseTimeClass2Cloudlet = 0.0;
-        this.meanResponseTimeClass1Cloud = 0.0;
-        this.meanResponseTimeClass2Cloud = 0.0;
+        this.meanResponseTime                = 0.0;
+        this.meanResponseTimeCloudlet        = 0.0;
+        this.meanResponseTimeCloud           = 0.0;
+        this.meanResponseTimeClass1          = 0.0;
+        this.meanResponseTimeClass2          = 0.0;
+        this.meanResponseTimeClass1Cloudlet  = 0.0;
+        this.meanResponseTimeClass2Cloudlet  = 0.0;
+        this.meanResponseTimeClass1Cloud     = 0.0;
+        this.meanResponseTimeClass2Cloud     = 0.0;
         this.sampleMean = 0.0;
         this.variance = 0.0;
     }

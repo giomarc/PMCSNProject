@@ -1,7 +1,5 @@
 package runners.simulation;
 
-import cloudlet.Cloudlet;
-import cloudlet.CloudletController;
 import event.Event;
 import variablesGenerator.Arrivals;
 
@@ -11,14 +9,21 @@ public class StatisticsGenerator {
     private double allpackets;
     private static StatisticsGenerator instance = null;
     private double globalTime;
-    private double packet1Cloudlet;
-    private double packet2Cloudlet;
-    private double packet1Cloud;
-    private double packet2Cloud;
+
     private double completedCloudlet;
     private double completedCloud;
 
-    //SERVICE TIME
+    //POPULATION
+    private double completedCloudletClass1;
+    private double completedCloudletClass2;
+    private double completedCloudClass1;
+    private double completedCloudClass2;
+    private long arrivedCloudletClass1;
+    private long arrivedCloudletClass2;
+    private long arrivedCloudClass1;
+    private long arrivedCloudClass2;
+
+    //RESPONSE TIME
     private double meanResponseTime;
     private double meanResponseTimeCloudlet;
     private double meanResponseTimeCloud;
@@ -32,7 +37,6 @@ public class StatisticsGenerator {
     //POPULATION
     private double meanGlobalPopulation;
     private double meanCloudletPopulation;
-
     private double meanCloudPopulation;
     private double meanGlobalPopulationClass1;
     private double meanCloudletPopulationClass1;
@@ -87,10 +91,14 @@ public class StatisticsGenerator {
         this.allpackets                     = 0.0;
         this.packetloss                     = 0.0;
         this.globalTime                     = 0.0;
-        this.packet1Cloudlet                = 0.0;
-        this.packet1Cloud                   = 0.0;
-        this.packet2Cloudlet                = 0.0;
-        this.packet2Cloud                   = 0.0;
+        this.completedCloudletClass1        = 0.0;
+        this.completedCloudClass1           = 0.0;
+        this.completedCloudletClass2        = 0.0;
+        this.completedCloudClass2           = 0.0;
+        this.arrivedCloudletClass1          = 0;
+        this.arrivedCloudletClass2          = 0;
+        this.arrivedCloudClass1             = 0;
+        this.arrivedCloudClass2             = 0;
         this.completedCloud                 = 0.0;
         this.completedCloudlet              = 0.0;
         this.meanResponseTime               = 0.0;
@@ -202,19 +210,19 @@ public class StatisticsGenerator {
     }
 
     public void increasePacket1Cloudlet(){
-        this.packet1Cloudlet++;
+        this.completedCloudletClass1++;
     }
 
     public void increasePacket2Cloudlet(){
-        this.packet2Cloudlet++;
+        this.completedCloudletClass2++;
     }
 
     public void increasePacket1Cloud(){
-        this.packet1Cloud++;
+        this.completedCloudClass1++;
     }
 
     public void increasePacket2Cloud(){
-        this.packet2Cloud++;
+        this.completedCloudClass2++;
     }
 
 
@@ -226,11 +234,11 @@ public class StatisticsGenerator {
             meanResponseTimeCloudlet = welfordMean(meanResponseTimeCloudlet, serviceTime, (int) completedCloudlet);
             if(jobClass == 1){
                 increasePacket1Cloudlet();
-                meanResponseTimeClass1Cloudlet = welfordMean(meanResponseTimeClass1Cloudlet, serviceTime, (int) packet1Cloudlet);
+                meanResponseTimeClass1Cloudlet = welfordMean(meanResponseTimeClass1Cloudlet, serviceTime, (int) completedCloudletClass1);
             }
             else if(jobClass == 2){
                 increasePacket2Cloudlet();
-                meanResponseTimeClass2Cloudlet = welfordMean(meanResponseTimeClass2Cloudlet, serviceTime, (int) packet2Cloudlet);
+                meanResponseTimeClass2Cloudlet = welfordMean(meanResponseTimeClass2Cloudlet, serviceTime, (int) completedCloudletClass2);
             }
         }
         else if(e.getType() == 2) {     //cloud
@@ -238,21 +246,21 @@ public class StatisticsGenerator {
             meanResponseTimeCloud = welfordMean(meanResponseTimeCloud, serviceTime, (int) completedCloud);
             if(jobClass == 1){
                 increasePacket1Cloud();
-                meanResponseTimeClass1Cloud = welfordMean(meanResponseTimeClass1Cloud, serviceTime, (int) packet1Cloud);
+                meanResponseTimeClass1Cloud = welfordMean(meanResponseTimeClass1Cloud, serviceTime, (int) completedCloudClass1);
             }
             else if(jobClass == 2){
                 increasePacket2Cloud();
-                meanResponseTimeClass2Cloud = welfordMean(meanResponseTimeClass2Cloud, serviceTime, (int) packet2Cloud);
+                meanResponseTimeClass2Cloud = welfordMean(meanResponseTimeClass2Cloud, serviceTime, (int) completedCloudClass2);
             }
         }
         else
             System.exit(-1);
         if(jobClass == 1)
-            meanResponseTimeClass1 = welfordMean(meanResponseTimeClass1, serviceTime, (int) (packet1Cloudlet + packet1Cloud));
+            meanResponseTimeClass1 = welfordMean(meanResponseTimeClass1, serviceTime, (int) (completedCloudletClass1 + completedCloudClass1));
         else if(jobClass == 2)
-            meanResponseTimeClass2 = welfordMean(meanResponseTimeClass2, serviceTime, (int) (packet2Cloudlet + packet2Cloud));
+            meanResponseTimeClass2 = welfordMean(meanResponseTimeClass2, serviceTime, (int) (completedCloudletClass2 + completedCloudClass2));
 
-        meanResponseTime = welfordMean(meanResponseTime, serviceTime, (int) (packet1Cloudlet + packet2Cloudlet + packet1Cloud + packet2Cloud));
+        meanResponseTime = welfordMean(meanResponseTime, serviceTime, (int) (completedCloudletClass1 + completedCloudletClass2 + completedCloudClass1 + completedCloudClass2));
     }
 
     public void updatePopulationMeans(int type,
@@ -265,24 +273,24 @@ public class StatisticsGenerator {
                                       int cloudPopulationClass2){
 
         // aggiornamento della popolazione media senza considerare la classe
-        long globalIteration = (long) (packet1Cloud + packet2Cloud + packet1Cloudlet + packet2Cloudlet);
+        long globalIteration = (long) (arrivedCloudClass1 + completedCloudClass2 + completedCloudletClass1 + completedCloudletClass2);
         this.meanGlobalPopulation = welfordMean(this.meanGlobalPopulation, cloudletPopulation + cloudPopulation, globalIteration);
         if(type == 1){
-            long iterationValueCloudlet = (int) (packet1Cloudlet + packet2Cloudlet);
+            long iterationValueCloudlet = (int) (completedCloudletClass1 + completedCloudletClass2);
             this.meanCloudletPopulation = welfordMean(this.meanCloudletPopulation, cloudletPopulation, iterationValueCloudlet);
         }
         else if(type == 2){
-            long iterationValueCloud = (int) (packet1Cloud + packet2Cloud);
+            long iterationValueCloud = (int) (completedCloudClass1 + completedCloudClass2);
             this.meanCloudPopulation = welfordMean(this.meanCloudPopulation, cloudPopulation, iterationValueCloud);
         }
 
         //aggiornamento della popolazione media per la classe 1
         if(jobClass == 1) {
             if (type == 1) {
-                long iterationCloudletClass1 = (long) packet1Cloudlet;
+                long iterationCloudletClass1 = (long) completedCloudletClass1;
                 this.meanCloudletPopulationClass1 = welfordMean(this.meanCloudletPopulationClass1, cloudletPopulationClass1, iterationCloudletClass1);
             } else if (type == 2) {
-                long iterationCloudClass1 = (long) packet1Cloud;
+                long iterationCloudClass1 = (long) completedCloudClass1;
                 this.meanCloudPopulationClass1 = welfordMean(this.meanCloudPopulationClass1, cloudPopulationClass1, iterationCloudClass1);
             }
         }
@@ -290,22 +298,22 @@ public class StatisticsGenerator {
         //aggiornamento della popolazione media per la classe 2
         else if(jobClass == 2){
             if(type == 1){
-                long iterationCloudletClass2 = (long) packet2Cloudlet;
+                long iterationCloudletClass2 = (long) completedCloudletClass2;
                 this.meanCloudletPopulationClass2 = welfordMean(this.meanCloudletPopulationClass2, cloudletPopulationClass2, iterationCloudletClass2);
             }
             else if(type == 2){
-                long iterationCloudClass2 = (long) packet2Cloud;
+                long iterationCloudClass2 = (long) completedCloudClass2;
                 this.meanCloudPopulationClass2 = welfordMean(this.meanCloudPopulationClass2, cloudPopulationClass2, iterationCloudClass2);
             }
         }
     }
 
     public double getPacket1() {
-        return packet1Cloudlet + packet1Cloud;
+        return completedCloudletClass1 + completedCloudClass1;
     }
 
     public double getPacket2() {
-        return packet2Cloudlet + packet2Cloud;
+        return completedCloudletClass2 + completedCloudClass2;
     }
 
     public double getMeanGlobalPopulation() {
@@ -357,10 +365,10 @@ public class StatisticsGenerator {
         this.allpackets                     = 0.0;
         this.packetloss                     = 0.0;
         this.globalTime                     = 0.0;
-        this.packet1Cloudlet                = 0.0;
-        this.packet1Cloud                   = 0.0;
-        this.packet2Cloudlet                = 0.0;
-        this.packet2Cloud                   = 0.0;
+        this.completedCloudletClass1 = 0.0;
+        this.completedCloudClass1 = 0.0;
+        this.completedCloudletClass2 = 0.0;
+        this.completedCloudClass2 = 0.0;
         this.completedCloud                 = 0.0;
         this.completedCloudlet              = 0.0;
         this.meanResponseTime                = 0.0;

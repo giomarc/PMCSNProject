@@ -3,7 +3,7 @@ package cloudlet;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
-import runners.simulation.StatisticsGenerator;
+import runners.Statistics.Statistics;
 import system.SystemConfiguration;
 import variablesGenerator.Services;
 
@@ -51,7 +51,7 @@ public class Cloudlet {
             if(s.isBusy()) {
                 if (s.getJobInService().getCompletionTime() <= arrivalTime) {
                     s.setBusy(false);
-                    StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+                    Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                     decreaseN(s.getJobInService().getJobClass());
                     //calculateCloudletStatistics((n1+n2),iteration);
                 }
@@ -100,7 +100,7 @@ public class Cloudlet {
         double max = 0.0;
         for(Server s: serverList){
             if(s.isBusy()) {
-                StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+                Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                 s.setBusy(false);
 
                 if(s.getJobInService().getCompletionTime() > max)
@@ -112,7 +112,7 @@ public class Cloudlet {
 
 
     public static void calculateCloudletStatistics(double actualvalue,int n){
-        StatisticsGenerator.getInstance().calculateSampleMean(actualvalue,n);
+        Statistics.getInstance().calculateSampleMean(actualvalue,n);
     }
 
     public void reset(){

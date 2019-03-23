@@ -1,5 +1,7 @@
 package runners.simulation;
 
+import runners.Statistics.Statistics;
+import runners.Statistics.TimeStatistics;
 import variablesGenerator.InitGenerator;
 
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class ConfidenceInterval {
         }
         System.out.println("Percentage of outliers = " + outliers/tot);
         System.out.println("Mean Interval: " + ((min + max) /2));
-        System.out.println("Cloudlet service time" + StatisticsGenerator.getInstance().getMeanResponseTimeCloudlet());
+        System.out.println("Cloudlet service time" + TimeStatistics.getInstance().getMeanResponseTimeCloudlet());
 
     }
 

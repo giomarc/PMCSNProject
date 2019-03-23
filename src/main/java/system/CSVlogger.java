@@ -1,6 +1,7 @@
 package system;
 
-import runners.simulation.StatisticsGenerator;
+import runners.Statistics.Statistics;
+import runners.Statistics.TimeStatistics;
 
 import java.io.*;
 
@@ -63,19 +64,19 @@ public class CSVlogger {
         }
     }
 
-    public void writeOnFiles(StatisticsGenerator sg){
+    public void writeOnFiles(TimeStatistics ts){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
 
-        double meanGlobalServiceTime = sg.getMeanResponseTime();
-        double meanCloudletServiceTime = sg.getMeanResponseTimeCloudlet();
-        double meanCloudServiceTime = sg.getMeanResponseTimeCloud();
-        double meanCloudletServiceTimeClass1 = sg.getMeanResponseTimeClass1Cloudlet();
-        double meanCloudletServiceTimeClass2 = sg.getMeanResponseTimeClass2Cloudlet();
-        double meanCloudServiceTimeClass1 = sg.getMeanResponseTimeClass1Cloud();
-        double meanCloudServiceTimeClass2 = sg.getMeanResponseTimeClass2Cloud();
-        double meanClass1ServiceTime = sg.getMeanResponseTimeClass1();
-        double meanClass2ServiceTime = sg.getMeanResponseTimeClass2();
+        double meanGlobalServiceTime = ts.getMeanResponseTime();
+        double meanCloudletServiceTime = ts.getMeanResponseTimeCloudlet();
+        double meanCloudServiceTime = ts.getMeanResponseTimeCloud();
+        double meanCloudletServiceTimeClass1 = ts.getMeanResponseTimeClass1Cloudlet();
+        double meanCloudletServiceTimeClass2 = ts.getMeanResponseTimeClass2Cloudlet();
+        double meanCloudServiceTimeClass1 = ts.getMeanResponseTimeClass1Cloud();
+        double meanCloudServiceTimeClass2 = ts.getMeanResponseTimeClass2Cloud();
+        double meanClass1ServiceTime = ts.getMeanResponseTimeClass1();
+        double meanClass2ServiceTime = ts.getMeanResponseTimeClass2();
 
         BufferedWriter outRT;
         try {

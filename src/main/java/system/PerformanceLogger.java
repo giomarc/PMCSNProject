@@ -1,6 +1,8 @@
 package system;
 
-import runners.simulation.StatisticsGenerator;
+import runners.Statistics.JobStatistics;
+import runners.Statistics.Statistics;
+import runners.Statistics.TimeStatistics;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -92,76 +94,76 @@ public class PerformanceLogger implements Runnable {
         }
     }
 
-    public void printFinalResults(StatisticsGenerator statistics){
+    public void printFinalResults(JobStatistics js, TimeStatistics ts){
         System.out.print("\r100%");
         Printer.getInstance().print("\n\nCLOUDLET P_LOSS", "yellow");
-        System.out.println(statistics.calculatePLoss());
+        System.out.println(js.calculatePLoss());
         if(SystemConfiguration.VERBOSE) {
             Printer.getInstance().print("\nTHROUGHPUT", "yellow");
             Printer.getInstance().print("Analytic cloudlet throughput", "green");
-            System.out.println(statistics.getAnalyticCloudletThroughput());
+            System.out.println(js.getAnalyticCloudletThroughput());
             Printer.getInstance().print("Empirical cloudlet throughput", "green");
-            System.out.println(statistics.getEmpiricCloudletThroughput());
+            System.out.println(js.getEmpiricCloudletThroughput());
             Printer.getInstance().print("Analytic cloud throughput", "green");
-            System.out.println(statistics.getAnalyticCloudThroughput());
+            System.out.println(js.getAnalyticCloudThroughput());
             Printer.getInstance().print("Empirical cloud throughput", "green");
-            System.out.println(statistics.getEmpiricCloudThroughput());
+            System.out.println(js.getEmpiricCloudThroughput());
 
             Printer.getInstance().print("\nCOMPLETIONS", "yellow");
             Printer.getInstance().print("Job completed", "green");
-            System.out.println(((int) statistics.getAllpackets()));
+            System.out.println(((int) js.getAllpackets()));
             Printer.getInstance().print("Job class 1 completed", "green");
-            System.out.println(((int) statistics.getPacket1()));
+            System.out.println(((int) js.getPacket1()));
             Printer.getInstance().print("Job class 2 completed", "green");
-            System.out.println(((int) statistics.getPacket2()));
+            System.out.println(((int) js.getPacket2()));
 
             Printer.getInstance().print("\nSERVICE TIME", "yellow");
-            Printer.getInstance().print("Mean global service time", "green");
-            System.out.println(statistics.getMeanResponseTime());
-            Printer.getInstance().print("Mean Cloudlet service time", "green");
-            System.out.println(statistics.getMeanResponseTimeCloudlet());
-            Printer.getInstance().print("Mean Cloud service time", "green");
-            System.out.println(statistics.getMeanResponseTimeCloud());
-            Printer.getInstance().print("Mean class 1 service time", "green");
-            System.out.println(statistics.getMeanResponseTimeClass1());
-            Printer.getInstance().print("Mean class 2 service time", "green");
-            System.out.println(statistics.getMeanResponseTimeClass2());
-            Printer.getInstance().print("Mean cloudlet class 1 service time", "green");
-            System.out.println(statistics.getMeanResponseTimeClass1Cloudlet());
-            Printer.getInstance().print("Mean cloudlet class 2 service time", "green");
-            System.out.println(statistics.getMeanResponseTimeClass2Cloudlet());
-            Printer.getInstance().print("Mean cloud class 1 service time", "green");
-            System.out.println(statistics.getMeanResponseTimeClass1Cloud());
-            Printer.getInstance().print("Mean cloud class 2 service time", "green");
-            System.out.println(statistics.getMeanResponseTimeClass2Cloud());
+            Printer.getInstance().print("Mean global response time", "green");
+            System.out.println(ts.getMeanResponseTime());
+            Printer.getInstance().print("Mean Cloudlet response time", "green");
+            System.out.println(ts.getMeanResponseTimeCloudlet());
+            Printer.getInstance().print("Mean Cloud response time", "green");
+            System.out.println(ts.getMeanResponseTimeCloud());
+            Printer.getInstance().print("Mean class 1 response time", "green");
+            System.out.println(ts.getMeanResponseTimeClass1());
+            Printer.getInstance().print("Mean class 2 response time", "green");
+            System.out.println(ts.getMeanResponseTimeClass2());
+            Printer.getInstance().print("Mean cloudlet class 1 response time", "green");
+            System.out.println(ts.getMeanResponseTimeClass1Cloudlet());
+            Printer.getInstance().print("Mean cloudlet class 2 response time", "green");
+            System.out.println(ts.getMeanResponseTimeClass2Cloudlet());
+            Printer.getInstance().print("Mean cloud class 1 response time", "green");
+            System.out.println(ts.getMeanResponseTimeClass1Cloud());
+            Printer.getInstance().print("Mean cloud class 2 response time", "green");
+            System.out.println(ts.getMeanResponseTimeClass2Cloud());
 
             Printer.getInstance().print("\nSERVICE TIME", "yellow");
             Printer.getInstance().print("Mean global population", "green");
-            System.out.println(statistics.getMeanGlobalPopulation());
+            System.out.println(js.getMeanGlobalPopulation());
             Printer.getInstance().print("Mean Cloudlet population", "green");
-            System.out.println(statistics.getMeanCloudletPopulation());
+            System.out.println(js.getMeanCloudletPopulation());
             Printer.getInstance().print("Mean Cloud population", "green");
-            System.out.println(statistics.getMeanCloudPopulation());
+            System.out.println(js.getMeanCloudPopulation());
             Printer.getInstance().print("Mean class 1 population", "green");
             System.out.println("TODO");
             Printer.getInstance().print("Mean class 2 population", "green");
             System.out.println("TODO");
             Printer.getInstance().print("Mean cloudlet class 1 population", "green");
-            System.out.println(statistics.getMeanCloudletPopulationClass1());
+            System.out.println(js.getMeanCloudletPopulationClass1());
             Printer.getInstance().print("Mean cloudlet class 2 population", "green");
-            System.out.println(statistics.getMeanCloudletPopulationClass2());
+            System.out.println(js.getMeanCloudletPopulationClass2());
             Printer.getInstance().print("Mean cloud class 1 population", "green");
-            System.out.println(statistics.getMeanCloudPopulationClass1());
+            System.out.println(js.getMeanCloudPopulationClass1());
             Printer.getInstance().print("Mean cloud class 2 population", "green");
-            System.out.println(statistics.getMeanCloudPopulationClass1());
+            System.out.println(js.getMeanCloudPopulationClass1());
 
-            PerformanceLogger.getInstance().endTest(statistics.getGlobalTime());
+            PerformanceLogger.getInstance().endTest(js.getGlobalTime());
 
 //            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //            if(statistics.getMeanServiceTimeCloudlet() == 0.0) System.exit(-1);
 //            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-            CSVlogger.getInstance().writeOnFiles(statistics);
+            CSVlogger.getInstance().writeOnFiles(ts);
         }
     }
 

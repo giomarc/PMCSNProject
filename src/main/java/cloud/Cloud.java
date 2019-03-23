@@ -1,10 +1,9 @@
 package cloud;
 
-import cloudlet.CloudletController;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
-import runners.simulation.StatisticsGenerator;
+import runners.Statistics.Statistics;
 import variablesGenerator.Services;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +32,7 @@ public class Cloud {
             double updated = j.getCompletionTime() - arrivalTime;
             j.setCompletionTime(updated);
             if(j.getCompletionTime() < 0){
-                StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
+                Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
             }
         }
         removeFromList();
@@ -63,7 +62,7 @@ public class Cloud {
         for(Job j: jobsInService){
             if(j.getCompletionTime() > max)
                 max = j.getCompletionTime();
-            StatisticsGenerator.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
+            Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
         }
         return max;
     }

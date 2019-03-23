@@ -2,19 +2,19 @@ package cloudlet;
 
 import cloud.Cloud;
 import event.Event;
-import runners.simulation.StatisticsGenerator;
+import runners.Statistics.JobStatistics;
 
 public class CloudletController {
 
     private static CloudletController instance = new CloudletController();
     private int numberOfServers;
-    private StatisticsGenerator statistics;
+    private JobStatistics jobStatistics;
     private int iterations;
 
 
     private CloudletController(){
         numberOfServers = Cloudlet.getInstance().getNumberOfServers();
-        statistics = StatisticsGenerator.getInstance();
+        jobStatistics = JobStatistics.getInstance();
         iterations = 1;
     }
 
@@ -23,19 +23,19 @@ public class CloudletController {
     }
 
     public void dispatchArrivals(Event e){
-        statistics.increaseAllPackets();
+        jobStatistics.increaseAllPackets();
         double arrivalTime = e.getJob().getArrivalTime();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime);
-        //statistics.calculateSampleMean(numberOfJobsInCloudlet[1] + numberOfJobsInCloudlet[2],iterations);
+        //jobStatistics.calculateSampleMean(numberOfJobsInCloudlet[1] + numberOfJobsInCloudlet[2],iterations);
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
         iterations++;
         if(totalJobsInCloudlet >= numberOfServers){
-            statistics.increasePacketLoss();
+            jobStatistics.increasePacketLoss();
             Cloud.getInstance().processArrival(e);
-            statistics.updatePopulationMeans(2, e.getJob().getJobClass(), totalJobsInCloudlet, 0, numberOfJobsInCloudlet[0], 0 , numberOfJobsInCloudlet[1], 0);
+            jobStatistics.updatePopulationMeans(2, e.getJob().getJobClass(), totalJobsInCloudlet, 0, numberOfJobsInCloudlet[0], 0 , numberOfJobsInCloudlet[1], 0);
         }else{
             Cloudlet.getInstance().processArrival(e);
-            statistics.updatePopulationMeans(1, e.getJob().getJobClass(), totalJobsInCloudlet, 0, numberOfJobsInCloudlet[0], 0 , numberOfJobsInCloudlet[1], 0);
+            jobStatistics.updatePopulationMeans(1, e.getJob().getJobClass(), totalJobsInCloudlet, 0, numberOfJobsInCloudlet[0], 0 , numberOfJobsInCloudlet[1], 0);
         }
 
 
@@ -58,7 +58,7 @@ public class CloudletController {
 
     public void reset(){
         numberOfServers = Cloudlet.getInstance().getNumberOfServers();
-        statistics = StatisticsGenerator.getInstance();
+        jobStatistics = JobStatistics.getInstance();
         iterations = 1;
     }
 }

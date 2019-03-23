@@ -5,15 +5,21 @@ import cloudlet.Cloudlet;
 import cloudlet.CloudletController;
 import event.Event;
 import event.EventGenerator;
+import runners.Statistics.JobStatistics;
+import runners.Statistics.Statistics;
+import runners.Statistics.TimeStatistics;
 import system.CSVlogger;
 import system.PerformanceLogger;
 import system.SystemConfiguration;
 import variablesGenerator.InitGenerator;
 
+import java.sql.Time;
+
 
 public class Simulation {
 
-    private static StatisticsGenerator statistics;
+    private static JobStatistics jobStatistics;
+    private static TimeStatistics timeStatistics;
     private static CloudletController cloudletController;
 
     public static void main(String[] args) {
@@ -40,12 +46,10 @@ public class Simulation {
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
             Event e = EventGenerator.getInstance().generateArrival();
             cloudletController.dispatchArrivals(e);
-            statistics.setGlobalTime(statistics.getGlobalTime() + e.getJob().getArrivalTime());
+            jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
         }
-        statistics.setGlobalTime(statistics.getGlobalTime() + cloudletController.endSimulation());
-        PerformanceLogger.getInstance().printFinalResults(statistics);
-        statistics.printSampleMean();
-        statistics.printVariance();
+        jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());
+        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics);
     }
 
     @SuppressWarnings("Duplicates")
@@ -57,17 +61,16 @@ public class Simulation {
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
             Event e = EventGenerator.getInstance().generateArrival();
             cloudletController.dispatchArrivals(e);
-            statistics.setGlobalTime(statistics.getGlobalTime() + e.getJob().getArrivalTime());
+            jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
         }
-        statistics.setGlobalTime(statistics.getGlobalTime() + cloudletController.endSimulation());
-        PerformanceLogger.getInstance().printFinalResults(statistics);
-        statistics.printSampleMean();
-        statistics.printVariance();
+        jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());
+        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics);
     }
 
     private static void initialize(){
         SystemConfiguration.getConfigParams();
-        statistics = StatisticsGenerator.getInstance();
+        jobStatistics = JobStatistics.getInstance();
+        timeStatistics = TimeStatistics.getInstance();
         cloudletController = CloudletController.getInstance();
         CSVlogger.getInstance().createFileIfNotExists("Response_time.csv",
                 "Throughput.csv", "AVG_jobs.csv");
@@ -76,7 +79,8 @@ public class Simulation {
 
     public static void resetAll(){
         initialize();
-        StatisticsGenerator.getInstance().resetStatistics();
+        JobStatistics.getInstance().resetStatistics();
+        TimeStatistics.getInstance().resetStatistics();
         Cloud.getInstance().reset();
         Cloudlet.getInstance().reset();
         CloudletController.getInstance().reset();

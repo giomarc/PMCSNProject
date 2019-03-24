@@ -11,23 +11,26 @@ import java.util.Iterator;
 public class Cloud {
     private static Cloud instance = new Cloud();
     private static ArrayList<Job> jobsInService;
+    private int n1;
+    private int n2;
 
 
     private Cloud(){
         jobsInService = new ArrayList<>();
+        n1 = 0;
+        n2 = 0;
     }
 
     public static Cloud getInstance(){ return instance;}
 
 
     public void processArrival(Event e) {
-        removeCompletedJobs(e);
+        removeCompletedJobs(e.getJob().getArrivalTime());
         processCurrentJob(e.getJob());
     }
 
 
-    public void removeCompletedJobs(Event e){
-        double arrivalTime = e.getJob().getArrivalTime();
+    public void removeCompletedJobs(double arrivalTime){
         for(Job j: jobsInService){
             double updated = j.getCompletionTime() - arrivalTime;
             j.setCompletionTime(updated);
@@ -42,6 +45,7 @@ public class Cloud {
         int jobclass = j.getJobClass();
         j.setCompletionTime(Services.getInstance().getCloudServiceTime(jobclass));
         jobsInService.add(j);
+        increaseN(jobclass);
     }
 
 
@@ -53,6 +57,7 @@ public class Cloud {
             double x = jobExaminated.getCompletionTime();
             if( x < 0 ){
                 itr.remove();
+                decreaseN(jobExaminated.getJobClass());
             }
         }
     }
@@ -70,4 +75,24 @@ public class Cloud {
     public void reset(){
         jobsInService = new ArrayList<>();
     }
+
+    public int[] numberOfJobsInCloudlet(double arrivalTime) {
+        removeCompletedJobs(arrivalTime);
+        return new int[]{n1, n2};
+    }
+
+    private void decreaseN(int jobClass){
+        if(jobClass == 1)
+            n1--;
+        else
+            n2--;
+    }
+
+    private void increaseN(int jobClass){
+        if(jobClass == 1)
+            n1++;
+        else
+            n2++;
+    }
+
 }

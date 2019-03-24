@@ -72,8 +72,7 @@ public class Simulation {
         jobStatistics = JobStatistics.getInstance();
         timeStatistics = TimeStatistics.getInstance();
         cloudletController = CloudletController.getInstance();
-        CSVlogger.getInstance().createFileIfNotExists("Response_time.csv",
-                "Throughput.csv", "AVG_jobs.csv");
+        CSVlogger.getInstance().createFileIfNotExists();
     }
 
 

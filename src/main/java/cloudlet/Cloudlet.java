@@ -12,15 +12,17 @@ import java.util.ArrayList;
 public class Cloudlet {
 
     private static Cloudlet instance = new Cloudlet();
-    private static int n1;
-    private static int n2;
-    private static int numberOfServers;
-    private static ArrayList<Server> serverList;
+    private int n1;
+    private int n2;
+    private int numberOfServers;
+    private ArrayList<Server> serverList;
     //private int iteration;
 
 
 
     private Cloudlet(){
+        n1 = 0;
+        n2 = 0;
         numberOfServers = SystemConfiguration.N;
         //iteration = 1;
         initServers();
@@ -74,7 +76,7 @@ public class Cloudlet {
         return (n1+n2);
     }
 
-    public static void decreaseN(int jobClass){
+    private void decreaseN(int jobClass){
         if(jobClass == 1)
             n1--;
         else

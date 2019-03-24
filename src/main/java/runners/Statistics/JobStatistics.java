@@ -1,5 +1,6 @@
 package runners.Statistics;
 
+import system.CSVlogger;
 import variablesGenerator.Arrivals;
 
 public class JobStatistics {
@@ -7,22 +8,18 @@ public class JobStatistics {
     private static JobStatistics instance = null;
     private static Statistics statistics;
 
-    private double packetloss;
-    private double allpackets;
     private double globalTime;
     private long globalIteration;
 
     //POPULATION COUNTERS
-    private double completedCloudletClass1;
-    private double completedCloudletClass2;
-    private double completedCloudClass1;
-    private double completedCloudClass2;
+    private long completedCloudletClass1;
+    private long completedCloudletClass2;
+    private long completedCloudClass1;
+    private long completedCloudClass2;
     private long arrivedCloudletClass1;
     private long arrivedCloudletClass2;
     private long arrivedCloudClass1;
     private long arrivedCloudClass2;
-    private double completedCloudlet;
-    private double completedCloud;
 
 
     //POPULATION MEANS
@@ -36,19 +33,15 @@ public class JobStatistics {
     private double meanCloudletPopulationClass2;
     private double meanCloudPopulationClass2;
 
-    public JobStatistics(){
-        this.allpackets                     = 0.0;
-        this.packetloss                     = 0.0;
-        this.completedCloudletClass1        = 0.0;
-        this.completedCloudClass1           = 0.0;
-        this.completedCloudletClass2        = 0.0;
-        this.completedCloudClass2           = 0.0;
+    private JobStatistics(){
+        this.completedCloudletClass1        = 0;
+        this.completedCloudClass1           = 0;
+        this.completedCloudletClass2        = 0;
+        this.completedCloudClass2           = 0;
         this.arrivedCloudletClass1          = 0;
         this.arrivedCloudletClass2          = 0;
         this.arrivedCloudClass1             = 0;
         this.arrivedCloudClass2             = 0;
-        this.completedCloud                 = 0.0;
-        this.completedCloudlet              = 0.0;
         this.meanGlobalPopulation           = 0;
         this.meanCloudletPopulation         = 0;
         this.meanCloudPopulation            = 0;
@@ -68,16 +61,16 @@ public class JobStatistics {
         return instance;
     }
 
-    /**
-     * Methods to get statistics
-     */
 
+    //UPDATES AND CALCULATIONS
     public void updatePopulationMeans(int type, int jobClass,
-                                      int cloudletPopulation, int cloudPopulation,
                                       int cloudletPopulationClass1, int cloudPopulationClass1,
                                       int cloudletPopulationClass2, int cloudPopulationClass2){
 
         // aggiornamento della popolazione media senza considerare la classe
+        int cloudletPopulation = cloudletPopulationClass1 + cloudletPopulationClass2;
+        int cloudPopulation = cloudPopulationClass1 + cloudPopulationClass2;
+
         updateGlobalPopulation(cloudletPopulation, cloudPopulation);
         if(type == 1){
             long iterationValueCloudlet = (int) (arrivedCloudletClass1 + arrivedCloudletClass2);
@@ -90,6 +83,8 @@ public class JobStatistics {
 
         //aggiornamento della popolazione media per la classe 1
         if(jobClass == 1) {
+            long iterationClass1 = arrivedCloudletClass1 + arrivedCloudClass1;
+            this.meanGlobalPopulationClass1 = statistics.welfordMean(this.meanGlobalPopulationClass1, cloudletPopulationClass1 + cloudPopulationClass1, iterationClass1);
             if (type == 1) {
                 long iterationCloudletClass1 = (long) arrivedCloudletClass1;
                 this.meanCloudletPopulationClass1 = statistics.welfordMean(this.meanCloudletPopulationClass1, cloudletPopulationClass1, iterationCloudletClass1);
@@ -101,6 +96,8 @@ public class JobStatistics {
 
         //aggiornamento della popolazione media per la classe 2
         else if(jobClass == 2){
+            long iterationClass2 = arrivedCloudletClass2 + arrivedCloudClass2;
+            this.meanGlobalPopulationClass2 = statistics.welfordMean(this.meanGlobalPopulationClass2, cloudletPopulationClass2 + cloudPopulationClass2, iterationClass2);
             if(type == 1){
                 long iterationCloudletClass2 = (long) arrivedCloudletClass2;
                 this.meanCloudletPopulationClass2 = statistics.welfordMean(this.meanCloudletPopulationClass2, cloudletPopulationClass2, iterationCloudletClass2);
@@ -110,84 +107,109 @@ public class JobStatistics {
                 this.meanCloudPopulationClass2 = statistics.welfordMean(this.meanCloudPopulationClass2, cloudPopulationClass2, iterationCloudClass2);
             }
         }
+
+        CSVlogger.getInstance().writeMeanPopulation(this);
     }
 
-    public void updateGlobalIteration(){
+    private void updateGlobalIteration(){
         globalIteration = arrivedCloudClass1 + arrivedCloudClass2 + arrivedCloudletClass1 + arrivedCloudletClass2;
     }
 
-
-    public void updateGlobalPopulation(int cloudletPopulation, int cloudPopulation){
+    private void updateGlobalPopulation(int cloudletPopulation, int cloudPopulation){
         updateGlobalIteration();
         this.meanGlobalPopulation = statistics.welfordMean(this.meanGlobalPopulation,
                 cloudletPopulation + cloudPopulation, globalIteration);
     }
 
     public double calculatePLoss(){
-        return getPacketloss()/getAllpackets();
+        double allPackets = completedCloudletClass1 +
+                            completedCloudletClass2 +
+                            completedCloudClass1 +
+                            completedCloudClass2;
+        double packetLoss = completedCloudClass1 +
+                            completedCloudClass2;
+        return packetLoss/allPackets;
     }
 
-    public void increasePacketLoss(){
-        this.packetloss ++;
-    }
 
-    public void increaseAllPackets(){
-        this.allpackets ++;
-    }
-
-    public void increaseCompletedCloudlet(){
-        this.completedCloudlet++;
-    }
-
-    public void increaseCompletedCloud(){
-        completedCloud++;
-    }
-
-    public double getAnalyticCloudletThroughput(){
-        return Arrivals.getInstance().getTotalRate()*(1-calculatePLoss());
-    }
-
-    public double getEmpiricCloudletThroughput(){
-        return (completedCloudlet)/globalTime;
-    }
-
-    public double getAnalyticCloudThroughput(){
-        return Arrivals.getInstance().getTotalRate()*(calculatePLoss());
-    }
-
-    public double getEmpiricCloudThroughput(){
-        return (completedCloud)/globalTime;
-    }
-
+    //GLOBAL TIME
     public void setGlobalTime(double globalTime) {
         this.globalTime = globalTime;
     }
 
-    public void increaseCompletesCloudletClass(){
-        this.completedCloudletClass1++;
-    }
-
-    public void increasePacket2Cloudlet(){
-        this.completedCloudletClass2++;
-    }
-
-    public void increasePacket1Cloud(){
-        this.completedCloudClass1++;
-    }
-
-    public void increaseCompletedCloudletClass1(){completedCloudletClass1 ++;}
-
-    public void increaseCompletedCloudletClass2(){completedCloudletClass2 ++;}
-
-    public void increasePacket2Cloud(){
-        this.completedCloudClass2++;
+    public double getGlobalTime() {
+        return globalTime;
     }
 
 
+    //INCREASE ARRIVED JOBS
+    public void increaseArrivedCloudClass1() {
+        arrivedCloudClass1++;
+    }
 
-    /**
-     * Getters and Setters
-     */
+    public void increaseArrivedCloudClass2() {
+        arrivedCloudClass2++;
+    }
+
+    public void increaseArrivedCloudletClass1(){
+        arrivedCloudletClass1++;
+    }
+
+    public void increaseArrivedCloudletClass2(){
+        arrivedCloudletClass2++;
+    }
+
+
+    //INCREASE COMPLETED JOBS
+    void increaseCompletedCloudClass1() {
+        completedCloudClass1++;
+    }
+
+    void increaseCompletedCloudClass2() {
+        completedCloudClass2++;
+    }
+
+    void increaseCompletedCloudletClass1(){
+        completedCloudletClass1 ++;
+    }
+
+    void increaseCompletedCloudletClass2(){
+        completedCloudletClass2 ++;
+    }
+
+
+    //GET JOBS
+    double getCompletedCloudClass1() {
+        return completedCloudClass1;
+    }
+
+    double getCompletedCloudClass2() {
+        return completedCloudClass2;
+    }
+
+    double getCompletedCloudletClass1() {
+        return completedCloudletClass1;
+    }
+
+    double getCompletedCloudletClass2() {
+        return completedCloudletClass2;
+    }
+
+    double getCompletedCloudlet() {
+        return completedCloudletClass1 + completedCloudletClass2;
+    }
+
+    double getCompletedCloud() {
+        return completedCloudClass1 + completedCloudClass2;
+    }
+
+    public long getAllpackets(){
+        return  completedCloudletClass1 +
+                completedCloudletClass2 +
+                completedCloudClass1 +
+                completedCloudClass2;
+    }
+
     public double getPacket1() {
         return completedCloudletClass1 + completedCloudClass1;
     }
@@ -195,15 +217,6 @@ public class JobStatistics {
     public double getPacket2() {
         return completedCloudletClass2 + completedCloudClass2;
     }
-
-    public double getAllpackets(){
-        return this.allpackets;
-    }
-
-    public double getPacketloss(){
-        return this.packetloss;
-    }
-
 
     public double getMeanGlobalPopulation() {
         return meanGlobalPopulation;
@@ -242,54 +255,43 @@ public class JobStatistics {
     }
 
 
-    public double getGlobalTime() {
-        return globalTime;
+    //THROUGHPUT
+    public double getAnalyticCloudletThroughput(){
+        return Arrivals.getInstance().getTotalRate()*(1-calculatePLoss());
     }
 
-    public double getCompletedCloudlet() {
-        return completedCloudlet;
+    public double getEmpiricCloudletThroughput(){
+        return (completedCloudletClass1 + completedCloudletClass2)/globalTime;
     }
 
-    public double getCompletedCloud() {
-        return completedCloud;
+    public double getAnalyticCloudThroughput(){
+        return Arrivals.getInstance().getTotalRate()*(calculatePLoss());
     }
 
-
-    public double getCompletedCloudletClass1() {
-        return completedCloudletClass1;
-    }
-
-    public double getCompletedCloudletClass2() {
-        return completedCloudletClass2;
+    public double getEmpiricCloudThroughput(){
+        return (completedCloudClass1 + completedCloudClass2)/globalTime;
     }
 
 
+    //RESET STATISTICS
     public void resetStatistics(){
-        this.allpackets                     = 0.0;
-        this.packetloss                     = 0.0;
-        this.globalTime                     = 0.0;
-        this.completedCloudletClass1        = 0.0;
-        this.completedCloudClass1           = 0.0;
-        this.completedCloudletClass2        = 0.0;
-        this.completedCloudClass2           = 0.0;
-        this.completedCloud                 = 0.0;
-        this.completedCloudlet              = 0.0;
+        this.completedCloudletClass1        = 0;
+        this.completedCloudClass1           = 0;
+        this.completedCloudletClass2        = 0;
+        this.completedCloudClass2           = 0;
+        this.arrivedCloudletClass1          = 0;
+        this.arrivedCloudletClass2          = 0;
+        this.arrivedCloudClass1             = 0;
+        this.arrivedCloudClass2             = 0;
+        this.meanGlobalPopulation           = 0;
+        this.meanCloudletPopulation         = 0;
+        this.meanCloudPopulation            = 0;
+        this.meanGlobalPopulationClass1     = 0;
+        this.meanCloudletPopulationClass1   = 0;
+        this.meanCloudPopulationClass1      = 0;
+        this.meanGlobalPopulationClass2     = 0;
+        this.meanCloudletPopulationClass2   = 0;
+        this.meanCloudPopulationClass2      = 0;
     }
 
-
-    public void increaseCompletedCloudClass1() {
-        completedCloudClass1++;
-    }
-
-    public void increaseCompletedCloudClass2() {
-        completedCloudClass2++;
-    }
-
-    public double getCompletedCloudClass1() {
-        return completedCloudClass1;
-    }
-
-    public double getCompletedCloudClass2() {
-        return completedCloudClass2;
-    }
 }

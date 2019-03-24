@@ -60,7 +60,6 @@ public class Statistics {
         double serviceTime = e.getJob().getServiceTime();
 
         if(e.getType() == 1) {//cloudlet
-            js.increaseCompletedCloudlet();
             ts.setMeanResponseTimeCloudlet(welfordMean(ts.getMeanResponseTimeCloudlet(), serviceTime, (int) js.getCompletedCloudlet()));
             if(jobClass == 1){
                 js.increaseCompletedCloudletClass1();
@@ -73,7 +72,6 @@ public class Statistics {
         }
 
         else if(e.getType() == 2) {     //cloud
-            js.increaseCompletedCloud();
             ts.setMeanResponseTimeCloud(welfordMean(ts.getMeanResponseTimeCloud(), serviceTime, (int) js.getCompletedCloud()));
             if(jobClass == 1){
                 js.increaseCompletedCloudClass1();

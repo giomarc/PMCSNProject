@@ -1,5 +1,6 @@
 package system;
 
+import runners.Statistics.JobStatistics;
 import runners.Statistics.Statistics;
 import runners.Statistics.TimeStatistics;
 
@@ -8,9 +9,11 @@ import java.io.*;
 public class CSVlogger {
 
     private static CSVlogger instance = new CSVlogger();
+    private int totalMeansDuringSimulations = 1000;
     private String fileResponseTime;
     private String fileThroughput;
     private String fileAVGjobs;
+    private String fileMeansInOneSimulation;
 
     private CSVlogger(){}
 
@@ -18,10 +21,11 @@ public class CSVlogger {
         return instance;
     }
 
-    public void createFileIfNotExists(String fileResponseTime, String fileThroughput, String fileAVGjobs){
-        this.fileResponseTime = fileResponseTime;
-        this.fileThroughput = fileThroughput;
-        this.fileAVGjobs = fileAVGjobs;
+    public void createFileIfNotExists(){
+        this.fileResponseTime = "ResponseTime.csv";
+        this.fileThroughput = "Throughput.csv";
+        this.fileAVGjobs = "AVGjobs.csv";
+        this.fileMeansInOneSimulation = "MeansInOneSimulation.csv";
 
         try {
             File directory = new File("./LOGS/");
@@ -34,6 +38,7 @@ public class CSVlogger {
             File fileRT = new File("./LOGS/" + fileResponseTime);
             File fileX = new File("./LOGS/" + fileThroughput);
             File fileEN = new File("./LOGS/" + fileAVGjobs);
+            File fileMS = new File("./LOGS/" + fileMeansInOneSimulation);
             if (fileRT.createNewFile()) {
                 BufferedWriter outRT = new BufferedWriter(new FileWriter("./LOGS/" + fileResponseTime, true));
                 System.out.println("File Response Time has been created.");
@@ -58,6 +63,15 @@ public class CSVlogger {
                         + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                 outEN.flush();
             }
+            fileMS.delete();
+            if (fileMS.createNewFile()) {
+                BufferedWriter outMS = new BufferedWriter(new FileWriter("./LOGS/" + fileMeansInOneSimulation, true));
+                System.out.println("File Means in one simulation jobs has been created.");
+                outMS.write("seed,  global_time, cloudlet_class1, cloudlet_class2, "
+                        + "cloudletGeneral, cloud_class1, cloud_class2,"
+                        + "cloudGeneral, class1, class2");
+                outMS.flush();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -81,7 +95,6 @@ public class CSVlogger {
         BufferedWriter outRT;
         try {
             outRT = new BufferedWriter(new FileWriter("./LOGS/" + fileResponseTime, true));
-            System.out.println("File Response Time has been created.");
             outRT.write("\n" + iterations + "," + seed + "," +
                     meanGlobalServiceTime + "," + meanCloudServiceTime + "," + meanCloudletServiceTime + "," +
                     meanClass1ServiceTime + "," + meanCloudServiceTimeClass1 + "," + meanCloudletServiceTimeClass1 + "," +
@@ -91,7 +104,38 @@ public class CSVlogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
+
+    public void writeMeanPopulation(JobStatistics js){
+        if(totalMeansDuringSimulations  > 0) {
+            totalMeansDuringSimulations--;
+
+            long seed = SystemConfiguration.SEED;
+            double globalTime = js.getGlobalTime();
+
+            double meanCloudletPopulation = js.getMeanCloudletPopulation();
+            double meanCloudletPopulationClass1 = js.getMeanCloudletPopulationClass1();
+            double meanCloudletPopulationClass2 = js.getMeanCloudletPopulationClass2();
+
+            double meanCloudPopulation = js.getMeanCloudPopulation();
+            double meanCloudPopulationClass1 = js.getMeanCloudPopulationClass1();
+            double meanCloudPopulationClass2 = js.getMeanCloudPopulationClass2();
+
+            double meanClass1Population = js.getMeanGlobalPopulationClass1();
+            double meanClass2Population = js.getMeanGlobalPopulationClass2();
+
+            BufferedWriter outMS;
+            try {
+                outMS = new BufferedWriter(new FileWriter("./LOGS/" + fileMeansInOneSimulation, true));
+                outMS.write("\n" + seed + "," + globalTime + "," + meanCloudletPopulationClass1 + "," + meanCloudletPopulationClass2 + ","
+                        + meanCloudletPopulation + "," + meanCloudPopulationClass1 + "," + meanCloudPopulationClass2 + ","
+                        + meanCloudPopulation + "," + meanClass1Population + "," + meanClass2Population);
+                outMS.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

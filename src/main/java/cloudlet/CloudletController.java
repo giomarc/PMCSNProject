@@ -23,19 +23,28 @@ public class CloudletController {
     }
 
     public void dispatchArrivals(Event e){
-        jobStatistics.increaseAllPackets();
+        int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime);
-        //jobStatistics.calculateSampleMean(numberOfJobsInCloudlet[1] + numberOfJobsInCloudlet[2],iterations);
+        int[] numberOfJobsInCloud = Cloud.getInstance().numberOfJobsInCloudlet(arrivalTime);
+
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
+        int totalJobsInCloud = numberOfJobsInCloud[0] + numberOfJobsInCloud[1];
         iterations++;
         if(totalJobsInCloudlet >= numberOfServers){
-            jobStatistics.increasePacketLoss();
+            if(jobClass == 1)
+                jobStatistics.increaseArrivedCloudClass1();
+            else
+                jobStatistics.increaseArrivedCloudClass2();
             Cloud.getInstance().processArrival(e);
-            jobStatistics.updatePopulationMeans(2, e.getJob().getJobClass(), totalJobsInCloudlet, 0, numberOfJobsInCloudlet[0], 0 , numberOfJobsInCloudlet[1], 0);
+            jobStatistics.updatePopulationMeans(2, e.getJob().getJobClass(), numberOfJobsInCloudlet[0], numberOfJobsInCloud[0] , numberOfJobsInCloudlet[1], numberOfJobsInCloud[1]);
         }else{
+            if(jobClass == 1)
+                jobStatistics.increaseArrivedCloudletClass1();
+            else
+                jobStatistics.increaseArrivedCloudletClass2();
             Cloudlet.getInstance().processArrival(e);
-            jobStatistics.updatePopulationMeans(1, e.getJob().getJobClass(), totalJobsInCloudlet, 0, numberOfJobsInCloudlet[0], 0 , numberOfJobsInCloudlet[1], 0);
+            jobStatistics.updatePopulationMeans(1, e.getJob().getJobClass(), numberOfJobsInCloudlet[0], numberOfJobsInCloud[0] , numberOfJobsInCloudlet[1], numberOfJobsInCloud[1]);
         }
 
 

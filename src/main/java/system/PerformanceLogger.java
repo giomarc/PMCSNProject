@@ -1,7 +1,6 @@
 package system;
 
 import runners.Statistics.JobStatistics;
-import runners.Statistics.Statistics;
 import runners.Statistics.TimeStatistics;
 
 import java.time.Duration;
@@ -35,8 +34,7 @@ public class PerformanceLogger implements Runnable {
     }
 
     public void endTest(double simulationTime){
-        //long memoryUsage = (calculateAverage(memoryUsages));
-        long memoryUsage = 0;
+        long memoryUsage = (calculateAverage(memoryUsages));
         stop = true;
         end = Instant.now();
         duration = Duration.between(start, end);
@@ -137,7 +135,7 @@ public class PerformanceLogger implements Runnable {
             Printer.getInstance().print("Mean cloud class 2 response time", "green");
             System.out.println(ts.getMeanResponseTimeClass2Cloud());
 
-            Printer.getInstance().print("\nSERVICE TIME", "yellow");
+            Printer.getInstance().print("\nAVG POPULATION", "yellow");
             Printer.getInstance().print("Mean global population", "green");
             System.out.println(js.getMeanGlobalPopulation());
             Printer.getInstance().print("Mean Cloudlet population", "green");
@@ -145,9 +143,9 @@ public class PerformanceLogger implements Runnable {
             Printer.getInstance().print("Mean Cloud population", "green");
             System.out.println(js.getMeanCloudPopulation());
             Printer.getInstance().print("Mean class 1 population", "green");
-            System.out.println("TODO");
+            System.out.println(js.getMeanGlobalPopulationClass1());
             Printer.getInstance().print("Mean class 2 population", "green");
-            System.out.println("TODO");
+            System.out.println(js.getMeanGlobalPopulationClass2());
             Printer.getInstance().print("Mean cloudlet class 1 population", "green");
             System.out.println(js.getMeanCloudletPopulationClass1());
             Printer.getInstance().print("Mean cloudlet class 2 population", "green");
@@ -155,13 +153,9 @@ public class PerformanceLogger implements Runnable {
             Printer.getInstance().print("Mean cloud class 1 population", "green");
             System.out.println(js.getMeanCloudPopulationClass1());
             Printer.getInstance().print("Mean cloud class 2 population", "green");
-            System.out.println(js.getMeanCloudPopulationClass1());
+            System.out.println(js.getMeanCloudPopulationClass2());
 
             PerformanceLogger.getInstance().endTest(js.getGlobalTime());
-
-//            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//            if(statistics.getMeanServiceTimeCloudlet() == 0.0) System.exit(-1);
-//            //ELIMINA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             CSVlogger.getInstance().writeOnFiles(ts);
         }
@@ -187,14 +181,5 @@ public class PerformanceLogger implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void reset(){
-        start = null;
-        end = null;
-        duration = null;
-        memoryUsages = null;
-        stop = false;
-        son = null;
     }
 }

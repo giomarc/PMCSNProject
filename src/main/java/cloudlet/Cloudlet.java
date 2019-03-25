@@ -55,7 +55,6 @@ public class Cloudlet {
                     s.setBusy(false);
                     Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                     decreaseN(s.getJobInService().getJobClass());
-                    //calculateCloudletStatistics((n1+n2),iteration);
                 }
                 else
                     s.getJobInService().setCompletionTime(s.getJobInService().getCompletionTime() - arrivalTime);
@@ -72,9 +71,6 @@ public class Cloudlet {
         return numberOfServers;
     }
 
-    public int getJobInCloudletAfterComplition(){
-        return (n1+n2);
-    }
 
     private void decreaseN(int jobClass){
         if(jobClass == 1)

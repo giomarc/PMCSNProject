@@ -20,9 +20,7 @@ public class ReadStatisticsCSV {
             try (
                     Reader reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
                     CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
-                            .withHeader("iterations", "lambda1", "lambda2", "mu1cloudlet", "mu2cloudlet", "mu1cloud", "mu2cloud", "n", "seed", "system general",
-                                    "cloud general", "cloudlet general", "system class 1", "cloud class 1", "cloudlet class 1" ,
-                                    "system class 2", "cloud class 2", "cloudlet class 2")
+                            .withHeader()
                             .withFirstRecordAsHeader()
                             .withIgnoreHeaderCase()
                             .withTrim())
@@ -31,7 +29,7 @@ public class ReadStatisticsCSV {
                 for (CSVRecord csvRecord : csvParser) {
                     // cv = csvRecord.get("cloudlet general");
                     //cloudlet_general.add(Double.parseDouble(cv));
-                    cloudlet_general.add(Double.valueOf(csvRecord.get("cloudlet general")));
+                    cloudlet_general.add(Double.valueOf(csvRecord.get("Cloudlet_response_time")));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

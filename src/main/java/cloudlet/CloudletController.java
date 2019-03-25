@@ -9,13 +9,11 @@ public class CloudletController {
     private static CloudletController instance = new CloudletController();
     private int numberOfServers;
     private JobStatistics jobStatistics;
-    private int iterations;
 
 
     private CloudletController(){
         numberOfServers = Cloudlet.getInstance().getNumberOfServers();
         jobStatistics = JobStatistics.getInstance();
-        iterations = 1;
     }
 
     public static CloudletController getInstance(){
@@ -29,8 +27,6 @@ public class CloudletController {
         int[] numberOfJobsInCloud = Cloud.getInstance().numberOfJobsInCloudlet(arrivalTime);
 
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
-        int totalJobsInCloud = numberOfJobsInCloud[0] + numberOfJobsInCloud[1];
-        iterations++;
         if(totalJobsInCloudlet >= numberOfServers){
             if(jobClass == 1)
                 jobStatistics.increaseArrivedCloudClass1();
@@ -57,18 +53,8 @@ public class CloudletController {
         return Math.max(cloudletEndTime, cloudEndTime);
     }
 
-
-    public int getIterations(){
-        return iterations;
-    }
-
-    public void increaseIterations(){
-        iterations++;
-    }
-
     public void reset(){
         numberOfServers = Cloudlet.getInstance().getNumberOfServers();
         jobStatistics = JobStatistics.getInstance();
-        iterations = 1;
     }
 }

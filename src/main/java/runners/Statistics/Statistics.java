@@ -41,6 +41,7 @@ public class Statistics {
         double i = (double) n;
         if(i!=0)
             valueToUpdate = valueToUpdate + (diff / i);
+
         return valueToUpdate;
     }
 

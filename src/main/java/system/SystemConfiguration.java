@@ -23,6 +23,7 @@ public class SystemConfiguration {
     public static boolean MULTI_RUN = false;
     public static long SEED = 0;
     public static long ITERATIONS = 0;
+    public static boolean CSVLOGGER = false;
 
     public static void getConfigParams() {
         try {
@@ -48,6 +49,7 @@ public class SystemConfiguration {
             SEED = Long.parseLong(prop.getProperty("SEED"));
             ITERATIONS = Long.parseLong((prop.getProperty("ITERATIONS")));
             VERBOSE = Boolean.parseBoolean(prop.getProperty("VERBOSE"));
+            CSVLOGGER = Boolean.parseBoolean(prop.getProperty("CSVLOGGER"));
 
         }
         catch (Exception e) {

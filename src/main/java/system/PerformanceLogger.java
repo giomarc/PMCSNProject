@@ -71,6 +71,8 @@ public class PerformanceLogger implements Runnable {
     }
 
     public void printInitialConfiguration(){
+        if(SystemConfiguration.CSVLOGGER)
+            Printer.getInstance().print("Execution started with CSVLOGGER=true. To avoid writing results on CSV start again the execution setting CSVLOGGER=false", "cyan");
         if(SystemConfiguration.VERBOSE) {
             Printer.getInstance().print("Execution started with VERBOSE=true. To reduce logs start again the execution setting VERBOSE=false", "cyan");
             Printer.getInstance().print("\nARRIVAL RATES", "yellow");
@@ -114,6 +116,20 @@ public class PerformanceLogger implements Runnable {
             System.out.println(((int) js.getPacket1()));
             Printer.getInstance().print("Job class 2 completed", "green");
             System.out.println(((int) js.getPacket2()));
+            Printer.getInstance().print("Cloudlet class 1 completed", "green");
+            System.out.println(((int) js.getCompletedCloudletClass1()));
+            Printer.getInstance().print("Cloudlet class 2 completed", "green");
+            System.out.println(((int) js.getCompletedCloudletClass2()));
+            Printer.getInstance().print("Cloud class 1 completed", "green");
+            System.out.println(((int) js.getCompletedCloudClass1()));
+            Printer.getInstance().print("Cloud class 2 completed", "green");
+            System.out.println(((int) js.getCompletedCloudClass2()));
+            Printer.getInstance().print("Cloudlet completed", "green");
+            System.out.println(((int) js.getCompletedCloudlet()));
+            Printer.getInstance().print("Cloud completed", "green");
+            System.out.println(((int) js.getCompletedCloud()));
+
+
 
             Printer.getInstance().print("\nSERVICE TIME", "yellow");
             Printer.getInstance().print("Mean global response time", "green");

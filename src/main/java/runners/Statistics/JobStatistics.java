@@ -97,10 +97,10 @@ public class JobStatistics {
             long iterationClass1 = arrivedCloudletClass1 + arrivedCloudClass1;
             this.meanGlobalPopulationClass1 = statistics.welfordMean(this.meanGlobalPopulationClass1, cloudletPopulationClass1 + cloudPopulationClass1, iterationClass1);
             if (type == 1) {
-                long iterationCloudletClass1 = (long) arrivedCloudletClass1;
+                long iterationCloudletClass1 = arrivedCloudletClass1;
                 this.meanCloudletPopulationClass1 = statistics.welfordMean(this.meanCloudletPopulationClass1, cloudletPopulationClass1, iterationCloudletClass1);
             } else if (type == 2) {
-                long iterationCloudClass1 = (long) arrivedCloudClass1;
+                long iterationCloudClass1 = arrivedCloudClass1;
                 this.meanCloudPopulationClass1 = statistics.welfordMean(this.meanCloudPopulationClass1, cloudPopulationClass1, iterationCloudClass1);
             }
         }
@@ -110,11 +110,11 @@ public class JobStatistics {
             long iterationClass2 = arrivedCloudletClass2 + arrivedCloudClass2;
             this.meanGlobalPopulationClass2 = statistics.welfordMean(this.meanGlobalPopulationClass2, cloudletPopulationClass2 + cloudPopulationClass2, iterationClass2);
             if(type == 1){
-                long iterationCloudletClass2 = (long) arrivedCloudletClass2;
+                long iterationCloudletClass2 = arrivedCloudletClass2;
                 this.meanCloudletPopulationClass2 = statistics.welfordMean(this.meanCloudletPopulationClass2, cloudletPopulationClass2, iterationCloudletClass2);
             }
             else if(type == 2){
-                long iterationCloudClass2 = (long) arrivedCloudClass2;
+                long iterationCloudClass2 = arrivedCloudClass2;
                 this.meanCloudPopulationClass2 = statistics.welfordMean(this.meanCloudPopulationClass2, cloudPopulationClass2, iterationCloudClass2);
             }
         }
@@ -123,7 +123,6 @@ public class JobStatistics {
     }
 
     private void updateGlobalIteration(){
-        //globalIteration = arrivedCloudClass1 + arrivedCloudClass2 + arrivedCloudletClass1 + arrivedCloudletClass2;
         globalIteration++;
     }
 
@@ -134,9 +133,7 @@ public class JobStatistics {
     }
 
 
-    /**
-     * PLOSS
-     */
+    //PLOSS
     public double calculatePLoss(){
         double allPackets = completedCloudletClass1 +
                             completedCloudletClass2 +
@@ -148,9 +145,7 @@ public class JobStatistics {
     }
 
 
-    /**
-     * GLOBAL TIME
-     */
+    //GLOBAL TIME
     public void setGlobalTime(double globalTime) {
         this.globalTime = globalTime;
     }
@@ -160,9 +155,7 @@ public class JobStatistics {
     }
 
 
-    /**
-     * INCREASE ARRIVED JOBS
-     */
+    //INCREASE ARRIVED JOBS
     public void increaseArrivedCloudClass1() {
         arrivedCloudClass1++;
     }
@@ -180,9 +173,7 @@ public class JobStatistics {
     }
 
 
-    /**
-     * INCREASE COMPLETED JOBS
-     */
+    //INCREASE COMPLETED JOBS
     void increaseCompletedCloudClass1() {
         completedCloudClass1++;
     }
@@ -200,30 +191,28 @@ public class JobStatistics {
     }
 
 
-    /**
-     * GET NUMBER OF JOBS
-     */
-    double getCompletedCloudClass1() {
+    //GET NUMBER OF JOBS
+    public double getCompletedCloudClass1() {
         return completedCloudClass1;
     }
 
-    double getCompletedCloudClass2() {
+    public double getCompletedCloudClass2() {
         return completedCloudClass2;
     }
 
-    double getCompletedCloudletClass1() {
+    public double getCompletedCloudletClass1() {
         return completedCloudletClass1;
     }
 
-    double getCompletedCloudletClass2() {
+    public double getCompletedCloudletClass2() {
         return completedCloudletClass2;
     }
 
-    double getCompletedCloudlet() {
+    public double getCompletedCloudlet() {
         return completedCloudletClass1 + completedCloudletClass2;
     }
 
-    double getCompletedCloud() {
+    public double getCompletedCloud() {
         return completedCloudClass1 + completedCloudClass2;
     }
 
@@ -243,9 +232,7 @@ public class JobStatistics {
     }
 
 
-    /**
-     * MEAN POPULATIONS
-     */
+    // MEAN POPULATION
     public double getMeanGlobalPopulation() {
         return meanGlobalPopulation;
     }
@@ -283,9 +270,7 @@ public class JobStatistics {
     }
 
 
-    /**
-     * THROUGHPUT
-     */
+    // THROUGHPUT
     public double getAnalyticCloudletThroughput(){
         return Arrivals.getInstance().getTotalRate()*(1-calculatePLoss());
     }
@@ -300,38 +285,6 @@ public class JobStatistics {
 
     public double getEmpiricCloudThroughput(){
         return (completedCloudClass1 + completedCloudClass2)/globalTime;
-    }
-
-
-    /**
-     * ITERATIONS
-     */
-    public double getGlobalIteration() {
-        return globalIteration;
-    }
-
-    public double getCloudletIteration() {
-        return cloudletIteration;
-    }
-
-    public double getCloudIteration() {
-        return cloudIteration;
-    }
-
-    public double getCloudletClass1Iteration() {
-        return cloudletClass1Iteration;
-    }
-
-    public double getCloudletClass2Iteration() {
-        return cloudletClass2Iteration;
-    }
-
-    public double getCloudClass1Iteration() {
-        return cloudClass1Iteration;
-    }
-
-    public double getCloudClas2Iteration() {
-        return cloudClas2Iteration;
     }
 
     //RESET STATISTICS

@@ -21,6 +21,7 @@ public class Simulation {
     private static JobStatistics jobStatistics;
     private static TimeStatistics timeStatistics;
     private static CloudletController cloudletController;
+    //new development
 
     public static void main(String[] args) {
         initialize();

@@ -122,6 +122,7 @@ public class JobStatistics {
         CSVlogger.getInstance().writeMeanPopulation(this);
     }
 
+
     private void updateGlobalIteration(){
         globalIteration++;
     }

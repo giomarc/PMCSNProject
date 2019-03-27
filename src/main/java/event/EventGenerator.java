@@ -2,6 +2,7 @@ package event;
 
 import job.Job;
 import variablesGenerator.Arrivals;
+import variablesGenerator.Services;
 
 public class EventGenerator {
 
@@ -13,7 +14,7 @@ public class EventGenerator {
 
     public Event generateArrival(){
         double arrival = Arrivals.getInstance().getArrival();
-        Job job = new Job(Arrivals.getInstance().determineJobClass(), arrival);
+        Job job = new Job(Arrivals.getInstance().determineJobClass(), arrival, Services.getInstance().getJobOperations());
         return new Event(0, job);
     }
 

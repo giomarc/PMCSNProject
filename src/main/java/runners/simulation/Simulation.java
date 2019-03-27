@@ -31,8 +31,6 @@ public class Simulation {
                 runWithCustomSeed(Long.parseLong(args[0]) + i);
                 resetAll();
             }
-
-
         }
         else
             run();

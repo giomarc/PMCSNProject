@@ -43,7 +43,9 @@ public class Cloud {
 
     private void processCurrentJob(Job j){
         int jobclass = j.getJobClass();
-        j.setCompletionTime(Services.getInstance().getCloudServiceTime(jobclass));
+        //double completionTime = Services.getInstance().getCloudServiceTime(jobclass);
+        double completionTime = Services.getInstance().getCloudServiceTimePerOperation(jobclass, j.getOperations());
+        j.setCompletionTime(completionTime);
         jobsInService.add(j);
         increaseN(jobclass);
     }

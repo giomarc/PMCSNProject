@@ -6,12 +6,14 @@ public class Job {
     private double  completionTime;
     private double  serviceTime;
     private int     jobClass;
+    private double operations;
 
-    public Job(int jobClass, double arrivalTime){
+    public Job(int jobClass, double arrivalTime, double operations){
         this.completionTime = 0.0;
         this.serviceTime = 0.0;
         this.arrivalTime = arrivalTime;
         this.jobClass = jobClass;
+        this.operations = operations;
     }
 
     public double getArrivalTime() {
@@ -34,5 +36,13 @@ public class Job {
 
     public double getServiceTime() {
         return serviceTime;
+    }
+
+    public double getOperations() {
+        return operations;
+    }
+
+    public void setOperations(double operations) {
+        this.operations = operations;
     }
 }

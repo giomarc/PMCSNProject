@@ -43,4 +43,23 @@ public class Services {
     }
 
 
+    public double getJobOperations(){
+        return InitGenerator.getInstance().exponential(1, 3);
+    }
+
+    public double getCloudletServiceTimePerOperation(int jobClass, double numberOfOperations){
+        if(jobClass == 1)
+            return (1/SystemConfiguration.CLOUDLET_M1) * numberOfOperations;
+        else
+            return (1/SystemConfiguration.CLOUDLET_M2) * numberOfOperations;
+    }
+
+    public double getCloudServiceTimePerOperation(int jobClass, double numberOfOperations){
+        if(jobClass == 1)
+            return (1/SystemConfiguration.CLOUD_M1) * numberOfOperations;
+        else
+            return (1/SystemConfiguration.CLOUD_M2) * numberOfOperations;
+    }
+
+
 }

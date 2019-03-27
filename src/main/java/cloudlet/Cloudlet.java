@@ -34,7 +34,8 @@ public class Cloudlet {
 
     public void processArrival(Event e) {
         Job job = e.getJob();
-        double completionTime = Services.getInstance().getCloudletServiceTime(job.getJobClass());
+        //double completionTime = Services.getInstance().getCloudletServiceTime(job.getJobClass());
+        double completionTime = Services.getInstance().getCloudletServiceTimePerOperation(job.getJobClass(), job.getOperations());
         for(Server s: serverList){
             if(!s.isBusy()){
                 increaseN(job.getJobClass());

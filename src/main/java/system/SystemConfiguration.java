@@ -15,6 +15,7 @@ public class SystemConfiguration {
     public static double CLOUDLET_M2 = 0.0;
     public static double CLOUD_M1 = 0.0;
     public static double CLOUD_M2 = 0.0;
+    public static double PHASE_P = 0.0;
     public static double START = 0.0;
     public static double STOP = 0.0;
     public static boolean VERBOSE = true;
@@ -39,6 +40,7 @@ public class SystemConfiguration {
             CLOUDLET_M2 = Double.parseDouble(prop.getProperty("CLOUDLET_M2"));
             CLOUD_M1 = Double.parseDouble(prop.getProperty("CLOUD_M1"));
             CLOUD_M2 = Double.parseDouble(prop.getProperty("CLOUD_M2"));
+            PHASE_P = Double.parseDouble(prop.getProperty("PHASE_P"));
             START = Double.parseDouble(prop.getProperty("START"));
             STOP = Double.parseDouble(prop.getProperty("STOP"));
             //S = Integer.parseInt(prop.getProperty("S"));

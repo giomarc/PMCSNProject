@@ -3,6 +3,7 @@ package cloudlet;
 import cloud.Cloud;
 import event.Event;
 import runners.Statistics.JobStatistics;
+import system.SystemConfiguration;
 import variablesGenerator.Services;
 
 public class CloudletController {
@@ -21,8 +22,23 @@ public class CloudletController {
         return instance;
     }
 
-    @SuppressWarnings("Duplicates")
+
     public void dispatchArrivals(Event e){
+        int algorithm = SystemConfiguration.ALGORITHM;
+        switch (algorithm){
+            case 1: dispatchArrivalsStandard(e);
+                    break;
+            case 2: dispatchArrivalsSBAlgorithm(e);
+                    break;
+            case 3: dispatchArrivalsFirstClassinCloudletAlgorithm(e);
+                    break;
+            case 4: dispatchArrivalsThresholdAlgorithm(e, SystemConfiguration.THRESHOLD);
+                    break;
+        }
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void dispatchArrivalsStandard(Event e){
         int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime);
@@ -47,39 +63,12 @@ public class CloudletController {
     }
 
 
-    @SuppressWarnings("Duplicates")
-    public void dispatchArrivalsSecondAlgorithm(Event e){
-        int jobClass = e.getJob().getJobClass();
-        double arrivalTime = e.getJob().getArrivalTime();
-        int[] numberOfJobsInCloudlet = Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime);
-        int[] numberOfJobsInCloud = Cloud.getInstance().numberOfJobsInCloudlet(arrivalTime);
-        double operations = e.getJob().getOperations();
-
-        int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
-        if(totalJobsInCloudlet >= numberOfServers || operations > 1){
-            if(jobClass == 1)
-                jobStatistics.increaseArrivedCloudClass1();
-            else
-                jobStatistics.increaseArrivedCloudClass2();
-            Cloud.getInstance().processArrival(e);
-            jobStatistics.updatePopulationMeans(2, e.getJob().getJobClass(), numberOfJobsInCloudlet[0], numberOfJobsInCloud[0] , numberOfJobsInCloudlet[1], numberOfJobsInCloud[1]);
-        }else{
-            if(jobClass == 1)
-                jobStatistics.increaseArrivedCloudletClass1();
-            else
-                jobStatistics.increaseArrivedCloudletClass2();
-            Cloudlet.getInstance().processArrival(e);
-        }
-        jobStatistics.updatePopulationMeans(1, e.getJob().getJobClass(), numberOfJobsInCloudlet[0], numberOfJobsInCloud[0] , numberOfJobsInCloudlet[1], numberOfJobsInCloud[1]);
-    }
-
-
     /**
      * job classe 1 nel coudlet
      * @param e
      */
     @SuppressWarnings("Duplicates")
-    public void dispatchArrivalsThirdAlgorithm(Event e){
+    public void dispatchArrivalsFirstClassinCloudletAlgorithm(Event e){
         int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().numberOfJobsInCloudlet(arrivalTime);
@@ -87,7 +76,7 @@ public class CloudletController {
         double operations = e.getJob().getOperations();
 
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
-        if(totalJobsInCloudlet >= numberOfServers || jobClass == 1){
+        if(totalJobsInCloudlet >= numberOfServers || jobClass == 2){
             if(jobClass == 1)
                 jobStatistics.increaseArrivedCloudClass1();
             else

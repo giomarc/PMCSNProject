@@ -43,7 +43,7 @@ public class CSVlogger {
                 if (fileRT.createNewFile()) {
                     BufferedWriter outRT = new BufferedWriter(new FileWriter("./LOGS/" + fileResponseTime, true));
                     System.out.println("File Response Time has been created.");
-                    outRT.write("iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
+                    outRT.write("algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
                             + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time , "
                             + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                     outRT.flush();
@@ -51,7 +51,7 @@ public class CSVlogger {
                 if (fileX.createNewFile()) {
                     BufferedWriter outX = new BufferedWriter(new FileWriter("./LOGS/" + fileThroughput, true));
                     System.out.println("File Throughput has been created.");
-                    outX.write("iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
+                    outX.write("algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
                             + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time,"
                             + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                     outX.flush();
@@ -59,7 +59,7 @@ public class CSVlogger {
                 if (fileEN.createNewFile()) {
                     BufferedWriter outEN = new BufferedWriter(new FileWriter("./LOGS/" + fileAVGjobs, true));
                     System.out.println("File AVG jobs has been created.");
-                    outEN.write("iterations, seed,  Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
+                    outEN.write("algorithm, threshold, iterations, seed,  Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
                             + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time,"
                             + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                     outEN.flush();
@@ -84,6 +84,10 @@ public class CSVlogger {
         if(SystemConfiguration.CSVLOGGER) {
             long seed = SystemConfiguration.SEED;
             long iterations = SystemConfiguration.ITERATIONS;
+            int algorithm = SystemConfiguration.ALGORITHM;
+            int threshold = -1;
+            if(algorithm == 4)
+                threshold = SystemConfiguration.THRESHOLD;
 
             double meanGlobalServiceTime = ts.getMeanResponseTime();
             double meanCloudletServiceTime = ts.getMeanResponseTimeCloudlet();
@@ -98,7 +102,7 @@ public class CSVlogger {
             BufferedWriter outRT;
             try {
                 outRT = new BufferedWriter(new FileWriter("./LOGS/" + fileResponseTime, true));
-                outRT.write("\n" + iterations + "," + seed + "," +
+                outRT.write("\n" + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
                         meanGlobalServiceTime + "," + meanCloudServiceTime + "," + meanCloudletServiceTime + "," +
                         meanClass1ServiceTime + "," + meanCloudServiceTimeClass1 + "," + meanCloudletServiceTimeClass1 + "," +
                         meanClass2ServiceTime + "," + meanCloudServiceTimeClass2 + "," + meanCloudletServiceTimeClass2

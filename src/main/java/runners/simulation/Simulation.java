@@ -21,7 +21,6 @@ public class Simulation {
     private static JobStatistics jobStatistics;
     private static TimeStatistics timeStatistics;
     private static CloudletController cloudletController;
-    //new development
 
     public static void main(String[] args) {
         initialize();
@@ -44,8 +43,7 @@ public class Simulation {
         for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
             Event e = EventGenerator.getInstance().generateArrival();
-            //cloudletController.dispatchArrivals(e);
-            cloudletController.dispatchArrivalsThresholdAlgorithm(e,16);
+            cloudletController.dispatchArrivals(e);
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
         }
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());

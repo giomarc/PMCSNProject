@@ -25,6 +25,8 @@ public class SystemConfiguration {
     public static long SEED = 0;
     public static long ITERATIONS = 0;
     public static boolean CSVLOGGER = false;
+    public static int ALGORITHM = 1;
+    public static int THRESHOLD = 14;
 
     public static void getConfigParams() {
         try {
@@ -52,6 +54,8 @@ public class SystemConfiguration {
             ITERATIONS = Long.parseLong((prop.getProperty("ITERATIONS")));
             VERBOSE = Boolean.parseBoolean(prop.getProperty("VERBOSE"));
             CSVLOGGER = Boolean.parseBoolean(prop.getProperty("CSVLOGGER"));
+            ALGORITHM = Integer.parseInt(prop.getProperty("ALGORITHM"));
+            THRESHOLD = Integer.parseInt(prop.getProperty("THRESHOLD"));
 
         }
         catch (Exception e) {

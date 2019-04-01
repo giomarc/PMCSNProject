@@ -42,8 +42,9 @@ public class Cloudlet {
                 increaseN(job.getJobClass());
                 //calculateCloudletStatistics((n1+n2),iteration);
                 s.setBusy(true);
+                job.setCompletionTime(completionTime);
                 s.setJobInService(job);
-                s.getJobInService().setCompletionTime(completionTime);
+                //s.getJobInService().setCompletionTime(completionTime);
                 break;
             }
         }
@@ -121,5 +122,9 @@ public class Cloudlet {
         serverList = null;
         numberOfServers = SystemConfiguration.N;
         initServers();
+    }
+
+    public ArrayList<Server> getServerList(){
+        return this.serverList;
     }
 }

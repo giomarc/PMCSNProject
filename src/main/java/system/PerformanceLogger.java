@@ -173,7 +173,7 @@ public class PerformanceLogger implements Runnable {
 
             PerformanceLogger.getInstance().endTest(js.getGlobalTime());
 
-            CSVlogger.getInstance().writeOnFiles(ts);
+            CSVlogger.getInstance().writeOnFiles(ts, js.getGlobalTime());
         }
     }
 

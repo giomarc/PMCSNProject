@@ -16,7 +16,6 @@ public class Cloudlet {
     private int n2;
     private int numberOfServers;
     private ArrayList<Server> serverList;
-    //private int iteration;
 
 
 
@@ -24,7 +23,6 @@ public class Cloudlet {
         n1 = 0;
         n2 = 0;
         numberOfServers = SystemConfiguration.N;
-        //iteration = 1;
         initServers();
     }
 
@@ -34,17 +32,13 @@ public class Cloudlet {
 
     public void processArrival(Event e) {
         Job job = e.getJob();
-        //double completionTime = Services.getInstance().getCloudletServiceTime(job.getJobClass());
-        double completionTime = Services.getInstance().getCloudletExpServiceTimePerOperation(job.getJobClass(), job.getOperations());
-        //double completionTime = Services.getInstance().getCloudletExpServiceTimePerOperation(job.getJobClass(), job.getOperations());
+        double completionTime = Services.getInstance().getCloudletServiceTime(job.getJobClass(), job.getOperations());
         for(Server s: serverList){
             if(!s.isBusy()){
                 increaseN(job.getJobClass());
-                //calculateCloudletStatistics((n1+n2),iteration);
                 s.setBusy(true);
                 job.setCompletionTime(completionTime);
                 s.setJobInService(job);
-                //s.getJobInService().setCompletionTime(completionTime);
                 break;
             }
         }

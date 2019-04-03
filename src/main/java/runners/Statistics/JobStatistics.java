@@ -58,8 +58,8 @@ public class JobStatistics {
         this.meanGlobalPopulationClass2     = 0;
         this.meanCloudletPopulationClass2   = 0;
         this.meanCloudPopulationClass2      = 0;
-        this.globalIteration = 0;
-        this.globalTime = 0;
+        this.globalIteration                = 0;
+        this.globalTime                     = 0;
         statistics = Statistics.getInstance();
     }
 
@@ -307,8 +307,8 @@ public class JobStatistics {
         this.meanGlobalPopulationClass2     = 0;
         this.meanCloudletPopulationClass2   = 0;
         this.meanCloudPopulationClass2      = 0;
-        this.globalIteration = 0;
-        this.globalTime = 0;
+        this.globalIteration                = 0;
+        this.globalTime                     = 0;
     }
 
 }

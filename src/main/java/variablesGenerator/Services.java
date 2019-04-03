@@ -4,7 +4,6 @@ import system.SystemConfiguration;
 
 public class Services {
 
-    private static InitGenerator init = null;
     private static Services instance = null;
 
     private double serviceRatePhase1Class1;
@@ -29,24 +28,18 @@ public class Services {
     }
 
 
-    /**
-     * Return cloudlet service times
-     * @param job_class
-     */
-    public double getCloudletServiceTime(int job_class){
-        double service_rate;
-        if(job_class == 1)
-             service_rate = SystemConfiguration.CLOUDLET_M1;
+
+
+    // SERVICE TIME CLOUD
+
+    public double getCloudServiceTime(int jobclass, double numberOfOperations){
+        if(SystemConfiguration.OPERATIONS_ENABLED)
+            return getCloudServiceTimePerOperation(jobclass, numberOfOperations);
         else
-            service_rate = SystemConfiguration.CLOUDLET_M2;
-        return init.getInstance().exponential(service_rate, 1);
+            return getCloudServiceTimeWithoutOperations(jobclass);
     }
 
-    /**
-     * Return cloudlet service times
-     * @param job_class
-     */
-    public double getCloudServiceTime(int job_class){
+    private double getCloudServiceTimeWithoutOperations(int job_class){
         double service_rate;
         if(job_class == 1)
             service_rate = SystemConfiguration.CLOUD_M1;
@@ -55,26 +48,38 @@ public class Services {
         return InitGenerator.getInstance().exponential(service_rate, 2);
     }
 
-
-    public double getJobOperations(){
-        return InitGenerator.getInstance().exponential(1, 3);
-    }
-
-    public double getCloudletExpServiceTimePerOperation(int jobClass, double numberOfOperations){
-        if(jobClass == 1)
-            return (1/SystemConfiguration.CLOUDLET_M1) * numberOfOperations;
-        else
-            return (1/SystemConfiguration.CLOUDLET_M2) * numberOfOperations;
-    }
-
-    public double getCloudExpServiceTimePerOperation(int jobClass, double numberOfOperations){
+    private double getCloudServiceTimePerOperation(int jobClass, double numberOfOperations){
         if(jobClass == 1)
             return (1/SystemConfiguration.CLOUD_M1) * numberOfOperations;
         else
             return (1/SystemConfiguration.CLOUD_M2) * numberOfOperations;
     }
 
-    public double getCloudletHyperExpServiceTimePerOperation(int jobClass, double numberOfOperations){
+
+
+    // SERVICE TIME CLOUDLET
+
+    public double getCloudletServiceTime(int jobclass, double numberOfOperations){
+        //hyperexponential using operations
+        if(SystemConfiguration.HYPEREXPO_ENABLED && SystemConfiguration.OPERATIONS_ENABLED)
+            return getCloudletHyperExpServiceTimePerOperation(jobclass, numberOfOperations);
+
+        //hyperexponential without using operations
+        else if (SystemConfiguration.HYPEREXPO_ENABLED)
+            return getCloudletHyperExpServiceTimeWithoutOperations(jobclass);
+
+        //exponential using operations
+        else if(SystemConfiguration.OPERATIONS_ENABLED)
+            return getCloudletExpServiceTimePerOperation(jobclass, numberOfOperations);
+
+        //exponential without using operations
+        else
+            return getCloudletServiceTimeWithoutOperations(jobclass);
+
+    }
+
+    @SuppressWarnings("Duplicates")
+    private double getCloudletHyperExpServiceTimePerOperation(int jobClass, double numberOfOperations){
         double serviceRate;
         double p = SystemConfiguration.PHASE_P;
         if(InitGenerator.getInstance().uniform() <= p){
@@ -91,6 +96,57 @@ public class Services {
         }
         return (1/serviceRate) * numberOfOperations;
     }
+
+    @SuppressWarnings("Duplicates")
+    private double getCloudletHyperExpServiceTimeWithoutOperations(int jobClass){
+        double serviceRate;
+        double p = SystemConfiguration.PHASE_P;
+        if(InitGenerator.getInstance().uniform() <= p){
+            if(jobClass == 1)
+                serviceRate = serviceRatePhase1Class1;
+            else
+                serviceRate = serviceRatePhase1Class2;
+        }
+        else{
+            if(jobClass == 1)
+                serviceRate = serviceRatePhase2Class1;
+            else
+                serviceRate = serviceRatePhase2Class2;
+        }
+        return InitGenerator.getInstance().exponential(serviceRate, 1);
+    }
+
+    private double getCloudletExpServiceTimePerOperation(int jobClass, double numberOfOperations){
+        if(jobClass == 1)
+            return (1/SystemConfiguration.CLOUDLET_M1) * numberOfOperations;
+        else
+            return (1/SystemConfiguration.CLOUDLET_M2) * numberOfOperations;
+    }
+
+    private double getCloudletServiceTimeWithoutOperations(int job_class){
+        double service_rate;
+        if(job_class == 1)
+            service_rate = SystemConfiguration.CLOUDLET_M1;
+        else
+            service_rate = SystemConfiguration.CLOUDLET_M2;
+        return InitGenerator.getInstance().exponential(service_rate, 1);
+    }
+
+
+    // OTHER
+
+
+    public double getJobOperations(){
+        return InitGenerator.getInstance().exponential(1, 3);
+    }
+
+
+
+
+
+
+
+
 
 
 

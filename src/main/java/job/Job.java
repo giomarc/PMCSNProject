@@ -41,8 +41,4 @@ public class Job {
     public double getOperations() {
         return operations;
     }
-
-    public void setOperations(double operations) {
-        this.operations = operations;
-    }
 }

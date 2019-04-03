@@ -51,7 +51,7 @@ public class CSVlogger {
                 if (fileRT.createNewFile()) {
                     BufferedWriter outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTime, true));
                     System.out.println("File Response Time has been created.");
-                    outRT.write("algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
+                    outRT.write("distribution, operations, algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
                             + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time , "
                             + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                     outRT.flush();
@@ -59,7 +59,7 @@ public class CSVlogger {
                 if (fileX.createNewFile()) {
                     BufferedWriter outX = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughput, true));
                     System.out.println("File Throughput has been created.");
-                    outX.write("algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
+                    outX.write("distribution, operations, algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
                             + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time,"
                             + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                     outX.flush();
@@ -67,7 +67,7 @@ public class CSVlogger {
                 if (fileEN.createNewFile()) {
                     BufferedWriter outEN = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileAVGjobs, true));
                     System.out.println("File AVG jobs has been created.");
-                    outEN.write("algorithm, threshold, iterations, seed,  Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
+                    outEN.write("distribution, operations, algorithm, threshold, iterations, seed,  Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
                             + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time,"
                             + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                     outEN.flush();
@@ -85,7 +85,7 @@ public class CSVlogger {
                 if (fileSV.createNewFile()) {
                     BufferedWriter outSV = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileServerStatus, true));
                     System.out.println("File Server Status in one simulation jobs has been created.");
-                    outSV.write("algorithm, threshold, iterations, seed, id, utilization, packets_completed");
+                    outSV.write("distribution, operations, algorithm, threshold, iterations, seed, id, utilization, packets_completed");
                     outSV.flush();
                 }
             } catch (IOException e) {
@@ -111,6 +111,12 @@ public class CSVlogger {
         int threshold = -1;
         if(algorithm == 4)
             threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
         double meanGlobalServiceTime = ts.getMeanResponseTime();
         double meanCloudletServiceTime = ts.getMeanResponseTimeCloudlet();
@@ -125,7 +131,7 @@ public class CSVlogger {
         BufferedWriter outRT;
         try {
             outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTime, true));
-            outRT.write("\n" + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+            outRT.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
                     meanGlobalServiceTime + "," + meanCloudServiceTime + "," + meanCloudletServiceTime + "," +
                     meanClass1ServiceTime + "," + meanCloudServiceTimeClass1 + "," + meanCloudletServiceTimeClass1 + "," +
                     meanClass2ServiceTime + "," + meanCloudServiceTimeClass2 + "," + meanCloudletServiceTimeClass2
@@ -179,6 +185,12 @@ public class CSVlogger {
         int threshold = -1;
         if(algorithm == 4)
             threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
         int id;
         double utilization;
@@ -190,13 +202,17 @@ public class CSVlogger {
                 utilization = s.getTimeBusy()/globalTime;
                 jobsCompleted = s.getJobProcessed();
                 outServer = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileServerStatus, true));
-                outServer.write("\n" + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," + id + "," + utilization + "," + jobsCompleted);
+                outServer.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," + id + "," + utilization + "," + jobsCompleted);
                 outServer.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void reset(){
+        totalMeansDuringSimulations = 1000;
     }
 
 

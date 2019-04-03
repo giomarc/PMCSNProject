@@ -1,6 +1,7 @@
 package event;
 
 import job.Job;
+import system.SystemConfiguration;
 import variablesGenerator.Arrivals;
 import variablesGenerator.Services;
 
@@ -14,7 +15,11 @@ public class EventGenerator {
 
     public Event generateArrival(){
         double arrival = Arrivals.getInstance().getArrival();
-        Job job = new Job(Arrivals.getInstance().determineJobClass(), arrival, Services.getInstance().getJobOperations());
+        Job job;
+        if(SystemConfiguration.OPERATIONS_ENABLED)
+            job = new Job(Arrivals.getInstance().determineJobClass(), arrival, Services.getInstance().getJobOperations());
+        else
+            job = new Job(Arrivals.getInstance().determineJobClass(), arrival, 0);
         return new Event(0, job);
     }
 

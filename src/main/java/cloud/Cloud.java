@@ -23,14 +23,12 @@ public class Cloud {
 
     public static Cloud getInstance(){ return instance;}
 
-
     public void processArrival(Event e) {
         removeCompletedJobs(e.getJob().getArrivalTime());
         processCurrentJob(e.getJob());
     }
 
-
-    public void removeCompletedJobs(double arrivalTime){
+    private void removeCompletedJobs(double arrivalTime){
         for(Job j: jobsInService){
             double updated = j.getCompletionTime() - arrivalTime;
             j.setCompletionTime(updated);
@@ -43,15 +41,13 @@ public class Cloud {
 
     private void processCurrentJob(Job j){
         int jobclass = j.getJobClass();
-        //double completionTime = Services.getInstance().getCloudServiceTime(jobclass);
-        double completionTime = Services.getInstance().getCloudExpServiceTimePerOperation(jobclass, j.getOperations());
+        double completionTime = Services.getInstance().getCloudServiceTime(jobclass, j.getOperations());
         j.setCompletionTime(completionTime);
         jobsInService.add(j);
         increaseN(jobclass);
     }
 
-
-    public void removeFromList(){
+    private void removeFromList(){
         Iterator itr = jobsInService.iterator();
         Job jobExaminated;
         while(itr.hasNext()){
@@ -75,6 +71,8 @@ public class Cloud {
     }
 
     public void reset(){
+        n1 = 0;
+        n2 = 0;
         jobsInService = new ArrayList<>();
     }
 

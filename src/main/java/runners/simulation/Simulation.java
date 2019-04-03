@@ -24,10 +24,9 @@ public class Simulation {
 
     public static void main(String[] args) {
         initialize();
-        if(args.length == 2) {
-            System.out.println("running with custom seed");
-            for(int i = 0; i< Integer.parseInt(args[1]); i++){
-                runWithCustomSeed(Long.parseLong(args[0]) + i);
+        if(SystemConfiguration.MULTI_RUN) {
+            for(int i = 0; i< SystemConfiguration.RUNS; i++){
+                runWithCustomSeed(SystemConfiguration.SEED + i);
                 resetAll();
             }
         }
@@ -81,6 +80,7 @@ public class Simulation {
         Cloud.getInstance().reset();
         Cloudlet.getInstance().reset();
         CloudletController.getInstance().reset();
+        CSVlogger.getInstance().reset();
     }
 
 }

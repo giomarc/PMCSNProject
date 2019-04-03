@@ -27,6 +27,9 @@ public class SystemConfiguration {
     public static boolean CSVLOGGER = false;
     public static int ALGORITHM = 1;
     public static int THRESHOLD = 14;
+    public static int RUNS = 1;
+    public static boolean HYPEREXPO_ENABLED = true;
+    public static boolean OPERATIONS_ENABLED = true;
 
     public static void getConfigParams() {
         try {
@@ -45,8 +48,8 @@ public class SystemConfiguration {
             PHASE_P = Double.parseDouble(prop.getProperty("PHASE_P"));
             START = Double.parseDouble(prop.getProperty("START"));
             STOP = Double.parseDouble(prop.getProperty("STOP"));
-            //S = Integer.parseInt(prop.getProperty("S"));
             N = Integer.parseInt(prop.getProperty("N"));
+            RUNS = Integer.parseInt(prop.getProperty("RUNS"));
             //BATCH_SIZE = Integer.parseInt(prop.getProperty("BATCH_SIZE"));
             //NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));
             MULTI_RUN = Boolean.valueOf(prop.getProperty("MULTI_RUN"));
@@ -56,6 +59,8 @@ public class SystemConfiguration {
             CSVLOGGER = Boolean.parseBoolean(prop.getProperty("CSVLOGGER"));
             ALGORITHM = Integer.parseInt(prop.getProperty("ALGORITHM"));
             THRESHOLD = Integer.parseInt(prop.getProperty("THRESHOLD"));
+            HYPEREXPO_ENABLED = Boolean.parseBoolean(prop.getProperty("HYPEREXPO_ENABLED"));
+            OPERATIONS_ENABLED = Boolean.parseBoolean(prop.getProperty("OPERATIONS_ENABLED"));
 
         }
         catch (Exception e) {

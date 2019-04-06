@@ -57,17 +57,20 @@ public class PerformanceLogger implements Runnable {
     }
 
     private long calculateAverage(ArrayList<Long> marks) {
-        if(marks != null) {
-            Long sum = 0L;
-            if (!marks.isEmpty()) {
-                for (Long mark : marks) {
-                    sum += mark;
+        if(!SystemConfiguration.MULTI_RUN) {
+            if (marks != null) {
+                Long sum = 0L;
+                if (!marks.isEmpty()) {
+                    for (Long mark : marks) {
+                        sum += mark;
+                    }
+                    return (long) (sum.doubleValue() / marks.size());
                 }
-                return (long) (sum.doubleValue() / marks.size());
-            }
-            return sum;
+                return sum;
+            } else return -1;
         }
-        else return -1;
+        else
+            return -1;
     }
 
     public void printInitialConfiguration(){
@@ -172,9 +175,8 @@ public class PerformanceLogger implements Runnable {
             System.out.println(js.getMeanCloudPopulationClass2());
 
             PerformanceLogger.getInstance().endTest(js.getGlobalTime());
-
-            CSVlogger.getInstance().writeOnFiles(ts, js.getGlobalTime());
         }
+        CSVlogger.getInstance().writeOnFiles(js, ts, js.getGlobalTime());
     }
 
     public void updateProgress(long current, long max) {

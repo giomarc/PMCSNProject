@@ -59,34 +59,38 @@ public class CSVlogger {
                 if (fileX.createNewFile()) {
                     BufferedWriter outX = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughput, true));
                     System.out.println("File Throughput has been created.");
-                    outX.write("distribution, operations, algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
-                            + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time,"
-                            + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
+                    outX.write("distribution, operations, algorithm, threshold, iterations, seed, " +
+                              "Global_sys_throughput, Cloud_throughput, Cloudlet_throughput, "
+                            + "Global_class1_throughput, Cloud_class1_throughput, Cloudlet_class1_throughput,"
+                            + "Global_class2_throughput, Cloud_class2_throughput, Cloudlet_class2_throughput");
                     outX.flush();
                 }
                 if (fileEN.createNewFile()) {
                     BufferedWriter outEN = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileAVGjobs, true));
                     System.out.println("File AVG jobs has been created.");
-                    outEN.write("distribution, operations, algorithm, threshold, iterations, seed,  Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
-                            + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time,"
-                            + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
+                    outEN.write("distribution, operations, algorithm, threshold, iterations, seed,  " +
+                            " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs, "
+                            + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs,"
+                            + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs");
                     outEN.flush();
                 }
-                fileMS.delete();
-                if (fileMS.createNewFile()) {
-                    BufferedWriter outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
-                    System.out.println("File Means in one simulation jobs has been created.");
-                    outMS.write("seed,  global_time, cloudlet_class1, cloudlet_class2, "
-                            + "cloudletGeneral, cloud_class1, cloud_class2,"
-                            + "cloudGeneral, class1, class2");
-                    outMS.flush();
-                }
-                fileSV.delete();
-                if (fileSV.createNewFile()) {
-                    BufferedWriter outSV = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileServerStatus, true));
-                    System.out.println("File Server Status in one simulation jobs has been created.");
-                    outSV.write("distribution, operations, algorithm, threshold, iterations, seed, id, utilization, packets_completed");
-                    outSV.flush();
+                if(!SystemConfiguration.MULTI_RUN) {
+                    fileMS.delete();
+                    if (fileMS.createNewFile()) {
+                        BufferedWriter outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
+                        System.out.println("File Means in one simulation jobs has been created.");
+                        outMS.write("seed,  global_time, cloudlet_class1, cloudlet_class2, "
+                                + "cloudletGeneral, cloud_class1, cloud_class2,"
+                                + "cloudGeneral, class1, class2");
+                        outMS.flush();
+                    }
+                    fileSV.delete();
+                    if (fileSV.createNewFile()) {
+                        BufferedWriter outSV = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileServerStatus, true));
+                        System.out.println("File Server Status in one simulation jobs has been created.");
+                        outSV.write("distribution, operations, algorithm, threshold, iterations, seed, id, utilization, packets_completed");
+                        outSV.flush();
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -95,10 +99,12 @@ public class CSVlogger {
         }
     }
 
-    public void writeOnFiles(TimeStatistics ts, double globaltime){
+    public void writeOnFiles(JobStatistics js, TimeStatistics ts, double globaltime){
         if(SystemConfiguration.CSVLOGGER) {
             writeResponseTime(ts);
-            writeServerStatistics(globaltime);
+            writeAVGjobs(js);
+            if(!SystemConfiguration.MULTI_RUN)
+                writeServerStatistics(globaltime);
         }
     }
 
@@ -143,8 +149,9 @@ public class CSVlogger {
 
     }
 
-    public void writeMeanPopulation(JobStatistics js){
-        if(SystemConfiguration.CSVLOGGER) {
+    @SuppressWarnings("Duplicates")
+    public void writeMeansInOneSimulation(JobStatistics js){
+        if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
             if (totalMeansDuringSimulations > 0) {
                 totalMeansDuringSimulations--;
 
@@ -209,6 +216,51 @@ public class CSVlogger {
             e.printStackTrace();
         }
 
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void writeTrhoughput(){
+        System.out.println("TODO");
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void writeAVGjobs(JobStatistics js){
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+
+        double meanGlobalAvgJobs = js.getMeanGlobalPopulation();
+        double meanCloudletAvgJobs = js.getMeanCloudletPopulation();
+        double meanCloudAvgJobs = js.getMeanCloudPopulation();
+        double meanCloudletAvgJobsClass1 = js.getMeanCloudletPopulationClass1();
+        double meanCloudletAvgJobsClass2 = js.getMeanCloudletPopulationClass2();
+        double meanCloudAvgJobsClass1 = js.getMeanCloudPopulationClass1();
+        double meanCloudAvgJobsClass2 = js.getMeanCloudPopulationClass2();
+        double meanClass1AvgJobs = js.getMeanGlobalPopulationClass1();
+        double meanClass2AvgJobs = js.getMeanGlobalPopulationClass2();
+
+
+        BufferedWriter outAVG;
+        try {
+            outAVG = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileAVGjobs, true));
+            outAVG.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                    meanGlobalAvgJobs + "," + meanCloudAvgJobs + "," + meanCloudletAvgJobs + "," +
+                    meanClass1AvgJobs + "," + meanCloudAvgJobsClass1 + "," + meanCloudletAvgJobsClass1 + "," +
+                    meanClass2AvgJobs + "," + meanCloudAvgJobsClass2 + "," + meanCloudletAvgJobsClass2
+            );
+            outAVG.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void reset(){

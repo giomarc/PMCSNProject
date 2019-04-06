@@ -1,5 +1,6 @@
 package cloud;
 
+import cloudlet.Cloudlet;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
@@ -15,9 +16,6 @@ public class Cloud {
     private int n1;
     private int n2;
 
-    private double delete = 1;
-    private int deletei = 0;
-
 
     private Cloud(){
         jobsInService = new ArrayList<>();
@@ -28,7 +26,7 @@ public class Cloud {
     public static Cloud getInstance(){ return instance;}
 
     public void processArrival(Event e) {
-        removeCompletedJobs(e.getJob().getArrivalTime());
+//        removeCompletedJobs(e.getJob().getArrivalTime());
         processCurrentJob(e.getJob());
     }
 
@@ -47,13 +45,6 @@ public class Cloud {
     private void processCurrentJob(Job j){
         int jobclass = j.getJobClass();
         double completionTime = Services.getInstance().getCloudServiceTime(jobclass, j.getOperations());
-
-
-        delete = Statistics.getInstance().welfordMean(delete, completionTime, deletei);
-        deletei++;
-        System.out.println(delete);
-
-
         j.setCompletionTime(completionTime);
         jobsInService.add(j);
         increaseN(jobclass);
@@ -89,9 +80,8 @@ public class Cloud {
         jobsInService = new ArrayList<>();
     }
 
-    public int[] numberOfJobsInCloud(double arrivalTime) {
+    public void timeHasPassed(double arrivalTime) {
         removeCompletedJobs(arrivalTime);
-        return new int[]{n1, n2};
     }
 
     private void decreaseN(int jobClass){
@@ -106,6 +96,10 @@ public class Cloud {
             n1++;
         else
             n2++;
+    }
+
+    public int[] returnJobsInCloud(){
+        return new int[]{n1, n2};
     }
 
 }

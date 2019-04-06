@@ -1,8 +1,10 @@
 package cloudlet;
 
+import cloud.Cloud;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
+import runners.Statistics.JobStatistics;
 import runners.Statistics.Statistics;
 import system.SystemConfiguration;
 import variablesGenerator.Services;
@@ -59,15 +61,17 @@ public class Cloudlet {
         }
     }
 
-    int[] numberOfJobsInCloudlet(double arrival){
+    void timeHasPassed(double arrival){
         removeCompletedJobs(arrival);
-        return new int[]{n1, n2};
     }
 
     public int getNumberOfServers() {
         return numberOfServers;
     }
 
+    public int [] getJobsInCloudlet(){
+        return new int[]{n1, n2};
+    }
 
     private void decreaseN(int jobClass){
         if(jobClass == 1)

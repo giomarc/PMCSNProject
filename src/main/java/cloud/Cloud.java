@@ -29,8 +29,9 @@ public class Cloud {
     }
 
     private void removeCompletedJobs(double arrivalTime){
+        double updated;
         for(Job j: jobsInService){
-            double updated = j.getCompletionTime() - arrivalTime;
+            updated = j.getCompletionTime() - arrivalTime;
             j.setCompletionTime(updated);
             if(j.getCompletionTime() < 0){
                 Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
@@ -50,9 +51,10 @@ public class Cloud {
     private void removeFromList(){
         Iterator itr = jobsInService.iterator();
         Job jobExaminated;
+        double x;
         while(itr.hasNext()){
             jobExaminated = (Job) itr.next();
-            double x = jobExaminated.getCompletionTime();
+            x = jobExaminated.getCompletionTime();
             if( x < 0 ){
                 itr.remove();
                 decreaseN(jobExaminated.getJobClass());
@@ -76,7 +78,7 @@ public class Cloud {
         jobsInService = new ArrayList<>();
     }
 
-    public int[] numberOfJobsInCloudlet(double arrivalTime) {
+    public int[] numberOfJobsInCloud(double arrivalTime) {
         removeCompletedJobs(arrivalTime);
         return new int[]{n1, n2};
     }

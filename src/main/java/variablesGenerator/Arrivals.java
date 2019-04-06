@@ -44,11 +44,9 @@ public class Arrivals {
         double p = init.uniform();
 
         if(p <= p1){
-            //System.out.println("p1 = " + p1);
             return 1;
         }
         else {
-            //System.out.println("p2 -> class 2");
             return 2;
         }
     }

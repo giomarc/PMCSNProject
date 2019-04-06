@@ -3,6 +3,7 @@ package cloud;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
+import runners.Statistics.JobStatistics;
 import runners.Statistics.Statistics;
 import variablesGenerator.Services;
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ public class Cloud {
     private static ArrayList<Job> jobsInService;
     private int n1;
     private int n2;
+
+    private double delete = 1;
+    private int deletei = 0;
 
 
     private Cloud(){
@@ -43,6 +47,13 @@ public class Cloud {
     private void processCurrentJob(Job j){
         int jobclass = j.getJobClass();
         double completionTime = Services.getInstance().getCloudServiceTime(jobclass, j.getOperations());
+
+
+        delete = Statistics.getInstance().welfordMean(delete, completionTime, deletei);
+        deletei++;
+        System.out.println(delete);
+
+
         j.setCompletionTime(completionTime);
         jobsInService.add(j);
         increaseN(jobclass);

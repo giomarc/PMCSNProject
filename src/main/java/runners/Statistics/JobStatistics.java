@@ -137,7 +137,7 @@ public class JobStatistics {
         // aggiornamento della popolazione media senza considerare la classe
         int cloudletPopulation = cloudletPopulationClass1 + cloudletPopulationClass2;
         int cloudPopulation = cloudPopulationClass1 + cloudPopulationClass2;
-        System.out.println("[ " + cloudletPopulationClass1 + ", " + cloudletPopulationClass2 + " | " + cloudPopulationClass1 + ", " + cloudPopulationClass2 + " | " + (cloudPopulationClass1+ cloudPopulationClass2) +" ]");
+//        System.out.println("[ " + cloudletPopulationClass1 + ", " + cloudletPopulationClass2 + " | " + cloudPopulationClass1 + ", " + cloudPopulationClass2 + " | " + (cloudPopulationClass1+ cloudPopulationClass2) +" ]");
 
         updateGlobalPopulation(cloudletPopulation, cloudPopulation);
         this.meanCloudletPopulation = statistics.welfordMean(this.meanCloudletPopulation, cloudletPopulation, globalIteration);

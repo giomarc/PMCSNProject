@@ -13,7 +13,7 @@ import java.io.*;
 public class CSVlogger {
 
     private static CSVlogger instance = new CSVlogger();
-    private int totalMeansDuringSimulations = 1000;
+    private int totalMeansDuringSimulations = 2000;
     private String fileResponseTime;
     private String fileThroughput;
     private String fileAVGjobs;
@@ -103,6 +103,7 @@ public class CSVlogger {
         if(SystemConfiguration.CSVLOGGER) {
             writeResponseTime(ts);
             writeAVGjobs(js);
+            writeThroughput(js);
             if(!SystemConfiguration.MULTI_RUN)
                 writeServerStatistics(globaltime);
         }
@@ -219,8 +220,42 @@ public class CSVlogger {
     }
 
     @SuppressWarnings("Duplicates")
-    private void writeTrhoughput(){
-        System.out.println("TODO");
+    private void writeThroughput(JobStatistics js){
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+
+        double cloudletThroughput = js.getEmpiricCloudletThroughput();
+        double cloudThroughput = js.getEmpiricCloudThroughput();
+        double globalThroughput = cloudletThroughput + cloudThroughput;
+        double cloudletThroughputClass1 = js.getEmpiricCloudletClass1Throughput();
+        double cloudletThroughputClass2 = js.getEmpiricCloudletClass2Throughput();
+        double cloudThroughputClass1 = js.getEmpiricCloudClass1Throughput();
+        double cloudThroughputClass2 = js.getEmpiricCloudClass2Throughput();
+        double class1Throughput = cloudletThroughputClass1 + cloudThroughputClass1;
+        double class2Throughput = cloudletThroughputClass2 + cloudThroughputClass2;
+
+        BufferedWriter outRT;
+        try {
+            outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughput, true));
+            outRT.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                    globalThroughput + "," + cloudThroughput + "," + cloudletThroughput + "," +
+                    class1Throughput + "," + cloudThroughputClass1 + "," + cloudletThroughputClass1 + "," +
+                    class2Throughput + "," + cloudThroughputClass2 + "," + cloudletThroughputClass2
+            );
+            outRT.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("Duplicates")

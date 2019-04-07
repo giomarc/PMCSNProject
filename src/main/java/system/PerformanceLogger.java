@@ -102,6 +102,7 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("\n\nCLOUDLET P_LOSS", "yellow");
         System.out.println(js.calculatePLoss());
         if(SystemConfiguration.VERBOSE) {
+            //THROUGHPUT GLOBALI
             Printer.getInstance().print("\nTHROUGHPUT", "yellow");
             Printer.getInstance().print("Analytic cloudlet throughput", "green");
             System.out.println(js.getAnalyticCloudletThroughput());
@@ -111,6 +112,28 @@ public class PerformanceLogger implements Runnable {
             System.out.println(js.getAnalyticCloudThroughput());
             Printer.getInstance().print("Empirical cloud throughput", "green");
             System.out.println(js.getEmpiricCloudThroughput());
+
+            //THROUGHPUT PER-CLASS CLOUDLET
+            Printer.getInstance().print("Analytic cloudlet class 1 throughput", "green");
+            System.out.println(js.getAnalyticCloudletClass1Throughput());
+            Printer.getInstance().print("Empirical cloudlet class 1 throughput", "green");
+            System.out.println(js.getEmpiricCloudletClass1Throughput());
+            Printer.getInstance().print("Analytic cloudlet class 2 throughput", "green");
+            System.out.println(js.getAnalyticCloudletClass2Throughput());
+            Printer.getInstance().print("Empirical cloudlet class 2 throughput", "green");
+            System.out.println(js.getEmpiricCloudletClass2Throughput());
+
+            //THROUGHPUT PER-CLASS CLOUD
+            Printer.getInstance().print("Analytic cloud class 1 throughput", "green");
+            System.out.println(js.getAnalyticCloudClass1Throughput());
+            Printer.getInstance().print("Empirical cloud class 1 throughput", "green");
+            System.out.println(js.getEmpiricCloudClass1Throughput());
+            Printer.getInstance().print("Analytic cloud class 2 throughput", "green");
+            System.out.println(js.getAnalyticCloudClass2Throughput());
+            Printer.getInstance().print("Empirical cloud class 2 throughput", "green");
+            System.out.println(js.getEmpiricCloudClass2Throughput());
+
+
 
             Printer.getInstance().print("\nCOMPLETIONS", "yellow");
             Printer.getInstance().print("Job completed", "green");

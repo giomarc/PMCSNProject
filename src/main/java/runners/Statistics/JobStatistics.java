@@ -1,6 +1,7 @@
 package runners.Statistics;
 
 import system.CSVlogger;
+import system.SystemConfiguration;
 import variablesGenerator.Arrivals;
 
 public class JobStatistics {
@@ -362,20 +363,59 @@ public class JobStatistics {
 
 
     // THROUGHPUT
-    public double getAnalyticCloudletThroughput(){
-        return Arrivals.getInstance().getTotalRate()*(1-calculatePLoss());
+
+
+    //GLOBAL CLOUDLET THROUGHPUT
+    public double getAnalyticCloudletThroughput() {
+        return Arrivals.getInstance().getTotalRate() * (1 - calculatePLoss());
     }
 
     public double getEmpiricCloudletThroughput(){
         return (completedCloudletClass1 + completedCloudletClass2)/globalTime;
     }
 
+    //PER-CLASS CLOUDLET THROUGHPUT
+    public double getAnalyticCloudletClass1Throughput() {
+        return SystemConfiguration.ARRIVAL_RATE_1 * (1 - calculatePLoss());
+    }
+
+    public double getEmpiricCloudletClass1Throughput(){
+        return completedCloudletClass1/globalTime;
+    }
+
+    public double getAnalyticCloudletClass2Throughput() {
+        return SystemConfiguration.ARRIVAL_RATE_2 * (1 - calculatePLoss());
+    }
+
+    public double getEmpiricCloudletClass2Throughput(){
+        return completedCloudletClass2/globalTime;
+    }
+
+
+    //GLOBAL CLOUD THROUGHPUT
     public double getAnalyticCloudThroughput(){
         return Arrivals.getInstance().getTotalRate()*(calculatePLoss());
     }
 
     public double getEmpiricCloudThroughput(){
         return (completedCloudClass1 + completedCloudClass2)/globalTime;
+    }
+
+    //PER-CLASS CLOUD THROUGHPUT
+    public double getAnalyticCloudClass1Throughput() {
+        return SystemConfiguration.ARRIVAL_RATE_1 * (calculatePLoss());
+    }
+
+    public double getEmpiricCloudClass1Throughput(){
+        return completedCloudClass1 /globalTime;
+    }
+
+    public double getAnalyticCloudClass2Throughput() {
+        return SystemConfiguration.ARRIVAL_RATE_2 * (calculatePLoss());
+    }
+
+    public double getEmpiricCloudClass2Throughput(){
+        return completedCloudClass2 /globalTime;
     }
 
     //RESET STATISTICS

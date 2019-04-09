@@ -37,6 +37,7 @@ public class BatchMeans {
         iterations = SystemConfiguration.ITERATIONS;
         num_batch = SystemConfiguration.NUM_BATCH;
         computeBatchSize();
+        init();
         counter_batch = 0;
     }
 
@@ -158,7 +159,6 @@ public class BatchMeans {
 
     public void updateBMCloudPopulationClass2 (double valueToInsert, int index){
         double v = BMCloudPopulationClass2[index] + valueToInsert;
-        System.out.println(v);
         BMCloudPopulationClass2[index] = v;
     }
 
@@ -199,6 +199,17 @@ public class BatchMeans {
     }
 
 
+    public void init(){
+        BMGlobalPopulation = new double[2];
+        BMCloudletPopulation = new double[2];
+        BMCloudPopulation = new double[2];
+        BMGlobalPopulationClass1 = new double[2];
+        BMCloudletPopulationClass1= new double[2];
+        BMCloudPopulationClass1= new double[2];
+        BMGlobalPopulationClass2= new double[2];
+        BMCloudletPopulationClass2= new double[2];
+        BMCloudPopulationClass2= new double[2];
+    }
 
 
 

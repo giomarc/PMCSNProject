@@ -47,7 +47,7 @@ public class Simulation {
         }
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());
         PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics);
-        BatchMeans.getInstance().computeBatchMeans();
+//        BatchMeans.getInstance().computeBatchMeans();
 
     }
 

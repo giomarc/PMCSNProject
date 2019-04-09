@@ -9,6 +9,7 @@ public class Statistics {
     private double variance;
     private static Statistics instance = null;
 
+
     private Statistics(){
         sampleMean = 0.0;
         variance = 0.0;

@@ -11,6 +11,19 @@ public class TimeStatistics {
     private double meanResponseTimeClass2;
     private double meanResponseTimeClass1Cloudlet;
 
+
+    private TimeStatistics(){
+        resetStatistics();
+    }
+
+    public static TimeStatistics getInstance()
+    {
+        if(instance == null)
+            instance = new TimeStatistics();
+        return instance;
+    }
+
+
     public static void setInstance(TimeStatistics instance) {
         TimeStatistics.instance = instance;
     }
@@ -56,24 +69,7 @@ public class TimeStatistics {
     private double meanResponseTimeClass2Cloud;
 
 
-    private TimeStatistics(){
-        this.meanResponseTime               = 0.0;
-        this.meanResponseTimeCloudlet       = 0.0;
-        this.meanResponseTimeCloud          = 0.0;
-        this.meanResponseTimeClass1         = 0.0;
-        this.meanResponseTimeClass2         = 0.0;
-        this.meanResponseTimeClass1Cloudlet = 0.0;
-        this.meanResponseTimeClass2Cloudlet = 0.0;
-        this.meanResponseTimeClass1Cloud    = 0.0;
-        this.meanResponseTimeClass2Cloud    = 0.0;
-    }
 
-    public static TimeStatistics getInstance()
-    {
-        if(instance == null)
-            instance = new TimeStatistics();
-        return instance;
-    }
     /**
      * Getters and Setters
      */

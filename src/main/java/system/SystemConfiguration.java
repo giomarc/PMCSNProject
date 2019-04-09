@@ -30,6 +30,9 @@ public class SystemConfiguration {
     public static int RUNS = 1;
     public static boolean HYPEREXPO_ENABLED = true;
     public static boolean OPERATIONS_ENABLED = true;
+    public static boolean BATCH = false;
+    //public static int BATCH_SIZE;
+    public static int NUM_BATCH;
 
     public static void getConfigParams() {
         try {
@@ -51,7 +54,7 @@ public class SystemConfiguration {
             N = Integer.parseInt(prop.getProperty("N"));
             RUNS = Integer.parseInt(prop.getProperty("RUNS"));
             //BATCH_SIZE = Integer.parseInt(prop.getProperty("BATCH_SIZE"));
-            //NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));
+            NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));
             MULTI_RUN = Boolean.valueOf(prop.getProperty("MULTI_RUN"));
             SEED = Long.parseLong(prop.getProperty("SEED"));
             ITERATIONS = Long.parseLong((prop.getProperty("ITERATIONS")));
@@ -61,6 +64,7 @@ public class SystemConfiguration {
             THRESHOLD = Integer.parseInt(prop.getProperty("THRESHOLD"));
             HYPEREXPO_ENABLED = Boolean.parseBoolean(prop.getProperty("HYPEREXPO_ENABLED"));
             OPERATIONS_ENABLED = Boolean.parseBoolean(prop.getProperty("OPERATIONS_ENABLED"));
+            BATCH = Boolean.parseBoolean(prop.getProperty("BATCH"));
 
         }
         catch (Exception e) {

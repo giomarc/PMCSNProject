@@ -8,13 +8,13 @@ import java.util.ArrayList;
 public class TestConfidenceInterval {
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         SystemConfiguration.getConfigParams();
         ReadStatisticsCSV rdc = new ReadStatisticsCSV();
         ArrayList<Double> cg = rdc.getCloudletGeneral();
-        double[] result = ConfidenceInterval.getInstance().computeConfidenceInterval(cg);
+        //double[] result = ConfidenceInterval.getInstance().computeConfidenceInterval(cg);
 
         System.out.println("[ " + result[0] + " , " + result[1] + " ]");
-    }
+    }*/
 }

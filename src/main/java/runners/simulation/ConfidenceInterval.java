@@ -21,14 +21,20 @@ public class ConfidenceInterval {
 
 
 
+    public double computeVariance(double sampleMean, double actualValue, double variance, long n)
+    {
+        if(n!=0){
+            double diff = actualValue - sampleMean;
+            variance += (diff * diff * (n-1)/n);
+        }
+        return variance;
+    }
 
     /**
      * funzione per il calcolo intervallo di confidenza
-     *
-     * @param givenNumbers
      * @return int[] - lower, upper
      */
-    public double[] computeConfidenceInterval(ArrayList<Double> givenNumbers) {
+    /*public double[] computeConfidenceInterval(ArrayList<Double> givenNumbers) {
 
         double sampleMean = 0.0;
         double variance = 0.0;
@@ -51,13 +57,32 @@ public class ConfidenceInterval {
             width = (t_student*stddev)/Math.sqrt(n-1);
         }
         double[] confidenceInterval = {sampleMean - width, sampleMean + width};
-        findOutliers(sampleMean - width, sampleMean + width,givenNumbers);
+        //findOutliers(sampleMean - width, sampleMean + width,givenNumbers);
+        return confidenceInterval;
+    }*/
+
+    public double[] computeConfidenceInterval(double[] val, int batchsize) {
+
+        double sampleMean = val[0];
+        double variance = val[1];
+        double stddev;
+        double t_student;
+        double width = 0.0;
+
+        stddev = Math.sqrt(variance);
+
+
+        double u = 1.0 - 0.5*(1-0 - confidence);
+        t_student = InitGenerator.getInstance().idfStudent(batchsize-1,u);
+        width = (t_student*stddev)/Math.sqrt(batchsize-1);
+
+        double[] confidenceInterval = {sampleMean - width, sampleMean + width};
         return confidenceInterval;
     }
 
 
 
-    private void findOutliers(Double min, Double max, ArrayList<Double> givenNumbers){
+    /*private void findOutliers(Double min, Double max, ArrayList<Double> givenNumbers){
         double outliers = 0.0;
         double tot = 1.0;
         for (Double d : givenNumbers){
@@ -69,7 +94,7 @@ public class ConfidenceInterval {
         System.out.println("Mean Interval: " + ((min + max) /2));
         System.out.println("Cloudlet service time" + TimeStatistics.getInstance().getMeanResponseTimeCloudlet());
 
-    }
+    }*/
 
 
 }

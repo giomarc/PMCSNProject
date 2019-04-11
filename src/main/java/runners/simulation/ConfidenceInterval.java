@@ -21,10 +21,10 @@ public class ConfidenceInterval {
 
 
 
-    public double computeVariance(double sampleMean, double actualValue, double variance, long n)
+    public double computeVariance(double valueToUpdate, double valueToInsert, double variance, long n)
     {
         if(n!=0){
-            double diff = actualValue - sampleMean;
+            double diff = valueToInsert - valueToUpdate;
             variance += (diff * diff * (n-1)/n);
         }
         return variance;

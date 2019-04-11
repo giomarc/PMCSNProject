@@ -208,10 +208,11 @@ public class JobStatistics {
             batchMeans.updateBMCloudPopulationClass2(varCloudPopulationClass2,0);
             batchMeans.updateBMCloudPopulationClass2(varCloudPopulationClass2,1);
 
-            if(globalIteration != SystemConfiguration.ITERATIONS){
+            /*if(globalIteration != SystemConfiguration.ITERATIONS){
                 resetStatistics();
                 globalIteration = actualit;
-            }
+            }*/
+            resetMeans();
         }
     }
 
@@ -468,6 +469,13 @@ public class JobStatistics {
         this.arrivedCloudletClass2          = 0;
         this.arrivedCloudClass1             = 0;
         this.arrivedCloudClass2             = 0;
+        resetMeans();
+        this.globalIteration                = 0;
+        this.globalTime                     = 0;
+    }
+
+
+    public void resetMeans(){
         this.meanGlobalPopulation           = 0;
         this.meanCloudletPopulation         = 0;
         this.meanCloudPopulation            = 0;
@@ -477,8 +485,15 @@ public class JobStatistics {
         this.meanGlobalPopulationClass2     = 0;
         this.meanCloudletPopulationClass2   = 0;
         this.meanCloudPopulationClass2      = 0;
-        this.globalIteration                = 0;
-        this.globalTime                     = 0;
+        this.varGlobalPopulation            = 0;
+        this.varCloudletPopulation          = 0;
+        this.varCloudPopulation             = 0;
+        this.varGlobalPopulationClass1      = 0;
+        this.varCloudletPopulationClass1    = 0;
+        this.varCloudPopulationClass1       = 0;
+        this.varGlobalPopulationClass2      = 0;
+        this.varCloudletPopulationClass2    = 0;
+        this.varCloudPopulationClass2       = 0;
     }
 
 }

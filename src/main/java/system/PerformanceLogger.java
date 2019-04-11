@@ -197,6 +197,26 @@ public class PerformanceLogger implements Runnable {
             Printer.getInstance().print("Mean cloud class 2 population", "green");
             System.out.println(js.getMeanCloudPopulationClass2());
 
+            Printer.getInstance().print("\nVariance POPULATION", "yellow");
+            Printer.getInstance().print("Variance global population", "green");
+            System.out.println(js.getVarGlobalPopulation());
+            Printer.getInstance().print("Variance Cloudlet population", "green");
+            System.out.println(js.getVarCloudletPopulation());
+            Printer.getInstance().print("Variance Cloud population", "green");
+            System.out.println(js.getVarCloudPopulation());
+            Printer.getInstance().print("Variance class 1 population", "green");
+            System.out.println(js.getVarGlobalPopulationClass1());
+            Printer.getInstance().print("Variance class 2 population", "green");
+            System.out.println(js.getVarGlobalPopulationClass2());
+            Printer.getInstance().print("Variance cloudlet class 1 population", "green");
+            System.out.println(js.getVarCloudletPopulationClass1());
+            Printer.getInstance().print("Variance cloudlet class 2 population", "green");
+            System.out.println(js.getVarCloudletPopulationClass2());
+            Printer.getInstance().print("Variance cloud class 1 population", "green");
+            System.out.println(js.getVarCloudPopulationClass1());
+            Printer.getInstance().print("Variance cloud class 2 population", "green");
+            System.out.println(js.getVarCloudPopulationClass2());
+
             PerformanceLogger.getInstance().endTest(js.getGlobalTime());
         }
         CSVlogger.getInstance().writeOnFiles(js, ts, js.getGlobalTime());

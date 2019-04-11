@@ -19,10 +19,6 @@ public class JobStatistics {
     private long completedCloudletClass2;
     private long completedCloudClass1;
     private long completedCloudClass2;
-    private long arrivedCloudletClass1;
-    private long arrivedCloudletClass2;
-    private long arrivedCloudClass1;
-    private long arrivedCloudClass2;
 
 
     //POPULATION MEANS
@@ -36,6 +32,7 @@ public class JobStatistics {
     private double meanCloudletPopulationClass2;
     private double meanCloudPopulationClass2;
 
+    //POPULATION VARIANCE
     private double varGlobalPopulation;
     private double varCloudletPopulation;
     private double varCloudPopulation;
@@ -46,7 +43,16 @@ public class JobStatistics {
     private double varCloudletPopulationClass2;
     private double varCloudPopulationClass2;
 
+
+    //ITERATIONS
+    private long cloudletIterationClass1;
+    private long cloudletIterationClass2;
+    private long cloudIterationClass1;
+    private long cloudIterationClass2;
     private long globalIteration;
+    private long actualIteration;
+
+
 
 
     private JobStatistics(){
@@ -64,67 +70,6 @@ public class JobStatistics {
     }
 
 
-    /**
-     * UPDATE POPULATION STATISTICS
-     */
-    @SuppressWarnings("Duplicates")
-    public void updatePopulationMeans(int type, int jobClass,
-                                      int cloudletPopulationClass1, int cloudPopulationClass1,
-                                      int cloudletPopulationClass2, int cloudPopulationClass2){
-
-        // aggiornamento della popolazione media senza considerare la classe
-        int cloudletPopulation = cloudletPopulationClass1 + cloudletPopulationClass2;
-        int cloudPopulation = cloudPopulationClass1 + cloudPopulationClass2;
-
-//        updateGlobalPopulation(cloudletPopulation, cloudPopulation);
-        if(type == 1){
-
-            long iterationValueCloudlet = (int) (arrivedCloudletClass1 + arrivedCloudletClass2);
-            this.meanCloudletPopulation = statistics.welfordMean(this.meanCloudletPopulation, cloudletPopulation, iterationValueCloudlet);
-        }
-        else if(type == 2){
-            long iterationValueCloud = (int) (arrivedCloudClass1 + arrivedCloudClass2);
-            this.meanCloudPopulation = statistics.welfordMean(this.meanCloudPopulation, cloudPopulation, iterationValueCloud);
-        }
-
-        //aggiornamento della popolazione media per la classe 1
-        if(jobClass == 1) {
-            long iterationClass1 = arrivedCloudletClass1 + arrivedCloudClass1;
-            this.meanGlobalPopulationClass1 = statistics.welfordMean(this.meanGlobalPopulationClass1, cloudletPopulationClass1 + cloudPopulationClass1, iterationClass1);
-            this.meanGlobalPopulationClass1 = confidenceInterval.computeVariance(this.meanGlobalPopulationClass1, cloudletPopulationClass1 + cloudPopulationClass1,varGlobalPopulationClass1, iterationClass1)
-;
-            if (type == 1) {
-                long iterationCloudletClass1 = arrivedCloudletClass1;
-                this.meanCloudletPopulationClass1 = statistics.welfordMean(this.meanCloudletPopulationClass1, cloudletPopulationClass1, iterationCloudletClass1);
-                this.varCloudletPopulationClass1 = confidenceInterval.computeVariance(this.meanCloudletPopulationClass1, cloudletPopulationClass1, varCloudletPopulationClass1,iterationCloudletClass1);
-            } else if (type == 2) {
-                long iterationCloudClass1 = arrivedCloudClass1;
-                this.meanCloudPopulationClass1 = statistics.welfordMean(this.meanCloudPopulationClass1, cloudPopulationClass1, iterationCloudClass1);
-            }
-        }
-
-        //aggiornamento della popolazione media per la classe 2
-        else if(jobClass == 2){
-            long iterationClass2 = arrivedCloudletClass2 + arrivedCloudClass2;
-            this.meanGlobalPopulationClass2 = statistics.welfordMean(this.meanGlobalPopulationClass2, cloudletPopulationClass2 + cloudPopulationClass2, iterationClass2);
-            if(type == 1){
-                long iterationCloudletClass2 = arrivedCloudletClass2;
-                this.meanCloudletPopulationClass2 = statistics.welfordMean(this.meanCloudletPopulationClass2, cloudletPopulationClass2, iterationCloudletClass2);
-            }
-            else if(type == 2){
-                long iterationCloudClass2 = arrivedCloudClass2;
-                this.meanCloudPopulationClass2 = statistics.welfordMean(this.meanCloudPopulationClass2, cloudPopulationClass2, iterationCloudClass2);
-            }
-        }
-
-        CSVlogger.getInstance().writeMeansInOneSimulation(this);
-    }
-
-
-
-
-
-
     @SuppressWarnings("Duplicates")
     public void updatePopulationMeansTest(int cloudletOrCloud, int jobClass,
                                           int[] cloudletPopulation,
@@ -136,44 +81,40 @@ public class JobStatistics {
         int totcloudletPopulation = cloudletPopulation[0] + cloudletPopulation[1];
         int totcloudPopulation = cloudPopulation[0] + cloudPopulation[1];
 
-        this.meanGlobalPopulation = statistics.welfordMean(this.meanGlobalPopulation, totcloudletPopulation + totcloudPopulation, globalIteration);
-        this.varGlobalPopulation = confidenceInterval.computeVariance(this.meanGlobalPopulation, totcloudletPopulation + totcloudPopulation, varGlobalPopulation,globalIteration);
+        this.meanGlobalPopulation = statistics.welfordMean(this.meanGlobalPopulation, totcloudletPopulation + totcloudPopulation, actualIteration);
+        this.varGlobalPopulation = confidenceInterval.computeVariance(this.meanGlobalPopulation, totcloudletPopulation + totcloudPopulation, varGlobalPopulation, actualIteration);
 
-        this.meanCloudletPopulation = statistics.welfordMean(this.meanCloudletPopulation, totcloudletPopulation, globalIteration);
-        this.varCloudletPopulation = confidenceInterval.computeVariance(this.meanCloudletPopulation,totcloudletPopulation,varCloudletPopulation,globalIteration);
+        this.meanCloudletPopulation = statistics.welfordMean(this.meanCloudletPopulation, totcloudletPopulation, actualIteration);
+        this.varCloudletPopulation = confidenceInterval.computeVariance(this.meanCloudletPopulation,totcloudletPopulation,varCloudletPopulation, actualIteration);
 
-        this.meanCloudPopulation = statistics.welfordMean(this.meanCloudPopulation, totcloudPopulation, globalIteration);
-        this.varCloudPopulation = confidenceInterval.computeVariance(this.meanCloudPopulation,totcloudPopulation,varCloudPopulation,globalIteration);
+        this.meanCloudPopulation = statistics.welfordMean(this.meanCloudPopulation, totcloudPopulation, actualIteration);
+        this.varCloudPopulation = confidenceInterval.computeVariance(this.meanCloudPopulation,totcloudPopulation,varCloudPopulation, actualIteration);
 
 
         //aggiornamento della popolazione media per la classe 1
         if(jobClass == 1) {
-            long iterationClass1 = arrivedCloudletClass1 + arrivedCloudClass1;
+            long iterationClass1 = cloudletIterationClass1 + cloudIterationClass1;
             this.meanGlobalPopulationClass1 = statistics.welfordMean(this.meanGlobalPopulationClass1, cloudletPopulation[0] + cloudPopulation[0], iterationClass1);
             this.varGlobalPopulationClass1 = confidenceInterval.computeVariance(meanGlobalPopulationClass1, cloudletPopulation[0] + cloudPopulation[0], varGlobalPopulationClass1,iterationClass1);
 
-            long iterationCloudletClass1 = arrivedCloudletClass1;
-            this.meanCloudletPopulationClass1 = statistics.welfordMean(this.meanCloudletPopulationClass1, cloudletPopulation[0], iterationCloudletClass1);
-            this.varCloudletPopulationClass1 = confidenceInterval.computeVariance(meanCloudletPopulationClass1,cloudletPopulation[0], varCloudletPopulationClass1,iterationCloudletClass1);
+            this.meanCloudletPopulationClass1 = statistics.welfordMean(this.meanCloudletPopulationClass1, cloudletPopulation[0], cloudletIterationClass1);
+            this.varCloudletPopulationClass1 = confidenceInterval.computeVariance(meanCloudletPopulationClass1,cloudletPopulation[0], varCloudletPopulationClass1,cloudletIterationClass1);
 
-            long iterationCloudClass1 = arrivedCloudClass1;
-            this.meanCloudPopulationClass1 = statistics.welfordMean(this.meanCloudPopulationClass1, cloudPopulation[0], iterationCloudClass1);
+            this.meanCloudPopulationClass1 = statistics.welfordMean(this.meanCloudPopulationClass1, cloudPopulation[0], cloudIterationClass1);
             this.varCloudPopulationClass1 = confidenceInterval.computeVariance(meanCloudPopulationClass1,cloudPopulation[0],varCloudPopulationClass1,iterationClass1);
 
         }
 
         //aggiornamento della popolazione media per la classe 2
         else if(jobClass == 2){
-            long iterationClass2 = arrivedCloudletClass2 + arrivedCloudClass2;
+            long iterationClass2 = cloudletIterationClass2 + cloudIterationClass2;
             this.meanGlobalPopulationClass2 = statistics.welfordMean(this.meanGlobalPopulationClass2, cloudletPopulation[1] + cloudPopulation[1], iterationClass2);
             this.varGlobalPopulationClass2 = confidenceInterval.computeVariance(meanGlobalPopulationClass2, cloudletPopulation[1] + cloudPopulation[1], varGlobalPopulationClass2,iterationClass2);
 
-            long iterationCloudletClass2 = arrivedCloudletClass2;
-            this.meanCloudletPopulationClass2 = statistics.welfordMean(this.meanCloudletPopulationClass2, cloudletPopulation[1], iterationCloudletClass2);
-            this.varCloudletPopulationClass2 = confidenceInterval.computeVariance(meanCloudletPopulationClass2,cloudletPopulation[1], varCloudletPopulationClass2,iterationCloudletClass2);
+            this.meanCloudletPopulationClass2 = statistics.welfordMean(this.meanCloudletPopulationClass2, cloudletPopulation[1], cloudletIterationClass2);
+            this.varCloudletPopulationClass2 = confidenceInterval.computeVariance(meanCloudletPopulationClass2,cloudletPopulation[1], varCloudletPopulationClass2,cloudletIterationClass2);
 
-            long iterationCloudClass2 = arrivedCloudClass2;
-            this.meanCloudPopulationClass2 = statistics.welfordMean(this.meanCloudPopulationClass2, cloudPopulation[1], iterationCloudClass2);
+            this.meanCloudPopulationClass2 = statistics.welfordMean(this.meanCloudPopulationClass2, cloudPopulation[1], cloudIterationClass2);
             this.varCloudPopulationClass2 = confidenceInterval.computeVariance(meanCloudPopulationClass2,cloudPopulation[1],varCloudPopulationClass2,iterationClass2);
 
         }
@@ -181,11 +122,9 @@ public class JobStatistics {
         CSVlogger.getInstance().writeMeansInOneSimulation(this);
     }
 
-
     public void computeBatch(){
 
-        long actualit = globalIteration;
-        if(SystemConfiguration.BATCH && ((actualit%batchMeans.getBatchSize() == 0) || globalIteration == SystemConfiguration.ITERATIONS)){
+        if(SystemConfiguration.BATCH && ((actualIteration == batchMeans.getBatchSize()) || globalIteration == SystemConfiguration.ITERATIONS)){
 
             batchMeans.updateBMGlobalPopulation(meanGlobalPopulation,0);
             batchMeans.updateBMGlobalPopulation(varGlobalPopulation,1);
@@ -208,63 +147,23 @@ public class JobStatistics {
             batchMeans.updateBMCloudPopulationClass2(varCloudPopulationClass2,0);
             batchMeans.updateBMCloudPopulationClass2(varCloudPopulationClass2,1);
 
-            /*if(globalIteration != SystemConfiguration.ITERATIONS){
-                resetStatistics();
-                globalIteration = actualit;
-            }*/
             resetMeans();
         }
     }
 
-    public void updateGlobalMean(int cloudletOrCloud, int jobClass, int[] cloudletPopulation, int[] cloudPopulation){
-        updateGlobalIterations(cloudletOrCloud, jobClass);
-
-        int currentCloudletPopulation = cloudletPopulation[0] + cloudletPopulation[1];
-        int currentCloudPopulation = cloudPopulation[0] + cloudPopulation[1];
-
-        this.meanGlobalPopulation = statistics.welfordMean(this.meanGlobalPopulation,
-                currentCloudletPopulation + currentCloudPopulation, globalIteration);
-
-
-        if(jobClass == 1){
-            long iterationClass1 = arrivedCloudletClass1 + arrivedCloudClass1;
-            this.meanGlobalPopulationClass1 = statistics.welfordMean(this.meanGlobalPopulationClass1, cloudletPopulation[0] + cloudPopulation[0], iterationClass1);
-        }
-        else{
-            long iterationClass2 = arrivedCloudletClass2 + arrivedCloudClass2;
-            this.meanGlobalPopulationClass2 = statistics.welfordMean(this.meanGlobalPopulationClass2, cloudletPopulation[1] + cloudPopulation[1], iterationClass2);
-        }
-    }
-
-    public void updatecloudMean(){
-
-    }
-
-    public void updateCloudletMean(){
-
-    }
-
-
-
     private void updateGlobalIterations(int cloudletOrCloud, int jobClass){
         if(cloudletOrCloud == 1 && jobClass == 1)
-            arrivedCloudletClass1++;
+            cloudletIterationClass1++;
         if(cloudletOrCloud == 1 && jobClass == 2)
-            arrivedCloudletClass2++;
+            cloudletIterationClass2++;
         if(cloudletOrCloud == 2 && jobClass == 1)
-            arrivedCloudClass1++;
+            cloudIterationClass1++;
         if(cloudletOrCloud == 2 && jobClass == 2)
-            arrivedCloudClass2++;
+            cloudIterationClass2++;
 
+        actualIteration++;
         globalIteration++;
     }
-
-//    private void updateGlobalPopulation(int cloudletPopulation, int cloudPopulation){
-//        updateGlobalIteration();
-//        this.meanGlobalPopulation = statistics.welfordMean(this.meanGlobalPopulation,
-//                cloudletPopulation + cloudPopulation, globalIteration);
-//    }
-
 
     //PLOSS
     public double calculatePLoss(){
@@ -288,24 +187,6 @@ public class JobStatistics {
     }
 
 
-    //INCREASE ARRIVED JOBS
-    public void increaseArrivedCloudClass1() {
-        arrivedCloudClass1++;
-    }
-
-    public void increaseArrivedCloudClass2() {
-        arrivedCloudClass2++;
-    }
-
-    public void increaseArrivedCloudletClass1(){
-        arrivedCloudletClass1++;
-    }
-
-    public void increaseArrivedCloudletClass2(){
-        arrivedCloudletClass2++;
-    }
-
-
     //INCREASE COMPLETED JOBS
     void increaseCompletedCloudClass1() {
         completedCloudClass1++;
@@ -321,6 +202,44 @@ public class JobStatistics {
 
     void increaseCompletedCloudletClass2(){
         completedCloudletClass2 ++;
+    }
+
+
+    //RESET STATISTICS
+    public void resetStatistics(){
+        this.completedCloudletClass1        = 0;
+        this.completedCloudClass1           = 0;
+        this.completedCloudletClass2        = 0;
+        this.completedCloudClass2           = 0;
+        this.globalTime                     = 0;
+        this.globalIteration                = 0;
+        resetMeans();
+    }
+
+    public void resetMeans(){
+        this.meanGlobalPopulation           = 0;
+        this.meanCloudletPopulation         = 0;
+        this.meanCloudPopulation            = 0;
+        this.meanGlobalPopulationClass1     = 0;
+        this.meanCloudletPopulationClass1   = 0;
+        this.meanCloudPopulationClass1      = 0;
+        this.meanGlobalPopulationClass2     = 0;
+        this.meanCloudletPopulationClass2   = 0;
+        this.meanCloudPopulationClass2      = 0;
+        this.varGlobalPopulation            = 0;
+        this.varCloudletPopulation          = 0;
+        this.varCloudPopulation             = 0;
+        this.varGlobalPopulationClass1      = 0;
+        this.varCloudletPopulationClass1    = 0;
+        this.varCloudPopulationClass1       = 0;
+        this.varGlobalPopulationClass2      = 0;
+        this.varCloudletPopulationClass2    = 0;
+        this.varCloudPopulationClass2       = 0;
+        this.cloudletIterationClass1        = 0;
+        this.cloudletIterationClass2        = 0;
+        this.cloudIterationClass1           = 0;
+        this.cloudIterationClass2           = 0;
+        this.actualIteration                = 0;
     }
 
 
@@ -403,9 +322,45 @@ public class JobStatistics {
     }
 
 
+    //POPULATION VARIANCE
+    public double getVarGlobalPopulation() {
+        return varGlobalPopulation/actualIteration;
+    }
+
+    public double getVarCloudletPopulation() {
+        return varCloudletPopulation/(actualIteration);
+    }
+
+    public double getVarCloudPopulation() {
+        return varCloudPopulation/(actualIteration);
+    }
+
+    public double getVarGlobalPopulationClass1() {
+        return varGlobalPopulationClass1;
+    }
+
+    public double getVarCloudletPopulationClass1() {
+        return varCloudletPopulationClass1;
+    }
+
+    public double getVarCloudPopulationClass1() {
+        return varCloudPopulationClass1;
+    }
+
+    public double getVarGlobalPopulationClass2() {
+        return varGlobalPopulationClass2;
+    }
+
+    public double getVarCloudletPopulationClass2() {
+        return varCloudletPopulationClass2;
+    }
+
+    public double getVarCloudPopulationClass2() {
+        return varCloudPopulationClass2;
+    }
+
+
     // THROUGHPUT
-
-
     //GLOBAL CLOUDLET THROUGHPUT
     public double getAnalyticCloudletThroughput() {
         return Arrivals.getInstance().getTotalRate() * (1 - calculatePLoss());
@@ -457,43 +412,6 @@ public class JobStatistics {
 
     public double getEmpiricCloudClass2Throughput(){
         return completedCloudClass2 /globalTime;
-    }
-
-    //RESET STATISTICS
-    public void resetStatistics(){
-        this.completedCloudletClass1        = 0;
-        this.completedCloudClass1           = 0;
-        this.completedCloudletClass2        = 0;
-        this.completedCloudClass2           = 0;
-        this.arrivedCloudletClass1          = 0;
-        this.arrivedCloudletClass2          = 0;
-        this.arrivedCloudClass1             = 0;
-        this.arrivedCloudClass2             = 0;
-        resetMeans();
-        this.globalIteration                = 0;
-        this.globalTime                     = 0;
-    }
-
-
-    public void resetMeans(){
-        this.meanGlobalPopulation           = 0;
-        this.meanCloudletPopulation         = 0;
-        this.meanCloudPopulation            = 0;
-        this.meanGlobalPopulationClass1     = 0;
-        this.meanCloudletPopulationClass1   = 0;
-        this.meanCloudPopulationClass1      = 0;
-        this.meanGlobalPopulationClass2     = 0;
-        this.meanCloudletPopulationClass2   = 0;
-        this.meanCloudPopulationClass2      = 0;
-        this.varGlobalPopulation            = 0;
-        this.varCloudletPopulation          = 0;
-        this.varCloudPopulation             = 0;
-        this.varGlobalPopulationClass1      = 0;
-        this.varCloudletPopulationClass1    = 0;
-        this.varCloudPopulationClass1       = 0;
-        this.varGlobalPopulationClass2      = 0;
-        this.varCloudletPopulationClass2    = 0;
-        this.varCloudPopulationClass2       = 0;
     }
 
 }

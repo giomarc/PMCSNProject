@@ -100,8 +100,7 @@ public class BatchMeans {
 
     public double computeMean(double val)
     {
-        double avg = val/num_batch;
-        return avg;
+        return val/num_batch;
     }
 
 

@@ -64,12 +64,15 @@ public class ConfidenceInterval {
     public double[] computeConfidenceInterval(double[] val, int batchsize) {
 
         double sampleMean = val[0];
+        System.out.println("media: " + sampleMean);
         double variance = val[1];
+        System.out.println("variance: " + variance);
         double stddev;
         double t_student;
-        double width = 0.0;
+        double width;
 
         stddev = Math.sqrt(variance);
+        System.out.println("stddev " + stddev);
 
 
         double u = 1.0 - 0.5*(1-0 - confidence);

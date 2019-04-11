@@ -143,7 +143,8 @@ public class JobStatistics {
         this.varCloudletPopulation = confidenceInterval.computeVariance(this.meanCloudletPopulation,totcloudletPopulation,varCloudletPopulation,globalIteration);
 
         this.meanCloudPopulation = statistics.welfordMean(this.meanCloudPopulation, totcloudPopulation, globalIteration);
-        this.varCloudPopulation = confidenceInterval.computeVariance(this.meanCloudletPopulation,totcloudPopulation,varCloudletPopulation,globalIteration);
+        this.varCloudPopulation = confidenceInterval.computeVariance(this.meanCloudPopulation,totcloudPopulation,varCloudPopulation,globalIteration);
+
 
         //aggiornamento della popolazione media per la classe 1
         if(jobClass == 1) {
@@ -157,7 +158,8 @@ public class JobStatistics {
 
             long iterationCloudClass1 = arrivedCloudClass1;
             this.meanCloudPopulationClass1 = statistics.welfordMean(this.meanCloudPopulationClass1, cloudPopulation[0], iterationCloudClass1);
-            this.varCloudPopulationClass1 = confidenceInterval.computeVariance(meanCloudPopulationClass1,cloudPopulation[0],varCloudletPopulationClass1,iterationClass1);
+            this.varCloudPopulationClass1 = confidenceInterval.computeVariance(meanCloudPopulationClass1,cloudPopulation[0],varCloudPopulationClass1,iterationClass1);
+
         }
 
         //aggiornamento della popolazione media per la classe 2
@@ -168,11 +170,11 @@ public class JobStatistics {
 
             long iterationCloudletClass2 = arrivedCloudletClass2;
             this.meanCloudletPopulationClass2 = statistics.welfordMean(this.meanCloudletPopulationClass2, cloudletPopulation[1], iterationCloudletClass2);
-            this.varCloudletPopulationClass2 = confidenceInterval.computeVariance(meanCloudletPopulationClass2,cloudletPopulation[1], varCloudletPopulationClass1,iterationCloudletClass2);
+            this.varCloudletPopulationClass2 = confidenceInterval.computeVariance(meanCloudletPopulationClass2,cloudletPopulation[1], varCloudletPopulationClass2,iterationCloudletClass2);
 
             long iterationCloudClass2 = arrivedCloudClass2;
             this.meanCloudPopulationClass2 = statistics.welfordMean(this.meanCloudPopulationClass2, cloudPopulation[1], iterationCloudClass2);
-            this.varCloudPopulationClass2 = confidenceInterval.computeVariance(meanCloudPopulationClass2,cloudPopulation[1],varCloudletPopulationClass1,iterationClass2);
+            this.varCloudPopulationClass2 = confidenceInterval.computeVariance(meanCloudPopulationClass2,cloudPopulation[1],varCloudPopulationClass2,iterationClass2);
 
         }
         computeBatch();

@@ -5,6 +5,7 @@ import runners.Statistics.Statistics;
 import system.SystemConfiguration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BatchMeans {
 
@@ -33,7 +34,7 @@ public class BatchMeans {
     //TIME STATISTICS BATCH
 
     private BatchMeans(){
-        confidenceInterval.getInstance();
+        confidenceInterval = ConfidenceInterval.getInstance();
         iterations = SystemConfiguration.ITERATIONS;
         num_batch = SystemConfiguration.NUM_BATCH;
         computeBatchSize();
@@ -51,48 +52,48 @@ public class BatchMeans {
     public void computeBatchMeans(){
         BMGlobalPopulation[0] = computeMean(BMGlobalPopulation[0]);
         BMGlobalPopulation[1] = computeMean(BMGlobalPopulation[1]);
-        BMGlobalPopulation = confidenceInterval.computeConfidenceInterval(BMGlobalPopulation,batch_size);
-        System.out.println("glob pop: [" + BMGlobalPopulation[0] + " , " + BMGlobalPopulation[1] + " )");
+        double[]res = confidenceInterval.computeConfidenceInterval(BMGlobalPopulation,num_batch);
+        System.out.println("global population: [" + res[0] + " , " + res[1] + " )");
 
         BMCloudletPopulation[0] = computeMean(BMCloudletPopulation[0]);
         BMCloudletPopulation[1] = computeMean(BMCloudletPopulation[1]);
-        BMCloudletPopulation = confidenceInterval.computeConfidenceInterval(BMCloudletPopulation,batch_size);
-        System.out.println("glob pop: [" + BMCloudletPopulation[0] + " , " +  BMCloudletPopulation[1] + " )");
+        res = confidenceInterval.computeConfidenceInterval(BMCloudletPopulation,num_batch);
+        System.out.println("cloudlet population: [" + res[0] + " , " + res[1] + " )");
 
-        BMCloudPopulationClass1[0] = computeMean(BMCloudPopulation[0]);
-        BMCloudPopulationClass1[1] = computeMean(BMCloudPopulation[1]);
-        BMCloudPopulationClass1 = confidenceInterval.computeConfidenceInterval(BMCloudPopulationClass1,batch_size);
-        System.out.println("glob pop: [" + BMCloudPopulationClass1[0] + " , " + BMCloudPopulationClass1[1] + " )");
+        BMCloudPopulation[0] = computeMean(BMCloudPopulation[0]);
+        BMCloudPopulation[1] = computeMean(BMCloudPopulation[1]);
+        res = confidenceInterval.computeConfidenceInterval(BMCloudPopulation,num_batch);
+        System.out.println("cloud population: [" + res[0] + " , " + res[1] + " )");
 
         BMGlobalPopulationClass1[0] = computeMean(BMGlobalPopulationClass1[0]);
         BMGlobalPopulationClass1[1] = computeMean(BMGlobalPopulationClass1[1]);
-        BMGlobalPopulationClass1 = confidenceInterval.computeConfidenceInterval(BMGlobalPopulationClass1,batch_size);
-        System.out.println("glob pop: [" + BMGlobalPopulationClass1[0] + " , " + BMGlobalPopulationClass1[1] + " )");
+        res = confidenceInterval.computeConfidenceInterval(BMGlobalPopulationClass1,num_batch);
+        System.out.println("glob pop class 1: [" + res[0] + " , " + res[1] + " )");
 
-        BMCloudletPopulationClass1[0] = computeMean(BMCloudletPopulationClass2[0]);
-        BMCloudletPopulationClass1[1] = computeMean(BMCloudletPopulationClass2[1]);
-        BMCloudletPopulationClass1 = confidenceInterval.computeConfidenceInterval(BMCloudletPopulationClass1,batch_size);
-        System.out.println("glob pop: [" + BMCloudletPopulationClass1[0] + " , " + BMCloudletPopulationClass1[1] + " )");
+        BMCloudletPopulationClass1[0] = computeMean(BMCloudletPopulationClass1[0]);
+        BMCloudletPopulationClass1[1] = computeMean(BMCloudletPopulationClass1[1]);
+        res = confidenceInterval.computeConfidenceInterval(BMCloudletPopulationClass1,num_batch);
+        System.out.println("cloudlet pop class 1: [" + res[0] + " , " + res[1] + " )");
 
         BMCloudPopulationClass1[0] = computeMean(BMCloudPopulationClass1[0]);
         BMCloudPopulationClass1[1] = computeMean(BMCloudPopulationClass1[1]);
-        BMCloudPopulationClass1 = confidenceInterval.computeConfidenceInterval(BMCloudPopulationClass1,batch_size);
-        System.out.println("glob pop: [" + BMCloudPopulationClass1[0] + " , " + BMCloudPopulationClass1[1] + " )");
+        res = confidenceInterval.computeConfidenceInterval(BMCloudPopulationClass1,num_batch);
+        System.out.println("cloud pop class 1: [" + res[0] + " , " + res[1] + " )");
 
         BMGlobalPopulationClass2[0] = computeMean(BMGlobalPopulationClass2[0]);
         BMGlobalPopulationClass2[1] = computeMean(BMGlobalPopulationClass2[1]);
-        BMGlobalPopulationClass2 = confidenceInterval.computeConfidenceInterval(BMGlobalPopulationClass2,batch_size);
-        System.out.println("glob pop: [" + BMGlobalPopulationClass2[0] + " , " + BMGlobalPopulationClass2[1] + " )");
+        res = confidenceInterval.computeConfidenceInterval(BMGlobalPopulationClass2,num_batch);
+        System.out.println("glob pop class 2: [" + res[0] + " , " + res[1] + " )");
 
         BMCloudletPopulationClass2[0] = computeMean(BMCloudletPopulationClass2[0]);
         BMCloudletPopulationClass2[1] = computeMean(BMCloudletPopulationClass2[1]);
-        BMCloudletPopulationClass2 = confidenceInterval.computeConfidenceInterval(BMCloudletPopulationClass2,batch_size);
-        System.out.println("glob pop: [" + BMCloudletPopulationClass2[0] + " , " + BMCloudletPopulationClass2[1] + " )");
+        res = confidenceInterval.computeConfidenceInterval(BMCloudletPopulationClass2,num_batch);
+        System.out.println("cloudlet pop class 2: [" + res[0] + " , " + res[1] + " )");
 
         BMCloudPopulationClass2[0] = computeMean(BMCloudPopulationClass2[0]);
         BMCloudPopulationClass2[1] = computeMean(BMCloudPopulationClass2[1]);
-        BMCloudPopulationClass2 = confidenceInterval.computeConfidenceInterval(BMCloudletPopulationClass2,batch_size);
-        System.out.println("glob pop: [" +  BMCloudPopulationClass2[0] + " , " +  BMCloudPopulationClass2[1] + " )");
+        res = confidenceInterval.computeConfidenceInterval(BMCloudletPopulationClass2,num_batch);
+        System.out.println("cloud pop class 2: [" + res[0] + " , " + res[1] + " )");
     }
 
 
@@ -212,7 +213,20 @@ public class BatchMeans {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "BatchMeans{" +
+                "BMGlobalPopulation=" + Arrays.toString(BMGlobalPopulation) +
+                ", BMCloudletPopulation=" + Arrays.toString(BMCloudletPopulation) +
+                ", BMCloudPopulation=" + Arrays.toString(BMCloudPopulation) +
+                ", BMGlobalPopulationClass1=" + Arrays.toString(BMGlobalPopulationClass1) +
+                ", BMCloudletPopulationClass1=" + Arrays.toString(BMCloudletPopulationClass1) +
+                ", BMCloudPopulationClass1=" + Arrays.toString(BMCloudPopulationClass1) +
+                ", BMGlobalPopulationClass2=" + Arrays.toString(BMGlobalPopulationClass2) +
+                ", BMCloudletPopulationClass2=" + Arrays.toString(BMCloudletPopulationClass2) +
+                ", BMCloudPopulationClass2=" + Arrays.toString(BMCloudPopulationClass2) +
+                '}';
+    }
 
 }
 

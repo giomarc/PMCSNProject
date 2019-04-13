@@ -20,6 +20,7 @@ public class Simulation {
 
     private static JobStatistics jobStatistics;
     private static TimeStatistics timeStatistics;
+    private static BatchMeans batchMeans;
     private static CloudletController cloudletController;
 
     public static void main(String[] args) {
@@ -46,7 +47,7 @@ public class Simulation {
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
         }
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());
-        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics);
+        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
 //        BatchMeans.getInstance().computeBatchMeans();
 
     }
@@ -63,7 +64,7 @@ public class Simulation {
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
         }
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());
-        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics);
+        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics,batchMeans);
     }
 
     private static void initialize(){
@@ -71,6 +72,7 @@ public class Simulation {
         jobStatistics = JobStatistics.getInstance();
         timeStatistics = TimeStatistics.getInstance();
         cloudletController = CloudletController.getInstance();
+        batchMeans = BatchMeans.getInstance();
         CSVlogger.getInstance().createFileIfNotExists();
     }
 
@@ -83,6 +85,7 @@ public class Simulation {
         Cloudlet.getInstance().reset();
         CloudletController.getInstance().reset();
         CSVlogger.getInstance().reset();
+        BatchMeans.getInstance().reset();
     }
 
 }

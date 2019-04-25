@@ -1,16 +1,8 @@
 package cloudlet;
 
 import job.Job;
-import variablesGenerator.Services;
 
-import java.util.ArrayList;
-
-/**
- * Author : Simone D'Aniello
- * Date :  03-Mar-19.
- */
 public class Server {
-
     private int id;
     private Job jobInService;
     private boolean busy;
@@ -31,13 +23,8 @@ public class Server {
     /**
      * Getter and Setters
      */
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Job getJobInService() {
@@ -57,7 +44,6 @@ public class Server {
     public void setBusy(boolean busy) {
         this.busy = busy;
     }
-
 
     public double getTimeBusy() {
         return timeBusy;

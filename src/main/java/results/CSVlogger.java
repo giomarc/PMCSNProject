@@ -1,15 +1,15 @@
-package system;
+package results;
 
-import cloud.Cloud;
 import cloudlet.Cloudlet;
-import cloudlet.CloudletController;
 import cloudlet.Server;
-import runners.Statistics.JobStatistics;
-import runners.Statistics.Statistics;
-import runners.Statistics.TimeStatistics;
-import runners.simulation.BatchMeans;
-
-import java.io.*;
+import statistics.BatchMeans;
+import statistics.JobStatistics;
+import statistics.TimeStatistics;
+import system.SystemConfiguration;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CSVlogger {
@@ -66,7 +66,7 @@ public class CSVlogger {
                     BufferedWriter outX = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughput, true));
                     System.out.println("File Throughput has been created.");
                     outX.write("distribution, operations, algorithm, threshold, iterations, seed, " +
-                              "Global_sys_throughput, Cloud_throughput, Cloudlet_throughput, "
+                            "Global_sys_throughput, Cloud_throughput, Cloudlet_throughput, "
                             + "Global_class1_throughput, Cloud_class1_throughput, Cloudlet_class1_throughput,"
                             + "Global_class2_throughput, Cloud_class2_throughput, Cloudlet_class2_throughput");
                     outX.flush();
@@ -121,7 +121,7 @@ public class CSVlogger {
         BatchMeans bm = BatchMeans.getInstance();
         if(SystemConfiguration.CSVLOGGER) {
             writeResponseTime(ts);
-            writeAVGjobs(bm);
+            // writeAVGjobs(bm);
             writeThroughput(js);
             if(!SystemConfiguration.MULTI_RUN) {
                 writeServerStatistics(globaltime);
@@ -180,16 +180,16 @@ public class CSVlogger {
                 long seed = SystemConfiguration.SEED;
                 double globalTime = js.getGlobalTime();
 
-                double meanCloudletPopulation = js.getMeanCloudletPopulation();
-                double meanCloudletPopulationClass1 = js.getMeanCloudletPopulationClass1();
-                double meanCloudletPopulationClass2 = js.getMeanCloudletPopulationClass2();
+                double meanCloudletPopulation = js.getMeanCloudletPopulation(0);
+                double meanCloudletPopulationClass1 = js.getMeanCloudletPopulation(1);
+                double meanCloudletPopulationClass2 = js.getMeanCloudletPopulation(2);
 
-                double meanCloudPopulation = js.getMeanCloudPopulation();
-                double meanCloudPopulationClass1 = js.getMeanCloudPopulationClass1();
-                double meanCloudPopulationClass2 = js.getMeanCloudPopulationClass2();
+                double meanCloudPopulation = js.getMeanCloudPopulation(0);
+                double meanCloudPopulationClass1 = js.getMeanCloudPopulation(1);
+                double meanCloudPopulationClass2 = js.getMeanCloudPopulation(2);
 
-                double meanClass1Population = js.getMeanGlobalPopulationClass1();
-                double meanClass2Population = js.getMeanGlobalPopulationClass2();
+                double meanClass1Population = js.getMeanGlobalPopulation(1);
+                double meanClass2Population = js.getMeanGlobalPopulation(2);
 
                 BufferedWriter outMS;
                 try {
@@ -255,13 +255,13 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-        double cloudletThroughput = js.getEmpiricCloudletThroughput();
-        double cloudThroughput = js.getEmpiricCloudThroughput();
+        double cloudletThroughput = js.getCloudletThroughput();
+        double cloudThroughput = js.getCloudThroughput();
         double globalThroughput = cloudletThroughput + cloudThroughput;
-        double cloudletThroughputClass1 = js.getEmpiricCloudletClass1Throughput();
-        double cloudletThroughputClass2 = js.getEmpiricCloudletClass2Throughput();
-        double cloudThroughputClass1 = js.getEmpiricCloudClass1Throughput();
-        double cloudThroughputClass2 = js.getEmpiricCloudClass2Throughput();
+        double cloudletThroughputClass1 = js.getCloudletClass1Throughput();
+        double cloudletThroughputClass2 = js.getCloudletClass2Throughput();
+        double cloudThroughputClass1 = js.getCloudClass1Throughput();
+        double cloudThroughputClass2 = js.getCloudClass2Throughput();
         double class1Throughput = cloudletThroughputClass1 + cloudThroughputClass1;
         double class2Throughput = cloudletThroughputClass2 + cloudThroughputClass2;
 
@@ -280,7 +280,7 @@ public class CSVlogger {
     }
 
     @SuppressWarnings("Duplicates")
-    private void writeAVGjobs(BatchMeans bm){
+   /* private void writeAVGjobs(BatchMeans bm){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
         int algorithm = SystemConfiguration.ALGORITHM;
@@ -294,7 +294,7 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-        double meanGlobalAvgJobs = bm.getMeanBMGlobalPopulation();
+       double meanGlobalAvgJobs = bm.getMeanBMGlobalPopulation();
         double meanCloudletAvgJobs = bm.getMeanBMCloudletPopulation();
         double meanCloudAvgJobs = bm.getMeanBMCloudPopulation();
         double meanCloudletAvgJobsClass1 = bm.getMeanBMCloudletPopulationClass1();
@@ -317,10 +317,10 @@ public class CSVlogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
-    @SuppressWarnings("Duplicates")
+
     private void writeBatchMeansjobs(BatchMeans js){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;

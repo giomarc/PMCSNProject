@@ -1,11 +1,9 @@
 package cloudlet;
 
-import cloud.Cloud;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
-import runners.Statistics.JobStatistics;
-import runners.Statistics.Statistics;
+import statistics.Statistics;
 import system.SystemConfiguration;
 import variablesGenerator.Services;
 
@@ -13,7 +11,7 @@ import java.util.ArrayList;
 
 public class Cloudlet {
 
-    private static Cloudlet instance = new Cloudlet();
+    private static Cloudlet instance;
     private int n1;
     private int n2;
     private int numberOfServers;
@@ -28,9 +26,14 @@ public class Cloudlet {
         initServers();
     }
 
+
     public static Cloudlet getInstance(){
+        if(instance == null)
+            instance = new Cloudlet();
         return instance;
     }
+
+
 
     public void processArrival(Event e) {
         Job job = e.getJob();
@@ -44,7 +47,6 @@ public class Cloudlet {
                 break;
             }
         }
-        //iteration++;
     }
 
     void removeCompletedJobs(double arrivalTime){
@@ -52,7 +54,7 @@ public class Cloudlet {
             if(s.isBusy()) {
                 if (s.getJobInService().getCompletionTime() <= arrivalTime) {
                     s.setBusy(false);
-                    Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+                    Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                     decreaseN(s.getJobInService().getJobClass());
                 }
                 else
@@ -65,9 +67,6 @@ public class Cloudlet {
         removeCompletedJobs(arrival);
     }
 
-    public int getNumberOfServers() {
-        return numberOfServers;
-    }
 
     public int [] getJobsInCloudlet(){
         return new int[]{n1, n2};
@@ -99,7 +98,7 @@ public class Cloudlet {
         double max = 0.0;
         for(Server s: serverList){
             if(s.isBusy()) {
-                Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+                Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
                 s.setBusy(false);
 
                 if(s.getJobInService().getCompletionTime() > max)
@@ -109,10 +108,6 @@ public class Cloudlet {
         return max;
     }
 
-
-    public static void calculateCloudletStatistics(double actualvalue,int n){
-        Statistics.getInstance().calculateSampleMean(actualvalue,n);
-    }
 
     public void reset(){
         n1 = 0;

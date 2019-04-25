@@ -1,15 +1,18 @@
-package runners.Statistics;
+package statistics;
 
-public class TimeStatistics {
+public class TimeStatistics{
+
 
     private static TimeStatistics instance = null;
-    //RESPONSE TIME
     private double meanResponseTime;
     private double meanResponseTimeCloudlet;
     private double meanResponseTimeCloud;
     private double meanResponseTimeClass1;
     private double meanResponseTimeClass2;
     private double meanResponseTimeClass1Cloudlet;
+    private double meanResponseTimeClass2Cloudlet;
+    private double meanResponseTimeClass1Cloud;
+    private double meanResponseTimeClass2Cloud;
 
 
     private TimeStatistics(){
@@ -23,10 +26,6 @@ public class TimeStatistics {
         return instance;
     }
 
-
-    public static void setInstance(TimeStatistics instance) {
-        TimeStatistics.instance = instance;
-    }
 
     public void setMeanResponseTime(double meanResponseTime) {
         this.meanResponseTime = meanResponseTime;
@@ -64,9 +63,6 @@ public class TimeStatistics {
         this.meanResponseTimeClass2Cloud = meanResponseTimeClass2Cloud;
     }
 
-    private double meanResponseTimeClass2Cloudlet;
-    private double meanResponseTimeClass1Cloud;
-    private double meanResponseTimeClass2Cloud;
 
 
 
@@ -109,6 +105,9 @@ public class TimeStatistics {
         return meanResponseTimeClass2Cloud;
     }
 
+
+
+
     public void resetStatistics(){
         this.meanResponseTime                = 0.0;
         this.meanResponseTimeCloudlet        = 0.0;
@@ -120,5 +119,6 @@ public class TimeStatistics {
         this.meanResponseTimeClass1Cloud     = 0.0;
         this.meanResponseTimeClass2Cloud     = 0.0;
     }
+
 
 }

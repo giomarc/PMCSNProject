@@ -1,16 +1,15 @@
 package cloud;
 
-import cloudlet.Cloudlet;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
-import runners.Statistics.JobStatistics;
-import runners.Statistics.Statistics;
+import statistics.Statistics;
 import variablesGenerator.Services;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Cloud {
+
     private static Cloud instance = new Cloud();
     private static ArrayList<Job> jobsInService;
     private int n1;
@@ -26,9 +25,10 @@ public class Cloud {
     public static Cloud getInstance(){ return instance;}
 
     public void processArrival(Event e) {
-//        removeCompletedJobs(e.getJob().getArrivalTime());
         processCurrentJob(e.getJob());
     }
+
+
 
     private void removeCompletedJobs(double arrivalTime){
         double updated;
@@ -36,11 +36,13 @@ public class Cloud {
             updated = j.getCompletionTime() - arrivalTime;
             j.setCompletionTime(updated);
             if(j.getCompletionTime() < 0){
-                Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
+                Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(2, j));
             }
         }
         removeFromList();
     }
+
+
 
     private void processCurrentJob(Job j){
         int jobclass = j.getJobClass();
@@ -49,6 +51,8 @@ public class Cloud {
         jobsInService.add(j);
         increaseN(jobclass);
     }
+
+
 
     private void removeFromList(){
         Iterator itr = jobsInService.iterator();
@@ -64,15 +68,19 @@ public class Cloud {
         }
     }
 
+
+
     public double endSimulation() {
         double max = 0.0;
         for(Job j: jobsInService){
             if(j.getCompletionTime() > max)
                 max = j.getCompletionTime();
-            Statistics.getInstance().receiveCompletion(EventGenerator.getInstance().generateCompletion(2, j));
+            Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(2, j));
         }
         return max;
     }
+
+
 
     public void reset(){
         n1 = 0;
@@ -80,26 +88,29 @@ public class Cloud {
         jobsInService = new ArrayList<>();
     }
 
+
+
     public void timeHasPassed(double arrivalTime) {
         removeCompletedJobs(arrivalTime);
     }
 
+
+
     private void decreaseN(int jobClass){
-        if(jobClass == 1)
-            n1--;
-        else
-            n2--;
+        if(jobClass == 1) n1--;
+        else n2--;
     }
 
+
+
     private void increaseN(int jobClass){
-        if(jobClass == 1)
-            n1++;
-        else
-            n2++;
+        if(jobClass == 1) n1++;
+        else n2++;
     }
+
+
 
     public int[] returnJobsInCloud(){
         return new int[]{n1, n2};
     }
-
 }

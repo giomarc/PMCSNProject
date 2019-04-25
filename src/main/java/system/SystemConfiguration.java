@@ -5,6 +5,7 @@ import java.util.Properties;
 
 public class SystemConfiguration {
 
+
     public static final String FILENAME = "src/main/resources/config.properties";
     public static double SETUP_TIME = 0.0;
     public static int N = 0;
@@ -19,8 +20,6 @@ public class SystemConfiguration {
     public static double START = 0.0;
     public static double STOP = 0.0;
     public static boolean VERBOSE = true;
-    //public static int BATCH_SIZE = 256;
-    //public static int NUM_BATCH = 64;
     public static boolean MULTI_RUN = false;
     public static long SEED = 0;
     public static long ITERATIONS = 0;
@@ -31,7 +30,6 @@ public class SystemConfiguration {
     public static boolean HYPEREXPO_ENABLED = true;
     public static boolean OPERATIONS_ENABLED = true;
     public static boolean BATCH = false;
-    //public static int BATCH_SIZE;
     public static int NUM_BATCH;
 
     public static void getConfigParams() {
@@ -53,7 +51,6 @@ public class SystemConfiguration {
             STOP = Double.parseDouble(prop.getProperty("STOP"));
             N = Integer.parseInt(prop.getProperty("N"));
             RUNS = Integer.parseInt(prop.getProperty("RUNS"));
-            //BATCH_SIZE = Integer.parseInt(prop.getProperty("BATCH_SIZE"));
             NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));
             MULTI_RUN = Boolean.valueOf(prop.getProperty("MULTI_RUN"));
             SEED = Long.parseLong(prop.getProperty("SEED"));

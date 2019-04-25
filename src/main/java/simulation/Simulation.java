@@ -1,20 +1,17 @@
-package runners.simulation;
+package simulation;
 
 import cloud.Cloud;
+import results.CSVlogger;
+import results.PerformanceLogger;
 import cloudlet.Cloudlet;
 import cloudlet.CloudletController;
 import event.Event;
 import event.EventGenerator;
-import runners.Statistics.JobStatistics;
-import runners.Statistics.Statistics;
-import runners.Statistics.TimeStatistics;
-import system.CSVlogger;
-import system.PerformanceLogger;
+import statistics.BatchMeans;
+import statistics.JobStatistics;
+import statistics.TimeStatistics;
 import system.SystemConfiguration;
 import variablesGenerator.InitGenerator;
-
-import java.sql.Time;
-
 
 public class Simulation {
 
@@ -36,7 +33,6 @@ public class Simulation {
 
     }
 
-    @SuppressWarnings("Duplicates")
     private static void run(){
         initialize();
         PerformanceLogger.getInstance().printInitialConfiguration();
@@ -48,7 +44,7 @@ public class Simulation {
         }
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());
         PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
-//        BatchMeans.getInstance().computeBatchMeans();
+        //BatchMeans.getInstance().computeBatchMeans();
 
     }
 
@@ -83,7 +79,6 @@ public class Simulation {
         TimeStatistics.getInstance().resetStatistics();
         Cloud.getInstance().reset();
         Cloudlet.getInstance().reset();
-        CloudletController.getInstance().reset();
         CSVlogger.getInstance().reset();
         BatchMeans.getInstance().reset();
     }

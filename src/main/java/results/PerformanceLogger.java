@@ -14,6 +14,8 @@ public class PerformanceLogger implements Runnable {
     private Instant start;
     private Instant end;
     private Duration duration;
+    private long realTimeInSeconds;
+    private long simulationTimeInSeconds;
     private static ArrayList<Long> memoryUsages;
     private static boolean stop;
     private Thread son;
@@ -26,7 +28,7 @@ public class PerformanceLogger implements Runnable {
         return instance;
     }
 
-    public void startTest(){
+    private void startTest(){
         //only Java 8
         start = Instant.now();
         stop = false;
@@ -34,7 +36,7 @@ public class PerformanceLogger implements Runnable {
         son.start();
     }
 
-    public void endTest(double simulationTime){
+    private void endTest(double simulationTime){
         long memoryUsage = (calculateAverage(memoryUsages));
         stop = true;
         end = Instant.now();
@@ -43,11 +45,14 @@ public class PerformanceLogger implements Runnable {
         long minutes = duration.toMinutes();
         long seconds = duration.getSeconds();
         long millis = duration.toMillis();
+        realTimeInSeconds = seconds;
 
         long s_days = (long) Math.floor(simulationTime/(3600 * 24));
         long s_hours = (long) Math.floor(simulationTime/3600);
         long s_minutes = (long) Math.floor(simulationTime/60);
         long s_seconds = (long) Math.floor(simulationTime);
+        simulationTimeInSeconds = s_seconds;
+
         Printer.getInstance().print("\nTIME", "yellow");
         Printer.getInstance().print("Real time", "green");
         System.out.println(hours + " hours, " + (minutes - 60*hours) + " min, " + (seconds - 60*minutes) + " seconds, " + (millis - 1000*seconds) + " millis");
@@ -88,19 +93,19 @@ public class PerformanceLogger implements Runnable {
         System.out.print("\r100%");
         Printer.getInstance().print("\n\nCLOUDLET P_LOSS", "yellow");
         System.out.println(js.calculatePLoss());
-        if(SystemConfiguration.VERBOSE) {
+        if(SystemConfiguration.VERBOSE && !SystemConfiguration.MULTI_RUN) {
             printThroughputResults(js);
             printCompletedJobs(js);
             printResponseTime(ts);
-            printMeanPopulation(js);
-            printVariancePopulation(js);
-            PerformanceLogger.getInstance().endTest(js.getGlobalTime());
+            printMeanPopulation(bm);
+            printVariancePopulation(bm);
         }
+        PerformanceLogger.getInstance().endTest(js.getGlobalTime());
         CSVlogger.getInstance().writeOnFiles(js.getGlobalTime());
     }
 
 
-    public void printSystemConfiguration(){
+    private void printSystemConfiguration(){
         Printer.getInstance().print("\nARRIVAL RATES", "yellow");
         System.out.println("lambda_1 = " + SystemConfiguration.ARRIVAL_RATE_1);
         System.out.println("lambda_2 = " + SystemConfiguration.ARRIVAL_RATE_2);
@@ -118,7 +123,7 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("\nCompletion Percentage:", "blue");
     }
 
-    public void printThroughputResults(JobStatistics js){
+    private void printThroughputResults(JobStatistics js){
         //THROUGHPUT GLOBALI
         Printer.getInstance().print("\nTHROUGHPUT", "yellow");
         Printer.getInstance().print("Cloudlet throughput", "green");
@@ -139,7 +144,7 @@ public class PerformanceLogger implements Runnable {
         System.out.println(js.getCloudClass2Throughput());
     }
 
-    public void printCompletedJobs(JobStatistics js) {
+    private void printCompletedJobs(JobStatistics js) {
         Printer.getInstance().print("\nCOMPLETIONS", "yellow");
         Printer.getInstance().print("Job completed", "green");
         System.out.println(((int) js.getPackets(0)));
@@ -161,7 +166,7 @@ public class PerformanceLogger implements Runnable {
         System.out.println(((int) js.getCompletedCloud(0)));
     }
 
-    public void printResponseTime(TimeStatistics ts){
+    private void printResponseTime(TimeStatistics ts){
         Printer.getInstance().print("\nSERVICE TIME", "yellow");
         Printer.getInstance().print("Mean global response time", "green");
         System.out.println(ts.getMeanResponseTime());
@@ -183,57 +188,67 @@ public class PerformanceLogger implements Runnable {
         System.out.println(ts.getMeanResponseTimeClass2Cloud());
     }
 
-    public void printMeanPopulation(JobStatistics js){
+    private void printMeanPopulation(BatchMeans js){
         Printer.getInstance().print("\nAVG POPULATION", "yellow");
         Printer.getInstance().print("Mean global population", "green");
-        System.out.println(js.getMeanGlobalPopulation(0));
+        System.out.println(js.getMeanBMGlobalPopulation());
         Printer.getInstance().print("Mean Cloudlet population", "green");
-        System.out.println(js.getMeanCloudletPopulation(0));
+        System.out.println(js.getMeanBMCloudletPopulation());
         Printer.getInstance().print("Mean Cloud population", "green");
-        System.out.println(js.getMeanCloudPopulation(0));
+        System.out.println(js.getMeanBMCloudPopulation());
         Printer.getInstance().print("Mean class 1 population", "green");
-        System.out.println(js.getMeanGlobalPopulation(1));
+        System.out.println(js.getMeanBMGlobalPopulation());
         Printer.getInstance().print("Mean class 2 population", "green");
-        System.out.println(js.getMeanGlobalPopulation(2));
+        System.out.println(js.getMeanBMGlobalPopulation());
         Printer.getInstance().print("Mean cloudlet class 1 population", "green");
-        System.out.println(js.getMeanCloudletPopulation(1));
+        System.out.println(js.getMeanBMCloudletPopulation());
         Printer.getInstance().print("Mean cloudlet class 2 population", "green");
-        System.out.println(js.getMeanCloudletPopulation(2));
+        System.out.println(js.getMeanBMCloudletPopulation());
         Printer.getInstance().print("Mean cloud class 1 population", "green");
-        System.out.println(js.getMeanCloudPopulation(1));
+        System.out.println(js.getMeanBMCloudPopulation());
         Printer.getInstance().print("Mean cloud class 2 population", "green");
-        System.out.println(js.getMeanCloudPopulation(2));
+        System.out.println(js.getMeanBMCloudPopulation());
     }
 
-    public void printVariancePopulation(JobStatistics js){
+    private void printVariancePopulation(BatchMeans js){
         Printer.getInstance().print("\nVariance POPULATION", "yellow");
         Printer.getInstance().print("Variance global population", "green");
-        System.out.println(js.getVarGlobalPopulation(0));
+        System.out.println(js.getMeanBMVarianceGlobalPopulation());
         Printer.getInstance().print("Variance Cloudlet population", "green");
-        System.out.println(js.getVarCloudletPopulation(0));
+        System.out.println(js.getMeanBMVarianceCloudletPopulation());
         Printer.getInstance().print("Variance Cloud population", "green");
-        System.out.println(js.getVarCloudPopulation(0));
+        System.out.println(js.getMeanBMVarianceCloudPopulation());
         Printer.getInstance().print("Variance class 1 population", "green");
-        System.out.println(js.getVarGlobalPopulation(1));
+        System.out.println(js.getMeanBMVarianceGlobalPopulation());
         Printer.getInstance().print("Variance class 2 population", "green");
-        System.out.println(js.getVarGlobalPopulation(2));
+        System.out.println(js.getMeanBMVarianceGlobalPopulation());
         Printer.getInstance().print("Variance cloudlet class 1 population", "green");
-        System.out.println(js.getVarCloudletPopulation(1));
+        System.out.println(js.getMeanBMVarianceCloudletPopulation());
         Printer.getInstance().print("Variance cloudlet class 2 population", "green");
-        System.out.println(js.getVarCloudletPopulation(2));
+        System.out.println(js.getMeanBMVarianceCloudletPopulation());
         Printer.getInstance().print("Variance cloud class 1 population", "green");
-        System.out.println(js.getVarCloudPopulation(1));
+        System.out.println(js.getMeanBMVarianceCloudPopulation());
         Printer.getInstance().print("Variance cloud class 2 population", "green");
-        System.out.println(js.getVarCloudPopulation(2));
+        System.out.println(js.getMeanBMVarianceCloudPopulation());
     }
-
-
 
     public void updateProgress(long current, long max) {
         if(current%10000 == 0) {
             double progressPercentage = ((double) current) / ((double) max);
             System.out.print("\r" + (int) (progressPercentage * 100) + "%");
         }
+    }
+
+    long getRealTime() {
+        return realTimeInSeconds;
+    }
+
+    long getSimulationTime() {
+        return simulationTimeInSeconds;
+    }
+
+    double getRam(){
+        return (calculateAverage(memoryUsages));
     }
 
     @Override

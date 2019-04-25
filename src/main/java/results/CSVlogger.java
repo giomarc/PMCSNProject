@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@SuppressWarnings("Duplicates")
 public class CSVlogger {
 
     private static CSVlogger instance = new CSVlogger();
@@ -22,7 +23,9 @@ public class CSVlogger {
     private String fileMeansInOneSimulation;
     private String fileServerStatus;
     private String fileBatchMeans;
+    private String fileBatchVariance;
     private String fileVarianceJobs;
+    private String fileSystemSimulation;
 
     private CSVlogger(){}
 
@@ -39,6 +42,8 @@ public class CSVlogger {
             this.fileMeansInOneSimulation = "MeansInOneSimulation.csv";
             this.fileServerStatus = "ServerStatus.csv";
             this.fileBatchMeans = "BatchMeans.csv";
+            this.fileBatchVariance = "BatchVariances.csv";
+            this.fileSystemSimulation = "SystemSimulation.csv";
 
 
             try {
@@ -56,6 +61,8 @@ public class CSVlogger {
                 File fileMS = new File("./RESULT_OUTPUT/" + fileMeansInOneSimulation);
                 File fileSV = new File("./RESULT_OUTPUT/" + fileServerStatus);
                 File fileBM = new File("./RESULT_OUTPUT/" + fileBatchMeans);
+                File fileBV = new File("./RESULT_OUTPUT/" + fileBatchVariance);
+                File fileSS = new File("./RESULT_OUTPUT/" + fileSystemSimulation);
 
                 if (fileRT.createNewFile()) {
                     BufferedWriter outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTime, true));
@@ -92,6 +99,13 @@ public class CSVlogger {
                             + "Global_class2_variance_jobs, Cloud_class2_variance_jobs, Cloudlet_class2_variance_jobs");
                     outVJ.flush();
                 }
+                if (fileSS.createNewFile()) {
+                    BufferedWriter outSS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileSystemSimulation, true));
+                    System.out.println("File System simulation has been created.");
+                    outSS.write("distribution, operations, algorithm, threshold, iterations, seed,  " +
+                            " Real_time, Simulation_time, RAM_Usage");
+                    outSS.flush();
+                }
                 if(!SystemConfiguration.MULTI_RUN) {
                     fileMS.delete();
                     if (fileMS.createNewFile()) {
@@ -110,14 +124,28 @@ public class CSVlogger {
                         outSV.flush();
                     }
                     fileBM.delete();
-                    if (fileBM.createNewFile()) {
-                        BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
-                        System.out.println("File Batch Means has been created.");
-                        outBM.write("batch_iteration, distribution, operations, algorithm, threshold, iterations, seed,  " +
-                                " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs, "
-                                + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs,"
-                                + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs");
-                        outBM.flush();
+                    if(SystemConfiguration.BATCH) {
+                        if (fileBM.createNewFile()) {
+                            BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
+                            System.out.println("File Batch Means Mean Population has been created.");
+                            outBM.write("batch_iteration, distribution, operations, algorithm, threshold, iterations, seed,  " +
+                                    " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs, "
+                                    + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs,"
+                                    + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs");
+                            outBM.flush();
+                        }
+                    }
+                    fileBV.delete();
+                    if(SystemConfiguration.BATCH) {
+                        if (fileBV.createNewFile()) {
+                            BufferedWriter outBV = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchVariance, true));
+                            System.out.println("File Batch Means Population Variance has been created.");
+                            outBV.write("batch_iteration, distribution, operations, algorithm, threshold, iterations, seed,  " +
+                                    " Global_sys_variance_jobs, Cloud_variance_jobs, Cloudlet_variance_jobs, "
+                                    + "Global_class1_variance_jobs, Cloud_class1_variance_jobs, Cloudlet_class1_variance_jobs,"
+                                    + "Global_class2_variance_jobs, Cloud_class2_variance_jobs, Cloudlet_class2_variance_jobs");
+                            outBV.flush();
+                        }
                     }
                 }
             } catch (IOException e) {
@@ -133,17 +161,20 @@ public class CSVlogger {
         BatchMeans bm = BatchMeans.getInstance();
         if(SystemConfiguration.CSVLOGGER) {
             writeResponseTime(ts);
-            // writeAVGjobs(bm);
+            writeAVGjobsPopulation(bm);
+            writeVarianceJobsPopulation(bm);
             writeThroughput(js);
+            writeSystemSimulation();
             if(!SystemConfiguration.MULTI_RUN) {
                 writeServerStatistics(globaltime);
-                if(SystemConfiguration.BATCH)
+                if(SystemConfiguration.BATCH) {
                     writeBatchMeansjobs(bm);
+                    writeBatchMeansVarianceJobs(bm);
+                }
             }
         }
     }
 
-    @SuppressWarnings("Duplicates")
     public void writeResponseTime(TimeStatistics ts){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
@@ -183,7 +214,6 @@ public class CSVlogger {
 
     }
 
-    @SuppressWarnings("Duplicates")
     public void writeMeansInOneSimulation(JobStatistics js){
         if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
             if (totalMeansDuringSimulations > 0) {
@@ -217,7 +247,6 @@ public class CSVlogger {
         }
     }
 
-    @SuppressWarnings("Duplicates")
     private void writeServerStatistics(double globalTime){
 
         long seed = SystemConfiguration.SEED;
@@ -252,7 +281,6 @@ public class CSVlogger {
 
     }
 
-    @SuppressWarnings("Duplicates")
     private void writeThroughput(JobStatistics js){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
@@ -291,8 +319,7 @@ public class CSVlogger {
         }
     }
 
-   /* @SuppressWarnings("Duplicates")
-    private void writeAVGjobs(BatchMeans bm){
+    private void writeAVGjobsPopulation(BatchMeans bm){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
         int algorithm = SystemConfiguration.ALGORITHM;
@@ -306,15 +333,15 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-       double meanGlobalAvgJobs = bm.getMeanBMGlobalPopulation();
-        double meanCloudletAvgJobs = bm.getMeanBMCloudletPopulation();
-        double meanCloudAvgJobs = bm.getMeanBMCloudPopulation();
-        double meanCloudletAvgJobsClass1 = bm.getMeanBMCloudletPopulationClass1();
-        double meanCloudletAvgJobsClass2 = bm.getMeanBMCloudletPopulationClass2();
-        double meanCloudAvgJobsClass1 = bm.getMeanBMCloudPopulationClass1();
-        double meanCloudAvgJobsClass2 = bm.getMeanBMCloudPopulationClass2();
-        double meanClass1AvgJobs = bm.getMeanBMGlobalPopulationClass1();
-        double meanClass2AvgJobs = bm.getMeanBMGlobalPopulationClass2();
+        double meanGlobalAvgJobs =          bm.getMeanBMGlobalPopulation();
+        double meanCloudletAvgJobs =        bm.getMeanBMCloudletPopulation();
+        double meanCloudAvgJobs =           bm.getMeanBMCloudPopulation();
+        double meanCloudletAvgJobsClass1 =  bm.getMeanBMCloudletPopulationClass1();
+        double meanCloudletAvgJobsClass2 =  bm.getMeanBMCloudletPopulationClass2();
+        double meanCloudAvgJobsClass1 =     bm.getMeanBMCloudPopulationClass1();
+        double meanCloudAvgJobsClass2 =     bm.getMeanBMCloudPopulationClass2();
+        double meanClass1AvgJobs =          bm.getMeanBMGlobalPopulationClass1();
+        double meanClass2AvgJobs =          bm.getMeanBMGlobalPopulationClass2();
 
 
         BufferedWriter outAVG;
@@ -329,9 +356,9 @@ public class CSVlogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
-    private void writeBatchMeansjobs(BatchMeans js){
+    private void writeVarianceJobsPopulation(BatchMeans bm){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
         int algorithm = SystemConfiguration.ALGORITHM;
@@ -345,15 +372,85 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-        ArrayList<Double> meanGlobalAvgJobs = js.getBMGlobalPopulation();
-        ArrayList<Double> meanCloudletAvgJobs = js.getBMCloudletPopulation();
-        ArrayList<Double> meanCloudAvgJobs = js.getBMCloudPopulation();
-        ArrayList<Double> meanCloudletAvgJobsClass1 = js.getBMCloudletPopulationClass1();
-        ArrayList<Double> meanCloudletAvgJobsClass2 = js.getBMCloudletPopulationClass2();
-        ArrayList<Double> meanCloudAvgJobsClass1 = js.getBMCloudPopulationClass1();
-        ArrayList<Double> meanCloudAvgJobsClass2 = js.getBMCloudPopulationClass2();
-        ArrayList<Double> meanClass1AvgJobs = js.getBMGlobalPopulationClass1();
-        ArrayList<Double> meanClass2AvgJobs = js.getBMGlobalPopulationClass2();
+        double varianceGlobalAvgJobs =          bm.getMeanBMVarianceGlobalPopulation();
+        double varianceCloudletAvgJobs =        bm.getMeanBMVarianceCloudletPopulation();
+        double varianceCloudAvgJobs =           bm.getMeanBMVarianceCloudPopulation();
+        double varianceCloudletAvgJobsClass1 =  bm.getMeanBMVarianceCloudletPopulationClass1();
+        double varianceCloudletAvgJobsClass2 =  bm.getMeanBMVarianceCloudletPopulationClass2();
+        double varianceCloudAvgJobsClass1 =     bm.getMeanBMVarianceCloudPopulationClass1();
+        double varianceCloudAvgJobsClass2 =     bm.getMeanBMVarianceCloudPopulationClass2();
+        double varianceClass1AvgJobs =          bm.getMeanBMVarianceGlobalPopulationClass1();
+        double varianceClass2AvgJobs =          bm.getMeanBMVarianceGlobalPopulationClass2();
+
+
+        BufferedWriter outVar;
+        try {
+            outVar = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileVarianceJobs, true));
+            outVar.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                    varianceGlobalAvgJobs + "," + varianceCloudAvgJobs + "," +       varianceCloudletAvgJobs + "," +
+                    varianceClass1AvgJobs + "," + varianceCloudAvgJobsClass1 + "," + varianceCloudletAvgJobsClass1 + "," +
+                    varianceClass2AvgJobs + "," + varianceCloudAvgJobsClass2 + "," + varianceCloudletAvgJobsClass2
+            );
+            outVar.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeSystemSimulation(){
+        PerformanceLogger pl = PerformanceLogger.getInstance();
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+
+        long real_time =          pl.getRealTime();
+        long simulation_time =    pl.getSimulationTime();
+        double RAM =              pl.getRam();
+
+
+        BufferedWriter outVar;
+        try {
+            outVar = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileSystemSimulation, true));
+            outVar.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                    real_time + "," + simulation_time + "," +  RAM);
+            outVar.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeBatchMeansjobs(BatchMeans bm){
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+
+        ArrayList<Double> meanGlobalAvgJobs = bm.getBMGlobalPopulation();
+        ArrayList<Double> meanCloudletAvgJobs = bm.getBMCloudletPopulation();
+        ArrayList<Double> meanCloudAvgJobs = bm.getBMCloudPopulation();
+        ArrayList<Double> meanCloudletAvgJobsClass1 = bm.getBMCloudletPopulationClass1();
+        ArrayList<Double> meanCloudletAvgJobsClass2 = bm.getBMCloudletPopulationClass2();
+        ArrayList<Double> meanCloudAvgJobsClass1 = bm.getBMCloudPopulationClass1();
+        ArrayList<Double> meanCloudAvgJobsClass2 = bm.getBMCloudPopulationClass2();
+        ArrayList<Double> meanClass1AvgJobs = bm.getBMGlobalPopulationClass1();
+        ArrayList<Double> meanClass2AvgJobs = bm.getBMGlobalPopulationClass2();
 
 
         BufferedWriter outAVG;
@@ -367,6 +464,47 @@ public class CSVlogger {
                 );
             }
             outAVG.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeBatchMeansVarianceJobs(BatchMeans bm){
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+
+        ArrayList<Double> varianceGlobalAvgJobs =           bm.getBMVarianceGlobalPopulation();
+        ArrayList<Double> varianceCloudletAvgJobs =         bm.getBMVarianceCloudletPopulation();
+        ArrayList<Double> varianceCloudAvgJobs =            bm.getBMVarianceCloudPopulation();
+        ArrayList<Double> varianceCloudletAvgJobsClass1 =   bm.getBMVarianceCloudletPopulationClass1();
+        ArrayList<Double> varianceCloudletAvgJobsClass2 =   bm.getBMVarianceCloudletPopulationClass2();
+        ArrayList<Double> varianceCloudAvgJobsClass1 =      bm.getBMVarianceCloudPopulationClass1();
+        ArrayList<Double> varianceCloudAvgJobsClass2 =      bm.getBMVarianceCloudPopulationClass2();
+        ArrayList<Double> varianceClass1AvgJobs =           bm.getBMVarianceGlobalPopulationClass1();
+        ArrayList<Double> varianceClass2AvgJobs =           bm.getBMVarianceGlobalPopulationClass2();
+
+
+        BufferedWriter outVar;
+        try {
+            outVar = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchVariance, true));
+            for(int i = 0; i < SystemConfiguration.NUM_BATCH; i++) {
+                outVar.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                        varianceGlobalAvgJobs.get(i) + "," + varianceCloudAvgJobs.get(i) + "," +       varianceCloudletAvgJobs.get(i) + "," +
+                        varianceClass1AvgJobs.get(i) + "," + varianceCloudAvgJobsClass1.get(i) + "," + varianceCloudletAvgJobsClass1.get(i) + "," +
+                        varianceClass2AvgJobs.get(i) + "," + varianceCloudAvgJobsClass2.get(i) + "," + varianceCloudletAvgJobsClass2.get(i)
+                );
+            }
+            outVar.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

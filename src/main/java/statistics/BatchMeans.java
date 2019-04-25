@@ -50,7 +50,7 @@ public class BatchMeans {
     }
 
 
-    public double getBatchSize(){
+    double getBatchSize(){
         batch_size = (double) (iterations / num_batch);
         return batch_size;
     }
@@ -63,8 +63,6 @@ public class BatchMeans {
     public void updateBMG(ArrayList<Double> listToUpdate,double valueToInsert) {
         listToUpdate.add(valueToInsert);
     }
-
-
 
     public double getBMMean(ArrayList<Double> values) {
         if(SystemConfiguration.BATCH) {
@@ -81,33 +79,13 @@ public class BatchMeans {
             return value /num_batch;
         }
         else
-            return JobStatistics.getInstance().getMeanGlobalPopulation(0);
-    }
-
-
-    public double getBMVariance(ArrayList<Double> values) {
-        if(SystemConfiguration.BATCH) {
-            double value = 0;
-
-            if(values.size()!=num_batch){
-                System.out.println("cicli: " + values.size() +  ", num_batch: " + num_batch);
-                System.exit(-1);
-            }
-            for (double d : values) {
-                value += d;
-            }
-            confidenceInterval.computeConfidenceInterval(BMGlobalPopulation);
-            return value /num_batch;
-        }
-        else
-            return JobStatistics.getInstance().getVarGlobalPopulation(0);
+            return values.get(0);
     }
 
 
     /**
      * Getter
      */
-
     public ArrayList<Double> getBMGlobalPopulation() {
         return BMGlobalPopulation;
     }
@@ -179,6 +157,157 @@ public class BatchMeans {
     public ArrayList<Double> getBMVarianceCloudPopulationClass2() {
         return BMVarCloudPopulation_2;
     }
+
+    /**
+     * GETTER FOR STATISTICS
+     */
+    public double getMeanBMGlobalPopulation() {
+        return getBMMean(BMGlobalPopulation);
+    }
+
+    public double getMeanBMCloudletPopulation() {
+        return getBMMean(BMCloudletPopulation);
+    }
+
+    public double getMeanBMCloudPopulation() {
+        return getBMMean(BMCloudPopulation);
+    }
+
+    public double getMeanBMGlobalPopulationClass1() {
+        return getBMMean(BMGlobalPopulation_1);
+    }
+
+    public double getMeanBMCloudletPopulationClass1() {
+        return getBMMean(BMCloudletPopulation_1);
+    }
+
+    public double getMeanBMCloudPopulationClass1() {
+        return getBMMean(BMCloudPopulation_1);
+    }
+
+    public double getMeanBMGlobalPopulationClass2() {
+        return getBMMean(BMGlobalPopulationClass2);
+    }
+
+    public double getMeanBMCloudletPopulationClass2() {
+        return getBMMean(BMCloudletPopulation_2);
+    }
+
+    public double getMeanBMCloudPopulationClass2() {
+        return getBMMean(BMCloudPopulation_2);
+    }
+
+    public double getMeanBMVarianceGlobalPopulation() {
+        return getBMMean(BMVarGlobalPopulation);
+    }
+
+    public double getMeanBMVarianceCloudletPopulation() {
+        return getBMMean(BMVarCloudletPopulation);
+    }
+
+    public double getMeanBMVarianceCloudPopulation() {
+        return getBMMean(BMVarCloudPopulation);
+    }
+
+    public double getMeanBMVarianceGlobalPopulationClass1() {
+        return getBMMean(BMVarGlobalPopulation_1);
+    }
+
+    public double getMeanBMVarianceCloudletPopulationClass1() {
+        return getBMMean(BMVarCloudletPopulation_1);
+    }
+
+    public double getMeanBMVarianceCloudPopulationClass1() {
+        return getBMMean(BMVarCloudPopulation_1);
+    }
+
+    public double getMeanBMVarianceGlobalPopulationClass2() {
+        return getBMMean(BMVarGlobalPopulation_2);
+    }
+
+    public double getMeanBMVarianceCloudletPopulationClass2() {
+        return getBMMean(BMVarCloudletPopulation_2);
+    }
+
+    public double getMeanBMVarianceCloudPopulationClass2() {
+        return getBMMean(BMVarCloudPopulation_2);
+    }
+
+    /**
+     * SETTER
+     */
+    void setBMGlobalPopulation(double currentValue) {
+         BMGlobalPopulation.add(currentValue);
+    }
+
+    void setBMCloudletPopulation(double currentValue) {
+        BMCloudletPopulation.add(currentValue);
+    }
+
+    void setBMCloudPopulation(double currentValue) {
+        BMCloudPopulation.add(currentValue);
+    }
+
+    void setBMGlobalPopulationClass1(double currentValue) {
+        BMGlobalPopulation_1.add(currentValue);
+    }
+
+    void setBMCloudletPopulationClass1(double currentValue) {
+        BMCloudletPopulation_1.add(currentValue);
+    }
+
+    void setBMCloudPopulationClass1(double currentValue) {
+        BMCloudPopulation_1.add(currentValue);
+    }
+
+    void setBMGlobalPopulationClass2(double currentValue) {
+        BMGlobalPopulationClass2.add(currentValue);
+    }
+
+    void setBMCloudletPopulationClass2(double currentValue) {
+        BMCloudletPopulation_2.add(currentValue);
+    }
+
+    void setBMCloudPopulationClass2(double currentValue) {
+        BMCloudPopulation_2.add(currentValue);
+    }
+
+    void setBMVarianceGlobalPopulation(double currentValue) {
+        BMVarGlobalPopulation.add(currentValue);
+    }
+
+    void setBMVarianceCloudletPopulation(double currentValue) {
+        BMVarCloudletPopulation.add(currentValue);
+    }
+
+    void setBMVarianceCloudPopulation(double currentValue) {
+        BMVarCloudPopulation.add(currentValue);
+    }
+
+    void setBMVarianceGlobalPopulationClass1(double currentValue) {
+        BMVarGlobalPopulation_1.add(currentValue);
+    }
+
+    void setBMVarianceCloudletPopulationClass1(double currentValue) {
+        BMVarCloudletPopulation_1.add(currentValue);
+    }
+
+    void setBMVarianceCloudPopulationClass1(double currentValue) {
+        BMVarCloudPopulation_1.add(currentValue);
+    }
+
+    void setBMVarianceGlobalPopulationClass2(double currentValue) {
+        BMVarGlobalPopulation_2.add(currentValue);
+    }
+
+    void setBMVarianceCloudletPopulationClass2(double currentValue) {
+        BMVarCloudletPopulation_2.add(currentValue);
+    }
+
+    void setBMVarianceCloudPopulationClass2(double currentValue) {
+        BMVarCloudPopulation_2.add(currentValue);
+    }
+
 
     public void reset(){
         init();

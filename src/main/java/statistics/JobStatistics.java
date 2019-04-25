@@ -65,9 +65,9 @@ public class JobStatistics{
         updateGlobal(cloudletPopulation,cloudPopulation);
 
         switch(jobClass){
-            case 1: updateClass1(cloudletPopulation[0],cloudPopulation[0]);
+            case 1: updateClass1(cloudletOrCloud, cloudletPopulation[0],cloudPopulation[0]);
                 break;
-            case 2:  updateClass2(cloudletPopulation[1],cloudPopulation[1]);
+            case 2:  updateClass2(cloudletOrCloud, cloudletPopulation[1],cloudPopulation[1]);
                 break;
         }
 
@@ -98,7 +98,7 @@ public class JobStatistics{
 
 
     @SuppressWarnings("Duplicates")
-    public void updateClass1(int cloudlet1, int cloud1){
+    public void updateClass1(int cloudletOrCloud, int cloudlet1, int cloud1){
         long iteration_1 = cloudletIteration_1+ cloudIteration_1;
         int totalClass1 = cloudlet1 + cloud1;
 
@@ -106,18 +106,20 @@ public class JobStatistics{
         meanGlobalPopulation_1 = GP1[0];
         varGlobalPopulation_1 = GP1[1];
 
-        double[] CD1 = statistics.computeMeanAndVariance(varCloudletPopulation_1,meanCloudletPopulation_1, cloudlet1, cloudletIteration_1);
-        meanCloudletPopulation_1 = CD1[0];
-        varCloudletPopulation_1 = CD1[1];
-
-        double[] C1 = statistics.computeMeanAndVariance(varCloudPopulation_1,meanCloudPopulation_1,cloud1,cloudIteration_1);
-        meanCloudPopulation_1 = C1[0];
-        varCloudPopulation_1 = C1[1];
-
+        if(cloudletOrCloud == 1) {
+            double[] CD1 = statistics.computeMeanAndVariance(varCloudletPopulation_1, meanCloudletPopulation_1, cloudlet1, cloudletIteration_1);
+            meanCloudletPopulation_1 = CD1[0];
+            varCloudletPopulation_1 = CD1[1];
+        }
+        else{
+            double[] C1 = statistics.computeMeanAndVariance(varCloudPopulation_1, meanCloudPopulation_1, cloud1, cloudIteration_1);
+            meanCloudPopulation_1 = C1[0];
+            varCloudPopulation_1 = C1[1];
+        }
     }
 
     @SuppressWarnings("Duplicates")
-    public void updateClass2(int cloudlet2, int cloud2){
+    public void updateClass2(int cloudletOrCloud, int cloudlet2, int cloud2){
         long iteration_2 = cloudletIteration_2+ cloudIteration_2;
         int totalClass2 = cloudlet2 + cloud2;
 
@@ -125,16 +127,16 @@ public class JobStatistics{
         meanGlobalPopulation_2 = GP2[0];
         varGlobalPopulation_2 = GP2[1];
 
-        double[] CD2 = statistics.computeMeanAndVariance(varCloudletPopulation_2,meanCloudletPopulation_2, cloudlet2, cloudletIteration_2);
-        meanCloudletPopulation_2 = CD2[0];
-        varCloudletPopulation_2 = CD2[1];
-
-        /*meanCloudPopulation_2 = statistics.computeMean(meanCloudPopulation_2, cloud2, cloudIteration_2);
-        varCloudPopulation_2 = statistics.computeVariance(varCloudPopulation_2,meanCloudPopulation_2,cloud2,cloudIteration_2);*/
-        double[] C2 = statistics.computeMeanAndVariance(varCloudPopulation_2,meanCloudPopulation_2,cloud2,cloudIteration_2);
-        meanCloudPopulation_2 = C2[0];
-        varCloudPopulation_2 = C2[1];
-
+        if(cloudletOrCloud == 1) {
+            double[] CD2 = statistics.computeMeanAndVariance(varCloudletPopulation_2, meanCloudletPopulation_2, cloudlet2, cloudletIteration_2);
+            meanCloudletPopulation_2 = CD2[0];
+            varCloudletPopulation_2 = CD2[1];
+        }
+        else {
+            double[] C2 = statistics.computeMeanAndVariance(varCloudPopulation_2, meanCloudPopulation_2, cloud2, cloudIteration_2);
+            meanCloudPopulation_2 = C2[0];
+            varCloudPopulation_2 = C2[1];
+        }
     }
 
 
@@ -185,7 +187,6 @@ public class JobStatistics{
     /**
      * PLOSS
      */
-
     public double calculatePLoss(){
         double allPackets = completedCloudlet_1 +
                 completedCloudlet_2 +
@@ -228,7 +229,6 @@ public class JobStatistics{
             return completedCloud_2;
     }
 
-
     public void updateCompletedCloudlet(int jobclass){
         switch(jobclass){
             case 1: completedCloudlet_1++;
@@ -244,6 +244,7 @@ public class JobStatistics{
             case 2: completedCloud_2++;
         }
     }
+
 
     //POPULATION
     public double getMeanCloudletPopulation(int jobclass) {
@@ -292,7 +293,7 @@ public class JobStatistics{
                 var =  varGlobalPopulation/globalIteration;
                 break;
             case 1:
-                var = varGlobalPopulation_1/globalIteration;
+                var = varGlobalPopulation_1/(cloudletIteration_1 + cloudIteration_1);
                 break;
             case 2:
                 var =  varGlobalPopulation_2/(cloudletIteration_2 + cloudIteration_2);
@@ -300,7 +301,6 @@ public class JobStatistics{
         }
         return var;
     }
-
 
     public double getVarCloudletPopulation(int jobclass) {
         double var = 0.0;
@@ -325,10 +325,10 @@ public class JobStatistics{
                 var = varCloudPopulation/globalIteration;
                 break;
             case 1:
-                var = varCloudPopulation_1/cloudletIteration_1;
+                var = varCloudPopulation_1/cloudIteration_1;
                 break;
             case 2:
-                var =  varCloudPopulation_2/cloudletIteration_2;
+                var =  varCloudPopulation_2/cloudIteration_2;
                 break;
         }
         return var;
@@ -350,8 +350,7 @@ public class JobStatistics{
             this.cloudIteration_2 = iteration;
     }
 
-    public long getCloudIteration(int jobclass)
-    {
+    public long getCloudIteration(int jobclass) {
         if(jobclass == 1)
             return cloudIteration_1;
         else
@@ -376,6 +375,7 @@ public class JobStatistics{
     public long getActualIteration() {
         return actualIteration;
     }
+
     public void setActualIteration(long actualIteration) {
         this.actualIteration = actualIteration;
     }

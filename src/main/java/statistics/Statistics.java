@@ -51,7 +51,6 @@ public class Statistics {
         return MV;
     }
 
-
     public void handleCompletion(Event e){
         int jobClass = e.getJob().getJobClass();
         double serviceTime = e.getJob().getServiceTime();
@@ -67,8 +66,6 @@ public class Statistics {
         updateResponseTime(jobClass,serviceTime);
     }
 
-
-
     public void handleCloudletCompletion(Event e, int jobclass, double serviceTime){
 
         TimeStatistics ts = TimeStatistics.getInstance();
@@ -83,8 +80,6 @@ public class Statistics {
             ts.setMeanResponseTimeClass2Cloudlet(computeMean(ts.getMeanResponseTimeClass2Cloudlet(), serviceTime, (int) js.getCompletedCloudlet(2)));
         }
     }
-
-
 
     public void handleCloudCompletion(Event e, int jobclass, double serviceTime){
         TimeStatistics ts = TimeStatistics.getInstance();

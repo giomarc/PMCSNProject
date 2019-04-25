@@ -1,4 +1,4 @@
-function [ploss,avgPopulation] = plossCalculator
+function [pstates, ploss,avgPopulation] = plossCalculator
 %PLOSSCALCULATOR Summary of this function goes here
 %   Detailed explanation goes here
 digits(11);
@@ -33,6 +33,7 @@ p30 = X(8);
 p03 = X(9);
 p12 = X(10);
 ploss = X(11);
+pstates = [p00 p01 p02 p10 p11 p20 p21 p30 p03 p12];
 avgPopulation = 0*p00 + 1*(p01 + p10) + 2*(p20 + p02 + p11) + 3*(p30 + p03 + p12 + p21);
 ploss = vpa(ploss);
 avgPopulation = vpa(avgPopulation);

@@ -22,6 +22,7 @@ public class CSVlogger {
     private String fileMeansInOneSimulation;
     private String fileServerStatus;
     private String fileBatchMeans;
+    private String fileVarianceJobs;
 
     private CSVlogger(){}
 
@@ -34,6 +35,7 @@ public class CSVlogger {
             this.fileResponseTime = "ResponseTime.csv";
             this.fileThroughput = "Throughput.csv";
             this.fileAVGjobs = "AVGjobs.csv";
+            this.fileVarianceJobs = "VarianceJobs.csv";
             this.fileMeansInOneSimulation = "MeansInOneSimulation.csv";
             this.fileServerStatus = "ServerStatus.csv";
             this.fileBatchMeans = "BatchMeans.csv";
@@ -50,6 +52,7 @@ public class CSVlogger {
                 File fileRT = new File("./RESULT_OUTPUT/" + fileResponseTime);
                 File fileX = new File("./RESULT_OUTPUT/" + fileThroughput);
                 File fileEN = new File("./RESULT_OUTPUT/" + fileAVGjobs);
+                File fileVJ = new File("./RESULT_OUTPUT/" + fileVarianceJobs);
                 File fileMS = new File("./RESULT_OUTPUT/" + fileMeansInOneSimulation);
                 File fileSV = new File("./RESULT_OUTPUT/" + fileServerStatus);
                 File fileBM = new File("./RESULT_OUTPUT/" + fileBatchMeans);
@@ -79,6 +82,15 @@ public class CSVlogger {
                             + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs,"
                             + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs");
                     outEN.flush();
+                }
+                if (fileVJ.createNewFile()) {
+                    BufferedWriter outVJ = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileVarianceJobs, true));
+                    System.out.println("File Variance jobs has been created.");
+                    outVJ.write("distribution, operations, algorithm, threshold, iterations, seed,  " +
+                            " Global_sys_variance_jobs, Cloud_variance_jobs, Cloudlet_variance_jobs, "
+                            + "Global_class1_variance_jobs, Cloud_class1_variance_jobs, Cloudlet_class1_variance_jobs,"
+                            + "Global_class2_variance_jobs, Cloud_class2_variance_jobs, Cloudlet_class2_variance_jobs");
+                    outVJ.flush();
                 }
                 if(!SystemConfiguration.MULTI_RUN) {
                     fileMS.delete();
@@ -279,8 +291,8 @@ public class CSVlogger {
         }
     }
 
-    @SuppressWarnings("Duplicates")
-   /* private void writeAVGjobs(BatchMeans bm){
+   /* @SuppressWarnings("Duplicates")
+    private void writeAVGjobs(BatchMeans bm){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
         int algorithm = SystemConfiguration.ALGORITHM;
@@ -318,8 +330,6 @@ public class CSVlogger {
             e.printStackTrace();
         }
     }*/
-
-
 
     private void writeBatchMeansjobs(BatchMeans js){
         long seed = SystemConfiguration.SEED;
@@ -361,7 +371,6 @@ public class CSVlogger {
             e.printStackTrace();
         }
     }
-
 
     public void reset(){
         totalMeansDuringSimulations = 1000;

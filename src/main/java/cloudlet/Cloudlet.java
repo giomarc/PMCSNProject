@@ -49,6 +49,13 @@ public class Cloudlet {
         }
     }
 
+
+
+    void timeHasPassed(double arrival){
+        removeCompletedJobs(arrival);
+    }
+
+
     void removeCompletedJobs(double arrivalTime){
         for(Server s: serverList){
             if(s.isBusy()) {
@@ -63,9 +70,7 @@ public class Cloudlet {
         }
     }
 
-    void timeHasPassed(double arrival){
-        removeCompletedJobs(arrival);
-    }
+
 
 
     public int [] getJobsInCloudlet(){

@@ -333,15 +333,15 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-        double meanGlobalAvgJobs =          bm.getMeanBMGlobalPopulation();
-        double meanCloudletAvgJobs =        bm.getMeanBMCloudletPopulation();
-        double meanCloudAvgJobs =           bm.getMeanBMCloudPopulation();
-        double meanCloudletAvgJobsClass1 =  bm.getMeanBMCloudletPopulationClass1();
-        double meanCloudletAvgJobsClass2 =  bm.getMeanBMCloudletPopulationClass2();
-        double meanCloudAvgJobsClass1 =     bm.getMeanBMCloudPopulationClass1();
-        double meanCloudAvgJobsClass2 =     bm.getMeanBMCloudPopulationClass2();
-        double meanClass1AvgJobs =          bm.getMeanBMGlobalPopulationClass1();
-        double meanClass2AvgJobs =          bm.getMeanBMGlobalPopulationClass2();
+        double meanGlobalAvgJobs =          bm.getMeanBMGlobalPopulation(0);
+        double meanCloudletAvgJobs =        bm.getMeanBMCloudletPopulation(0);
+        double meanCloudAvgJobs =           bm.getMeanBMCloudPopulation(0);
+        double meanCloudletAvgJobsClass1 =  bm.getMeanBMCloudletPopulation(1);
+        double meanCloudletAvgJobsClass2 =  bm.getMeanBMCloudletPopulation(2);
+        double meanCloudAvgJobsClass1 =     bm.getMeanBMCloudPopulation(1);
+        double meanCloudAvgJobsClass2 =     bm.getMeanBMCloudPopulation(2);
+        double meanClass1AvgJobs =          bm.getMeanBMGlobalPopulation(1);
+        double meanClass2AvgJobs =          bm.getMeanBMGlobalPopulation(2);
 
 
         BufferedWriter outAVG;
@@ -372,15 +372,15 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-        double varianceGlobalAvgJobs =          bm.getMeanBMVarianceGlobalPopulation();
-        double varianceCloudletAvgJobs =        bm.getMeanBMVarianceCloudletPopulation();
-        double varianceCloudAvgJobs =           bm.getMeanBMVarianceCloudPopulation();
-        double varianceCloudletAvgJobsClass1 =  bm.getMeanBMVarianceCloudletPopulationClass1();
-        double varianceCloudletAvgJobsClass2 =  bm.getMeanBMVarianceCloudletPopulationClass2();
-        double varianceCloudAvgJobsClass1 =     bm.getMeanBMVarianceCloudPopulationClass1();
-        double varianceCloudAvgJobsClass2 =     bm.getMeanBMVarianceCloudPopulationClass2();
-        double varianceClass1AvgJobs =          bm.getMeanBMVarianceGlobalPopulationClass1();
-        double varianceClass2AvgJobs =          bm.getMeanBMVarianceGlobalPopulationClass2();
+        double varianceGlobalAvgJobs =          bm.getMeanBMVarianceGlobalPopulation(0);
+        double varianceCloudletAvgJobs =        bm.getMeanBMVarianceCloudletPopulation(0);
+        double varianceCloudAvgJobs =           bm.getMeanBMVarianceCloudPopulation(0);
+        double varianceCloudletAvgJobsClass1 =  bm.getMeanBMVarianceCloudletPopulation(1);
+        double varianceCloudletAvgJobsClass2 =  bm.getMeanBMVarianceCloudletPopulation(2);
+        double varianceCloudAvgJobsClass1 =     bm.getMeanBMVarianceCloudPopulation(1);
+        double varianceCloudAvgJobsClass2 =     bm.getMeanBMVarianceCloudPopulation(2);
+        double varianceClass1AvgJobs =          bm.getMeanBMVarianceGlobalPopulation(1);
+        double varianceClass2AvgJobs =          bm.getMeanBMVarianceGlobalPopulation(2);
 
 
         BufferedWriter outVar;
@@ -442,15 +442,15 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-        ArrayList<Double> meanGlobalAvgJobs = bm.getBMGlobalPopulation();
-        ArrayList<Double> meanCloudletAvgJobs = bm.getBMCloudletPopulation();
-        ArrayList<Double> meanCloudAvgJobs = bm.getBMCloudPopulation();
-        ArrayList<Double> meanCloudletAvgJobsClass1 = bm.getBMCloudletPopulationClass1();
-        ArrayList<Double> meanCloudletAvgJobsClass2 = bm.getBMCloudletPopulationClass2();
-        ArrayList<Double> meanCloudAvgJobsClass1 = bm.getBMCloudPopulationClass1();
-        ArrayList<Double> meanCloudAvgJobsClass2 = bm.getBMCloudPopulationClass2();
-        ArrayList<Double> meanClass1AvgJobs = bm.getBMGlobalPopulationClass1();
-        ArrayList<Double> meanClass2AvgJobs = bm.getBMGlobalPopulationClass2();
+        ArrayList<Double> meanGlobalAvgJobs = bm.getBMGlobalPopulation(0);
+        ArrayList<Double> meanCloudletAvgJobs = bm.getBMCloudletPopulation(0);
+        ArrayList<Double> meanCloudAvgJobs = bm.getBMCloudPopulation(0);
+        ArrayList<Double> meanCloudletAvgJobsClass1 = bm.getBMCloudletPopulation(1);
+        ArrayList<Double> meanCloudletAvgJobsClass2 = bm.getBMCloudletPopulation(2);
+        ArrayList<Double> meanCloudAvgJobsClass1 = bm.getBMCloudPopulation(1);
+        ArrayList<Double> meanCloudAvgJobsClass2 = bm.getBMCloudPopulation(2);
+        ArrayList<Double> meanClass1AvgJobs = bm.getBMGlobalPopulation(1);
+        ArrayList<Double> meanClass2AvgJobs = bm.getBMGlobalPopulation(2);
 
 
         BufferedWriter outAVG;
@@ -483,15 +483,15 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
 
-        ArrayList<Double> varianceGlobalAvgJobs =           bm.getBMVarianceGlobalPopulation();
-        ArrayList<Double> varianceCloudletAvgJobs =         bm.getBMVarianceCloudletPopulation();
-        ArrayList<Double> varianceCloudAvgJobs =            bm.getBMVarianceCloudPopulation();
-        ArrayList<Double> varianceCloudletAvgJobsClass1 =   bm.getBMVarianceCloudletPopulationClass1();
-        ArrayList<Double> varianceCloudletAvgJobsClass2 =   bm.getBMVarianceCloudletPopulationClass2();
-        ArrayList<Double> varianceCloudAvgJobsClass1 =      bm.getBMVarianceCloudPopulationClass1();
-        ArrayList<Double> varianceCloudAvgJobsClass2 =      bm.getBMVarianceCloudPopulationClass2();
-        ArrayList<Double> varianceClass1AvgJobs =           bm.getBMVarianceGlobalPopulationClass1();
-        ArrayList<Double> varianceClass2AvgJobs =           bm.getBMVarianceGlobalPopulationClass2();
+        ArrayList<Double> varianceGlobalAvgJobs =           bm.getBMVarianceGlobalPopulation(0);
+        ArrayList<Double> varianceCloudletAvgJobs =         bm.getBMVarianceCloudletPopulation(0);
+        ArrayList<Double> varianceCloudAvgJobs =            bm.getBMVarianceCloudPopulation(0);
+        ArrayList<Double> varianceCloudletAvgJobsClass1 =   bm.getBMVarianceCloudletPopulation(1);
+        ArrayList<Double> varianceCloudletAvgJobsClass2 =   bm.getBMVarianceCloudletPopulation(2);
+        ArrayList<Double> varianceCloudAvgJobsClass1 =      bm.getBMVarianceCloudPopulation(1);
+        ArrayList<Double> varianceCloudAvgJobsClass2 =      bm.getBMVarianceCloudPopulation(2);
+        ArrayList<Double> varianceClass1AvgJobs =           bm.getBMVarianceGlobalPopulation(1);
+        ArrayList<Double> varianceClass2AvgJobs =           bm.getBMVarianceGlobalPopulation(2);
 
 
         BufferedWriter outVar;

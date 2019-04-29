@@ -19,7 +19,7 @@ public class BatchMeans {
     private ArrayList<Double> BMGlobalPopulation_1;
     private ArrayList<Double> BMCloudletPopulation_1;
     private ArrayList<Double> BMCloudPopulation_1;
-    private ArrayList<Double> BMGlobalPopulationClass2;
+    private ArrayList<Double> BMGlobalPopulation_2;
     private ArrayList<Double> BMCloudletPopulation_2;
     private ArrayList<Double> BMCloudPopulation_2;
 
@@ -75,7 +75,7 @@ public class BatchMeans {
             for (double d : values) {
                 value += d;
             }
-            confidenceInterval.computeConfidenceInterval(BMGlobalPopulation);
+            confidenceInterval.computeConfidenceInterval(values);
             return value /num_batch;
         }
         else
@@ -83,155 +83,155 @@ public class BatchMeans {
     }
 
 
+
     /**
      * Getter
      */
-    public ArrayList<Double> getBMGlobalPopulation() {
-        return BMGlobalPopulation;
+    public ArrayList<Double> getBMGlobalPopulation(int classId){
+        ArrayList<Double> mean = new ArrayList<>();
+        switch (classId){
+            case 0: mean = BMGlobalPopulation;
+            break;
+            case 1: mean =  BMGlobalPopulation_1;
+            break;
+            case 2: mean = BMGlobalPopulation_2;
+            break;
+        }
+        return mean;
     }
 
-    public ArrayList<Double> getBMCloudletPopulation() {
-        return BMCloudletPopulation;
+    public ArrayList<Double> getBMCloudletPopulation(int classId) {
+        ArrayList<Double> mean = new ArrayList<>();
+        switch (classId){
+            case 0: mean = BMCloudletPopulation;
+                break;
+            case 1: mean =  BMCloudletPopulation_1;
+                break;
+            case 2: mean = BMCloudletPopulation_2;
+                break;
+        }
+        return mean;
     }
 
-    public ArrayList<Double> getBMCloudPopulation() {
-        return BMCloudPopulation;
+    public ArrayList<Double> getBMCloudPopulation(int classId) {
+        ArrayList<Double> mean = new ArrayList<>();
+        switch (classId){
+            case 0: mean = BMCloudPopulation;
+                break;
+            case 1: mean =  BMCloudPopulation_1;
+                break;
+            case 2: mean = BMCloudPopulation_2;
+                break;
+        }
+        return mean;
     }
 
-    public ArrayList<Double> getBMGlobalPopulationClass1() {
-        return BMGlobalPopulation_1;
+
+    public ArrayList<Double> getBMVarianceGlobalPopulation(int classId) {
+        ArrayList<Double> var = new ArrayList<>();
+        switch (classId){
+            case 0: var = BMVarGlobalPopulation;
+                break;
+            case 1: var =  BMVarGlobalPopulation_1;
+                break;
+            case 2: var =  BMVarGlobalPopulation_2;
+                break;
+        }
+        return var;
     }
 
-    public ArrayList<Double> getBMCloudletPopulationClass1() {
-        return BMCloudletPopulation_1;
+    public ArrayList<Double> getBMVarianceCloudletPopulation(int classId) {
+        ArrayList<Double> var = new ArrayList<>();
+        switch (classId){
+            case 0: var = BMVarCloudletPopulation;
+                break;
+            case 1: var =  BMVarCloudletPopulation_1;
+                break;
+            case 2: var =  BMVarCloudletPopulation_2;
+                break;
+        }
+        return var;
     }
 
-    public ArrayList<Double> getBMCloudPopulationClass1() {
-        return BMCloudPopulation_1;
+    public ArrayList<Double> getBMVarianceCloudPopulation(int classId) {
+        ArrayList<Double> var = new ArrayList<>();
+        switch (classId){
+            case 0: var = BMVarCloudPopulation;
+                break;
+            case 1: var =  BMVarCloudPopulation_1;
+                break;
+            case 2: var =  BMVarCloudPopulation_2;
+                break;
+        }
+        return var;
     }
 
-    public ArrayList<Double> getBMGlobalPopulationClass2() {
-        return BMGlobalPopulationClass2;
-    }
-
-    public ArrayList<Double> getBMCloudletPopulationClass2() {
-        return BMCloudletPopulation_2;
-    }
-
-    public ArrayList<Double> getBMCloudPopulationClass2() {
-        return BMCloudPopulation_2;
-    }
-
-    public ArrayList<Double> getBMVarianceGlobalPopulation() {
-        return BMVarGlobalPopulation;
-    }
-
-    public ArrayList<Double> getBMVarianceCloudletPopulation() {
-        return BMVarCloudletPopulation;
-    }
-
-    public ArrayList<Double> getBMVarianceCloudPopulation() {
-        return BMVarCloudPopulation;
-    }
-
-    public ArrayList<Double> getBMVarianceGlobalPopulationClass1() {
-        return BMVarGlobalPopulation_1;
-    }
-
-    public ArrayList<Double> getBMVarianceCloudletPopulationClass1() {
-        return BMVarCloudletPopulation_1;
-    }
-
-    public ArrayList<Double> getBMVarianceCloudPopulationClass1() {
-        return BMVarCloudPopulation_1;
-    }
-
-    public ArrayList<Double> getBMVarianceGlobalPopulationClass2() {
-        return BMVarGlobalPopulation_2;
-    }
-
-    public ArrayList<Double> getBMVarianceCloudletPopulationClass2() {
-        return BMVarCloudletPopulation_2;
-    }
-
-    public ArrayList<Double> getBMVarianceCloudPopulationClass2() {
-        return BMVarCloudPopulation_2;
-    }
 
     /**
      * GETTER FOR STATISTICS
      */
-    public double getMeanBMGlobalPopulation() {
-        return getBMMean(BMGlobalPopulation);
+    public double getMeanBMGlobalPopulation(int classId) {
+        double res = 0.0;
+        switch (classId){
+            case 0: res = getBMMean(BMGlobalPopulation); break;
+            case 1: res = getBMMean(BMGlobalPopulation_1); break;
+            case 2: res = getBMMean(BMGlobalPopulation_2); break;
+        }
+        return res;
     }
 
-    public double getMeanBMCloudletPopulation() {
-        return getBMMean(BMCloudletPopulation);
+    public double getMeanBMCloudletPopulation(int classId) {
+        double res = 0.0;
+        switch (classId){
+            case 0: res = getBMMean(BMCloudletPopulation); break;
+            case 1: res = getBMMean(BMCloudletPopulation_1); break;
+            case 2: res = getBMMean(BMCloudletPopulation_2); break;
+        }
+        return res;
     }
 
-    public double getMeanBMCloudPopulation() {
-        return getBMMean(BMCloudPopulation);
+    public double getMeanBMCloudPopulation(int classId) {
+        double res = 0.0;
+        switch (classId){
+            case 0: res = getBMMean(BMCloudPopulation); break;
+            case 1: res = getBMMean(BMCloudPopulation_1); break;
+            case 2: res = getBMMean(BMCloudPopulation_2); break;
+        }
+        return res;
     }
 
-    public double getMeanBMGlobalPopulationClass1() {
-        return getBMMean(BMGlobalPopulation_1);
+
+
+    public double getMeanBMVarianceGlobalPopulation(int classId) {
+        double res = 0.0;
+        switch (classId){
+            case 0: res = getBMMean(BMVarGlobalPopulation); break;
+            case 1: res = getBMMean(BMVarGlobalPopulation_1); break;
+            case 2: res = getBMMean(BMVarGlobalPopulation_2); break;
+        }
+        return res;
     }
 
-    public double getMeanBMCloudletPopulationClass1() {
-        return getBMMean(BMCloudletPopulation_1);
+    public double getMeanBMVarianceCloudletPopulation(int classId) {
+        double res = 0.0;
+        switch (classId){
+            case 0: res = getBMMean(BMVarCloudletPopulation); break;
+            case 1: res = getBMMean(BMVarCloudletPopulation_1); break;
+            case 2: res = getBMMean(BMVarCloudletPopulation_2); break;
+        }
+        return res;
     }
 
-    public double getMeanBMCloudPopulationClass1() {
-        return getBMMean(BMCloudPopulation_1);
+    public double getMeanBMVarianceCloudPopulation(int classId) {
+        double res = 0.0;
+        switch (classId){
+            case 0: res = getBMMean(BMVarCloudPopulation); break;
+            case 1: res = getBMMean(BMVarCloudPopulation_1); break;
+            case 2: res = getBMMean(BMVarCloudPopulation_2); break;
+        }
+        return res;
     }
 
-    public double getMeanBMGlobalPopulationClass2() {
-        return getBMMean(BMGlobalPopulationClass2);
-    }
-
-    public double getMeanBMCloudletPopulationClass2() {
-        return getBMMean(BMCloudletPopulation_2);
-    }
-
-    public double getMeanBMCloudPopulationClass2() {
-        return getBMMean(BMCloudPopulation_2);
-    }
-
-    public double getMeanBMVarianceGlobalPopulation() {
-        return getBMMean(BMVarGlobalPopulation);
-    }
-
-    public double getMeanBMVarianceCloudletPopulation() {
-        return getBMMean(BMVarCloudletPopulation);
-    }
-
-    public double getMeanBMVarianceCloudPopulation() {
-        return getBMMean(BMVarCloudPopulation);
-    }
-
-    public double getMeanBMVarianceGlobalPopulationClass1() {
-        return getBMMean(BMVarGlobalPopulation_1);
-    }
-
-    public double getMeanBMVarianceCloudletPopulationClass1() {
-        return getBMMean(BMVarCloudletPopulation_1);
-    }
-
-    public double getMeanBMVarianceCloudPopulationClass1() {
-        return getBMMean(BMVarCloudPopulation_1);
-    }
-
-    public double getMeanBMVarianceGlobalPopulationClass2() {
-        return getBMMean(BMVarGlobalPopulation_2);
-    }
-
-    public double getMeanBMVarianceCloudletPopulationClass2() {
-        return getBMMean(BMVarCloudletPopulation_2);
-    }
-
-    public double getMeanBMVarianceCloudPopulationClass2() {
-        return getBMMean(BMVarCloudPopulation_2);
-    }
 
     /**
      * SETTER
@@ -260,8 +260,8 @@ public class BatchMeans {
         BMCloudPopulation_1.add(currentValue);
     }
 
-    void setBMGlobalPopulationClass2(double currentValue) {
-        BMGlobalPopulationClass2.add(currentValue);
+    void setBMGlobalPopulation_2(double currentValue) {
+        BMGlobalPopulation_2.add(currentValue);
     }
 
     void setBMCloudletPopulationClass2(double currentValue) {
@@ -322,7 +322,7 @@ public class BatchMeans {
         BMGlobalPopulation_1 = new ArrayList<>();
         BMCloudletPopulation_1 = new ArrayList<>();
         BMCloudPopulation_1 = new ArrayList<>();
-        BMGlobalPopulationClass2 = new ArrayList<>();
+        BMGlobalPopulation_2 = new ArrayList<>();
         BMCloudletPopulation_2 = new ArrayList<>();
         BMCloudPopulation_2 = new ArrayList<>();
 

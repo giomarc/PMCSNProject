@@ -69,9 +69,16 @@ public class JobStatistics{
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
         CSVlogger.getInstance().writeMeansInOneSimulation(this);
-        computeBatch();
+        if(SystemConfiguration.BATCH && (actualIteration > batchMeans.getBatchSize() || globalIteration == SystemConfiguration.ITERATIONS))
+            computeBatch();
     }
 
+
+    /**
+     * Updates means and variance of class 1 and class 2 jobs
+     * @param cloudletPopulation actual number of jobs in cloudlet
+     * @param cloudPopulation actual number of jobs in cloud
+     */
     public void updateGlobal(int[] cloudletPopulation, int[] cloudPopulation){
 
         int totcloudletPopulation = cloudletPopulation[0] + cloudletPopulation[1];
@@ -92,6 +99,12 @@ public class JobStatistics{
 
     }
 
+
+    /**
+     * Updates means and variance of class 1 jobs
+     * @param cloudlet1 actual number of class 1 jobs in cloudlet
+     * @param cloud1 actual number of class 1 jobs in cloud
+     */
     public void updateClass1(int cloudlet1, int cloud1){
         int totalClass1 = cloudlet1 + cloud1;
 
@@ -109,6 +122,12 @@ public class JobStatistics{
 
     }
 
+
+    /**
+     * Updates means and variance of class 2 jobs
+     * @param cloudlet2 actual number of class 2 jobs in cloudlet
+     * @param cloud2 actual number of class 2 jobs in cloud
+     */
     public void updateClass2(int cloudlet2, int cloud2){
         int totalClass2 = cloudlet2 + cloud2;
 
@@ -126,6 +145,7 @@ public class JobStatistics{
 
     }
 
+
     private void updateGlobalIterations(int cloudletOrCloud, int jobClass){
         if(cloudletOrCloud == 1 && jobClass == 1)
             cloudletIteration_1++;
@@ -141,55 +161,29 @@ public class JobStatistics{
     }
 
     private void computeBatch(){
-        if(SystemConfiguration.BATCH) {
-            if (actualIteration > batchMeans.getBatchSize() || globalIteration == SystemConfiguration.ITERATIONS) {
-                batchMeans.setBMCloudletPopulation                  (this.meanCloudletPopulation);
-                batchMeans.setBMCloudletPopulationClass1            (this.meanCloudletPopulation_1);
-                batchMeans.setBMCloudletPopulationClass2            (this.meanCloudletPopulation_2);
-                batchMeans.setBMCloudPopulation                     (this.meanCloudPopulation);
-                batchMeans.setBMCloudPopulationClass1               (this.meanCloudPopulation_1);
-                batchMeans.setBMCloudPopulationClass2               (this.meanCloudPopulation_2);
-                batchMeans.setBMGlobalPopulation                    (this.meanGlobalPopulation);
-                batchMeans.setBMGlobalPopulationClass1              (this.meanGlobalPopulation_1);
-                batchMeans.setBMGlobalPopulationClass2              (this.meanGlobalPopulation_2);
 
-                batchMeans.setBMVarianceCloudletPopulation          (this.varCloudletPopulation /    actualIteration);
-                batchMeans.setBMVarianceCloudletPopulationClass1    (this.varCloudletPopulation_1 /  actualIteration);
-                batchMeans.setBMVarianceCloudletPopulationClass2    (this.varCloudletPopulation_2 /  actualIteration);
-                batchMeans.setBMVarianceCloudPopulation             (this.varCloudPopulation /       actualIteration);
-                batchMeans.setBMVarianceCloudPopulationClass1       (this.varCloudPopulation_1 /     actualIteration);
-                batchMeans.setBMVarianceCloudPopulationClass2       (this.varCloudPopulation_2 /     actualIteration);
-                batchMeans.setBMVarianceGlobalPopulation            (this.varGlobalPopulation /      actualIteration);
-                batchMeans.setBMVarianceGlobalPopulationClass1      (this.varGlobalPopulation_1 /    actualIteration);
-                batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 /    actualIteration);
-                resetMeans();
-            }
-        }
-        else {
-            if(globalIteration == SystemConfiguration.ITERATIONS){
-                batchMeans.setBMCloudletPopulation                  (this.meanCloudletPopulation);
-                batchMeans.setBMCloudletPopulationClass1            (this.meanCloudletPopulation_1);
-                batchMeans.setBMCloudletPopulationClass2            (this.meanCloudletPopulation_2);
-                batchMeans.setBMCloudPopulation                     (this.meanCloudPopulation);
-                batchMeans.setBMCloudPopulationClass1               (this.meanCloudPopulation_1);
-                batchMeans.setBMCloudPopulationClass2               (this.meanCloudPopulation_2);
-                batchMeans.setBMGlobalPopulation                    (this.meanGlobalPopulation);
-                batchMeans.setBMGlobalPopulationClass1              (this.meanGlobalPopulation_1);
-                batchMeans.setBMGlobalPopulationClass2              (this.meanGlobalPopulation_2);
+        batchMeans.setBMCloudletPopulation                  (this.meanCloudletPopulation);
+        batchMeans.setBMCloudletPopulationClass1            (this.meanCloudletPopulation_1);
+        batchMeans.setBMCloudletPopulationClass2            (this.meanCloudletPopulation_2);
+        batchMeans.setBMCloudPopulation                     (this.meanCloudPopulation);
+        batchMeans.setBMCloudPopulationClass1               (this.meanCloudPopulation_1);
+        batchMeans.setBMCloudPopulationClass2               (this.meanCloudPopulation_2);
+        batchMeans.setBMGlobalPopulation                    (this.meanGlobalPopulation);
+        batchMeans.setBMGlobalPopulationClass1              (this.meanGlobalPopulation_1);
+        batchMeans.setBMGlobalPopulation_2                  (this.meanGlobalPopulation_2);
 
-                batchMeans.setBMVarianceCloudletPopulation          (this.varCloudletPopulation /    actualIteration);
-                batchMeans.setBMVarianceCloudletPopulationClass1    (this.varCloudletPopulation_1 /  actualIteration);
-                batchMeans.setBMVarianceCloudletPopulationClass2    (this.varCloudletPopulation_2 /  actualIteration);
-                batchMeans.setBMVarianceCloudPopulation             (this.varCloudPopulation /       actualIteration);
-                batchMeans.setBMVarianceCloudPopulationClass1       (this.varCloudPopulation_1 /     actualIteration);
-                batchMeans.setBMVarianceCloudPopulationClass2       (this.varCloudPopulation_2 /     actualIteration);
-                batchMeans.setBMVarianceGlobalPopulation            (this.varGlobalPopulation /      actualIteration);
-                batchMeans.setBMVarianceGlobalPopulationClass1      (this.varGlobalPopulation_1 /    actualIteration);
-                batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 /    actualIteration);
-                resetMeans();
-            }
-        }
+        batchMeans.setBMVarianceCloudletPopulation          (this.varCloudletPopulation /    actualIteration);
+        batchMeans.setBMVarianceCloudletPopulationClass1    (this.varCloudletPopulation_1 /  actualIteration);
+        batchMeans.setBMVarianceCloudletPopulationClass2    (this.varCloudletPopulation_2 /  actualIteration);
+        batchMeans.setBMVarianceCloudPopulation             (this.varCloudPopulation /       actualIteration);
+        batchMeans.setBMVarianceCloudPopulationClass1       (this.varCloudPopulation_1 /     actualIteration);
+        batchMeans.setBMVarianceCloudPopulationClass2       (this.varCloudPopulation_2 /     actualIteration);
+        batchMeans.setBMVarianceGlobalPopulation            (this.varGlobalPopulation /      actualIteration);
+        batchMeans.setBMVarianceGlobalPopulationClass1      (this.varGlobalPopulation_1 /    actualIteration);
+        batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 /    actualIteration);
+        resetMeans();
     }
+
 
 
 
@@ -327,48 +321,48 @@ public class JobStatistics{
         double var = 0.0;
         switch (jobclass) {
             case 0:
-                var =  varGlobalPopulation/globalIteration;
+                var = varGlobalPopulation;
                 break;
             case 1:
-                var = varGlobalPopulation_1/(globalIteration);
+                var = varGlobalPopulation_1/globalIteration;
                 break;
             case 2:
-                var =  varGlobalPopulation_2/(globalIteration);
+                var = varGlobalPopulation_2/globalIteration;
                 break;
         }
-        return var;
+        return (var/globalIteration);
     }
 
     public double getVarCloudletPopulation(int jobclass) {
         double var = 0.0;
         switch (jobclass) {
             case 0:
-                var =  varCloudletPopulation/globalIteration;
+                var = varCloudletPopulation;
                 break;
             case 1:
-                var = varCloudletPopulation_1/(globalIteration);
+                var = varCloudletPopulation_1;
                 break;
             case 2:
-                var =  varCloudletPopulation_2/(globalIteration);
+                var = varCloudletPopulation_2;
                 break;
         }
-        return var;
+        return (var/globalIteration);
     }
 
     public double getVarCloudPopulation(int jobclass) {
         double var = 0.0;
         switch (jobclass) {
             case 0:
-                var = varCloudPopulation/globalIteration;
+                var = varCloudPopulation;
                 break;
             case 1:
-                var = varCloudPopulation_1/globalIteration;
+                var = varCloudPopulation_1;
                 break;
             case 2:
-                var =  varCloudPopulation_2/globalIteration;
+                var =  varCloudPopulation_2;
                 break;
         }
-        return var;
+        return (var/globalIteration);
     }
 
 

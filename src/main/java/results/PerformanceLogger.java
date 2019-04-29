@@ -191,45 +191,45 @@ public class PerformanceLogger implements Runnable {
     private void printMeanPopulation(BatchMeans js){
         Printer.getInstance().print("\nAVG POPULATION", "yellow");
         Printer.getInstance().print("Mean global population", "green");
-        System.out.println(js.getMeanBMGlobalPopulation());
+        System.out.println(js.getMeanBMGlobalPopulation(0));
         Printer.getInstance().print("Mean Cloudlet population", "green");
-        System.out.println(js.getMeanBMCloudletPopulation());
+        System.out.println(js.getMeanBMCloudletPopulation(0));
         Printer.getInstance().print("Mean Cloud population", "green");
-        System.out.println(js.getMeanBMCloudPopulation());
+        System.out.println(js.getMeanBMCloudPopulation(0));
         Printer.getInstance().print("Mean class 1 population", "green");
-        System.out.println(js.getMeanBMGlobalPopulation());
+        System.out.println(js.getMeanBMGlobalPopulation(1));
         Printer.getInstance().print("Mean class 2 population", "green");
-        System.out.println(js.getMeanBMGlobalPopulation());
+        System.out.println(js.getMeanBMGlobalPopulation(2));
         Printer.getInstance().print("Mean cloudlet class 1 population", "green");
-        System.out.println(js.getMeanBMCloudletPopulation());
+        System.out.println(js.getMeanBMCloudletPopulation(1));
         Printer.getInstance().print("Mean cloudlet class 2 population", "green");
-        System.out.println(js.getMeanBMCloudletPopulation());
+        System.out.println(js.getMeanBMCloudletPopulation(2));
         Printer.getInstance().print("Mean cloud class 1 population", "green");
-        System.out.println(js.getMeanBMCloudPopulation());
+        System.out.println(js.getMeanBMCloudPopulation(1));
         Printer.getInstance().print("Mean cloud class 2 population", "green");
-        System.out.println(js.getMeanBMCloudPopulation());
+        System.out.println(js.getMeanBMCloudPopulation(2));
     }
 
     private void printVariancePopulation(BatchMeans js){
         Printer.getInstance().print("\nVariance POPULATION", "yellow");
         Printer.getInstance().print("Variance global population", "green");
-        System.out.println(js.getMeanBMVarianceGlobalPopulation());
+        System.out.println(js.getMeanBMVarianceGlobalPopulation(0));
         Printer.getInstance().print("Variance Cloudlet population", "green");
-        System.out.println(js.getMeanBMVarianceCloudletPopulation());
+        System.out.println(js.getMeanBMVarianceCloudletPopulation(0));
         Printer.getInstance().print("Variance Cloud population", "green");
-        System.out.println(js.getMeanBMVarianceCloudPopulation());
+        System.out.println(js.getMeanBMVarianceCloudPopulation(0));
         Printer.getInstance().print("Variance class 1 population", "green");
-        System.out.println(js.getMeanBMVarianceGlobalPopulation());
+        System.out.println(js.getMeanBMVarianceGlobalPopulation(1));
         Printer.getInstance().print("Variance class 2 population", "green");
-        System.out.println(js.getMeanBMVarianceGlobalPopulation());
+        System.out.println(js.getMeanBMVarianceGlobalPopulation(2));
         Printer.getInstance().print("Variance cloudlet class 1 population", "green");
-        System.out.println(js.getMeanBMVarianceCloudletPopulation());
+        System.out.println(js.getMeanBMVarianceCloudletPopulation(1));
         Printer.getInstance().print("Variance cloudlet class 2 population", "green");
-        System.out.println(js.getMeanBMVarianceCloudletPopulation());
+        System.out.println(js.getMeanBMVarianceCloudletPopulation(2));
         Printer.getInstance().print("Variance cloud class 1 population", "green");
-        System.out.println(js.getMeanBMVarianceCloudPopulation());
+        System.out.println(js.getMeanBMVarianceCloudPopulation(1));
         Printer.getInstance().print("Variance cloud class 2 population", "green");
-        System.out.println(js.getMeanBMVarianceCloudPopulation());
+        System.out.println(js.getMeanBMVarianceCloudPopulation(2));
     }
 
     public void updateProgress(long current, long max) {

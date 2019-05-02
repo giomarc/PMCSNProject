@@ -15,9 +15,6 @@ public class Arrivals {
     }
 
 
-    public void changeDefaultSeed(long seed){
-        init.putNewSeed(seed);
-    }
 
     /**
      * Return total rate

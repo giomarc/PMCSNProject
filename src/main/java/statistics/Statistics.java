@@ -44,9 +44,9 @@ public class Statistics {
         double diff = (newValue -  oldMean);
         double[] MV = new double[2];
         double i = (double) n;
-        if(i!= 0){
-            MV[1] = oldVar + diff * diff*(i-1)/i;
-            MV[0] = oldMean + (diff/i);
+        if(i!= 0) {
+            MV[1] = oldVar + (diff * diff * (i - 1) / i);
+            MV[0] = oldMean + (diff / i);
         }
         return MV;
     }

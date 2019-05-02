@@ -42,7 +42,7 @@ public class ConfidenceInterval {
             width = (t_student*stddev)/Math.sqrt(n-1);
         }
         double[] confidenceInterval = {sampleMean - width, sampleMean + width};
-        findOutliers(confidenceInterval[0],confidenceInterval[1], givenNumbers);
+        //findOutliers(confidenceInterval[0],confidenceInterval[1], givenNumbers);
         //findOutliers(sampleMean - width, sampleMean + width,givenNumbers);
         return confidenceInterval;
     }
@@ -52,7 +52,7 @@ public class ConfidenceInterval {
      * Returns number of outliers respect confidence interval
      */
     private void findOutliers(Double min, Double max, ArrayList<Double> givenNumbers){
-        System.out.println("( " + min + " , " + max + " )");
+        //System.out.println("( " + min + " , " + max + " )");
         double outliers = 0.0;
         double tot = 1.0;
         for (Double d : givenNumbers){
@@ -60,8 +60,8 @@ public class ConfidenceInterval {
                 outliers++;
             tot++;
         }
-        System.out.println("percentage of outliers " + outliers/(tot-1));
-        System.out.println("mean: " + ((min+max)/2));
+        //System.out.println("percentage of outliers " + outliers/(tot-1));
+        //System.out.println("mean: " + ((min+max)/2));
 
     }
 }

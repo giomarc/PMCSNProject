@@ -67,7 +67,6 @@ public class BatchMeans {
     public double getBMMean(ArrayList<Double> values) {
         if(SystemConfiguration.BATCH) {
             double value = 0;
-
             if(values.size()!=num_batch){
                 System.out.println("cicli: " + values.size() +  ", num_batch: " + num_batch);
                 System.exit(-1);
@@ -236,15 +235,15 @@ public class BatchMeans {
     /**
      * SETTER
      */
-    void setBMGlobalPopulation(double currentValue) {
+    void updateBMGlobalPopulation(double currentValue) {
          BMGlobalPopulation.add(currentValue);
     }
 
-    void setBMCloudletPopulation(double currentValue) {
+    void updateBMCloudletPopulation(double currentValue) {
         BMCloudletPopulation.add(currentValue);
     }
 
-    void setBMCloudPopulation(double currentValue) {
+    void updateBMCloudPopulation(double currentValue) {
         BMCloudPopulation.add(currentValue);
     }
 

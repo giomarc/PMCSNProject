@@ -26,25 +26,24 @@ public class ConfidenceInterval {
         double stddev;
         double t_student;
         double width = 0.0;
-        long n = 1;
+        long n = 0;
 
         for(Double actualValue : givenNumbers){
+            n++;
             double diff = actualValue - sampleMean;
             variance += (diff * diff * (n-1)/n);
             sampleMean += (diff/n);
-            n++;
         }
         stddev = Math.sqrt(variance);
 
         if(n>1){
-            double u = 1.0 - 0.5*(1-0 - confidence);
+            double u = 1.0 - 0.5*(1.0 - confidence);
             t_student = InitGenerator.getInstance().idfStudent(n-1,u);
             width = (t_student*stddev)/Math.sqrt(n-1);
         }
         double[] confidenceInterval = {sampleMean - width, sampleMean + width};
         System.out.println("( " + confidenceInterval[0] + " , " + confidenceInterval[1] + " )");
-        //findOutliers(confidenceInterval[0],confidenceInterval[1], givenNumbers);
-        //findOutliers(sampleMean - width, sampleMean + width,givenNumbers);
+        System.out.println("mean point CI: " + (confidenceInterval[0] + confidenceInterval[1])/2);
         return confidenceInterval;
     }
 

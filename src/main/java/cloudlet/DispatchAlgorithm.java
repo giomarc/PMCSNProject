@@ -85,6 +85,7 @@ public class DispatchAlgorithm {
         }else{
             Cloudlet.getInstance().processArrival(e);
         }
+
         jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
     }
 

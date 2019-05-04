@@ -41,11 +41,16 @@ public class Services {
 
     private double getCloudServiceTimeWithoutOperations(int job_class){
         double service_rate;
-        if(job_class == 1)
+        int stream;
+        if(job_class == 1){
             service_rate = SystemConfiguration.CLOUD_M1;
-        else
+            stream = 4;
+        }
+        else{
             service_rate = SystemConfiguration.CLOUD_M2;
-        return InitGenerator.getInstance().exponential(service_rate, 2);
+            stream = 5;
+        }
+        return InitGenerator.getInstance().exponential(service_rate, stream);
     }
 
     private double getCloudServiceTimePerOperation(int jobClass, double numberOfOperations){
@@ -125,11 +130,16 @@ public class Services {
 
     private double getCloudletServiceTimeWithoutOperations(int job_class){
         double service_rate;
-        if(job_class == 1)
+        int stream;
+        if(job_class == 1) {
             service_rate = SystemConfiguration.CLOUDLET_M1;
-        else
+            stream = 2;
+        }
+        else {
             service_rate = SystemConfiguration.CLOUDLET_M2;
-        return InitGenerator.getInstance().exponential(service_rate, 1);
+            stream = 3;
+        }
+        return InitGenerator.getInstance().exponential(service_rate, stream);
     }
 
 
@@ -137,7 +147,7 @@ public class Services {
 
 
     public double getJobOperations(){
-        return InitGenerator.getInstance().exponential(1, 3);
+        return InitGenerator.getInstance().exponential(1, 6);
     }
 
 

@@ -6,6 +6,7 @@ import system.SystemConfiguration;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("Duplicates")
 public class BatchMeans {
 
     private ConfidenceInterval confidenceInterval;

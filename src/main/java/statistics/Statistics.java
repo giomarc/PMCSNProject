@@ -1,7 +1,6 @@
 package statistics;
 
 import event.Event;
-import system.SystemConfiguration;
 
 import java.sql.Time;
 
@@ -54,11 +53,11 @@ public class Statistics {
         double serviceTime = e.getJob().getServiceTime();
 
         if(e.getType() == 1) {//cloudlet
-            handleCloudletCompletion(e,jobClass,serviceTime);
+            handleCloudletCompletion(jobClass,serviceTime);
             JobStatistics.getInstance().updateMeanCloudletCompleted();
         }
         else if(e.getType() == 2) {     //cloud
-            handleCloudCompletion(e,jobClass,serviceTime);
+            handleCloudCompletion(jobClass,serviceTime);
             JobStatistics.getInstance().updateMeanCloudCompleted();
         }
         else
@@ -67,7 +66,7 @@ public class Statistics {
         JobStatistics.getInstance().updateMeanGlobalCompleted();
     }
 
-    public void handleCloudletCompletion(Event e, int jobclass, double serviceTime){
+    public void handleCloudletCompletion(int jobclass, double serviceTime){
 
         TimeStatistics ts = TimeStatistics.getInstance();
         JobStatistics js = JobStatistics.getInstance();
@@ -82,7 +81,7 @@ public class Statistics {
         }
     }
 
-    public void handleCloudCompletion(Event e, int jobclass, double serviceTime){
+    public void handleCloudCompletion(int jobclass, double serviceTime){
         TimeStatistics ts = TimeStatistics.getInstance();
         JobStatistics js = JobStatistics.getInstance();
         ts.setMeanResponseTimeCloud(computeMean(ts.getMeanResponseTimeCloud(), serviceTime, (int) js.getCompletedCloud(0)));
@@ -97,7 +96,6 @@ public class Statistics {
             ts.setMeanResponseTimeClass2Cloud(computeMean(ts.getMeanResponseTimeClass2Cloud(), serviceTime, (int) js.getCompletedCloud(2)));
 
         }
-
     }
 
     public void updateResponseTime(int jobclass, double serviceTime){

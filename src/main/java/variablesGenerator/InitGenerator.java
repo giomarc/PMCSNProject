@@ -55,7 +55,7 @@ public class InitGenerator {
     }
 
     public double uniform(){
-        selectStream(0);
+        selectStream(5);
         return this.rvgs.uniform(0.0,1.0);
     }
 

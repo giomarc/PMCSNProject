@@ -72,11 +72,20 @@ public class Cloud {
 
     public double endSimulation() {
         double max = 0.0;
+
         for(Job j: jobsInService){
             if(j.getCompletionTime() > max)
                 max = j.getCompletionTime();
             Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(2, j));
+            decreaseN(j.getJobClass());
         }
+
+        while(!jobsInService.isEmpty())
+        {
+            jobsInService.remove(0);
+        }
+
+
         return max;
     }
 

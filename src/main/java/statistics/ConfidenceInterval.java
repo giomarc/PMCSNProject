@@ -42,6 +42,7 @@ public class ConfidenceInterval {
             width = (t_student*stddev)/Math.sqrt(n-1);
         }
         double[] confidenceInterval = {sampleMean - width, sampleMean + width};
+        System.out.println("( " + confidenceInterval[0] + " , " + confidenceInterval[1] + " )");
         //findOutliers(confidenceInterval[0],confidenceInterval[1], givenNumbers);
         //findOutliers(sampleMean - width, sampleMean + width,givenNumbers);
         return confidenceInterval;

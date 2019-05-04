@@ -1,6 +1,7 @@
 package statistics;
 
 import event.Event;
+import system.SystemConfiguration;
 
 import java.sql.Time;
 
@@ -43,11 +44,8 @@ public class Statistics {
     public double[] computeMeanAndVariance(double oldVar, double oldMean, double newValue, long n){
         double diff = (newValue -  oldMean);
         double[] MV = new double[2];
-        double i = (double) n;
-        if(i!= 0) {
-            MV[1] = oldVar + (diff * diff * (i - 1) / i);
-            MV[0] = oldMean + (diff / i);
-        }
+        MV[1] = oldVar + (diff * diff * (n - 1) / n);
+        MV[0] = oldMean + (diff / n);
         return MV;
     }
 
@@ -57,13 +55,16 @@ public class Statistics {
 
         if(e.getType() == 1) {//cloudlet
             handleCloudletCompletion(e,jobClass,serviceTime);
+            JobStatistics.getInstance().updateMeanCloudletCompleted();
         }
         else if(e.getType() == 2) {     //cloud
             handleCloudCompletion(e,jobClass,serviceTime);
+            JobStatistics.getInstance().updateMeanCloudCompleted();
         }
         else
             System.exit(-1);
         updateResponseTime(jobClass,serviceTime);
+        JobStatistics.getInstance().updateMeanGlobalCompleted();
     }
 
     public void handleCloudletCompletion(Event e, int jobclass, double serviceTime){
@@ -85,15 +86,18 @@ public class Statistics {
         TimeStatistics ts = TimeStatistics.getInstance();
         JobStatistics js = JobStatistics.getInstance();
         ts.setMeanResponseTimeCloud(computeMean(ts.getMeanResponseTimeCloud(), serviceTime, (int) js.getCompletedCloud(0)));
+
         if(jobclass == 1){
             js.updateCompletedCloud(1);
             ts.setMeanResponseTimeClass1Cloud(computeMean(ts.getMeanResponseTimeClass1Cloud(), serviceTime, (int) js.getCompletedCloud(1)));
         }
+
         else if(jobclass == 2){
             js.updateCompletedCloud(2);
             ts.setMeanResponseTimeClass2Cloud(computeMean(ts.getMeanResponseTimeClass2Cloud(), serviceTime, (int) js.getCompletedCloud(2)));
 
         }
+
     }
 
     public void updateResponseTime(int jobclass, double serviceTime){

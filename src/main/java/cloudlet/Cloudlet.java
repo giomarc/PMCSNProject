@@ -104,6 +104,7 @@ public class Cloudlet {
         for(Server s: serverList){
             if(s.isBusy()) {
                 Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+                decreaseN(s.getJobInService().getJobClass());
                 s.setBusy(false);
 
                 if(s.getJobInService().getCompletionTime() > max)

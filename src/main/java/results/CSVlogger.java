@@ -23,6 +23,7 @@ public class CSVlogger {
     private String fileMeansInOneSimulation;
     private String fileServerStatus;
     private String fileBatchMeans;
+    private String fileThroughputBatch;
     private String fileBatchVariance;
     private String fileVarianceJobs;
     private String fileSystemSimulation;
@@ -42,6 +43,7 @@ public class CSVlogger {
             this.fileMeansInOneSimulation = "MeansInOneSimulation.csv";
             this.fileServerStatus = "ServerStatus.csv";
             this.fileBatchMeans = "BatchMeans.csv";
+            this.fileThroughputBatch = "ThoughputBatch.csv";
             this.fileBatchVariance = "BatchVariances.csv";
             this.fileSystemSimulation = "SystemSimulation.csv";
 
@@ -61,6 +63,7 @@ public class CSVlogger {
                 File fileMS = new File("./RESULT_OUTPUT/" + fileMeansInOneSimulation);
                 File fileSV = new File("./RESULT_OUTPUT/" + fileServerStatus);
                 File fileBM = new File("./RESULT_OUTPUT/" + fileBatchMeans);
+                File fileTBM = new File("./RESULT_OUTPUT/" + fileThroughputBatch);
                 File fileBV = new File("./RESULT_OUTPUT/" + fileBatchVariance);
                 File fileSS = new File("./RESULT_OUTPUT/" + fileSystemSimulation);
 
@@ -124,6 +127,7 @@ public class CSVlogger {
                         outSV.flush();
                     }
                     fileBM.delete();
+                    fileTBM.delete();
                     if(SystemConfiguration.BATCH) {
                         if (fileBM.createNewFile()) {
                             BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
@@ -132,6 +136,13 @@ public class CSVlogger {
                                     " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs, "
                                     + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs,"
                                     + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs");
+                            outBM.flush();
+                        }
+                        if(fileTBM.createNewFile()){
+                            BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
+                            System.out.println("File Throughput Batch Means has been created.");
+                            outBM.write("batch_iteration, distribution, operations, algorithm, iterations, seed,  " +
+                                    "System throughput, System variance, Cloudlet Throughput, Cloudlet variance, Cloud Throuhput, Cloud variance");
                             outBM.flush();
                         }
                     }
@@ -170,9 +181,45 @@ public class CSVlogger {
                 if(SystemConfiguration.BATCH) {
                     writeBatchMeansjobs(bm);
                     writeBatchMeansVarianceJobs(bm);
+                    writeBatchMeansThroughput(bm);
                 }
             }
         }
+    }
+
+    private void writeBatchMeansThroughput(BatchMeans bm) {
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        ArrayList<Double> systemThroughput = bm.getAvgThroughputArray(0);
+        ArrayList<Double> cloudletThroughput = bm.getAvgThroughputArray(1);
+        ArrayList<Double> cloudThroughput = bm.getAvgThroughputArray(2);
+        ArrayList<Double> varSystemThroughput = bm.getVarThroughputArray(0);
+        ArrayList<Double> varCloudletThroughput = bm.getVarThroughputArray(1);
+        ArrayList<Double> varCloudThroughput = bm.getVarThroughputArray(2);
+
+        BufferedWriter outAVG;
+        try {
+            outAVG = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
+            for(int i = 0; i < SystemConfiguration.NUM_BATCH; i++) {
+                outAVG.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                        systemThroughput.get(i) + "," + varSystemThroughput + "," + cloudletThroughput.get(i) + "," + varCloudletThroughput + ","
+                        + cloudThroughput.get(i) + "," + varCloudThroughput);
+            }
+            outAVG.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void writeResponseTime(TimeStatistics ts){

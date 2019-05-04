@@ -100,13 +100,14 @@ public class PerformanceLogger implements Runnable {
             if(SystemConfiguration.BATCH) {
                 printMeanBatchPopulation(bm);
                 printVarianceBatchPopulation(bm);
+                printThroughputBatch(bm);
             }else{
                 printMeanPopulation(js);
                 printVariancePopulation(js);
             }
         }
         PerformanceLogger.getInstance().endTest(js.getGlobalTime());
-        //CSVlogger.getInstance().writeOnFiles(js.getGlobalTime());
+        CSVlogger.getInstance().writeOnFiles(js.getGlobalTime());
     }
 
 
@@ -235,6 +236,24 @@ public class PerformanceLogger implements Runnable {
         System.out.println(js.getMeanBMVarianceCloudPopulation(1));
         Printer.getInstance().print("Variance cloud class 2 population", "green");
         System.out.println(js.getMeanBMVarianceCloudPopulation(2));
+    }
+
+    private void printThroughputBatch(BatchMeans bm){
+        Printer.getInstance().print("\nTHROUGHPUT", "yellow");
+        Printer.getInstance().print("Mean global throughput", "green");
+        System.out.println(bm.getBMAvgThroughput(0));
+        Printer.getInstance().print("Var global throughput", "green");
+        System.out.println(bm.getBMVarThroughput(0));
+
+        Printer.getInstance().print("Mean cloudlet throughput", "green");
+        System.out.println(bm.getBMAvgThroughput(1));
+        Printer.getInstance().print("Var cloudlet throughput", "green");
+        System.out.println(bm.getBMVarThroughput(1));
+
+        Printer.getInstance().print("Mean cloud throughput", "green");
+        System.out.println(bm.getBMAvgThroughput(2));
+        Printer.getInstance().print("Var cloud throughput", "green");
+        System.out.println(bm.getBMVarThroughput(2));
     }
 
 

@@ -38,15 +38,19 @@ public class JobStatistics{
     private long completedCloud_1;
     private long completedCloud_2;
 
+    private double meanSystemThroughput;
+    private double meanCloudletThroughput;
+    private double meanCloudThroughput;
+    private double varSystemThroughput;
+    private double varCloudletThroughput;
+    private double varCloudThroughput;
+
+
     //ITERATIONS
     private long globalIteration;
-    private long cloudletIteration_1;
-    private long cloudletIteration_2;
-    private long cloudIteration_1;
-    private long cloudIteration_2;
-
     private long actualIteration;
     private double globalTime;
+    private double actualTime;
 
 
     private JobStatistics(){
@@ -62,16 +66,15 @@ public class JobStatistics{
     }
 
 
-    public void updatePopulationMeans(int cloudletOrCloud, int jobClass, int[] cloudletPopulation, int[] cloudPopulation){
+    public void updatePopulationMeans(int[] cloudletPopulation, int[] cloudPopulation){
 
-        updateGlobalIterations(cloudletOrCloud, jobClass);
+        updateGlobalIterations();
         updateGlobal(cloudletPopulation,cloudPopulation);
-
         updateClass1(cloudletPopulation[0],cloudPopulation[0]);
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
         CSVlogger.getInstance().writeMeansInOneSimulation(this);
-        if(SystemConfiguration.BATCH && (actualIteration%batchMeans.getBatchSize() == 0 || globalIteration == SystemConfiguration.ITERATIONS))
+        if(SystemConfiguration.BATCH && (actualIteration > batchMeans.getBatchSize()|| globalIteration == SystemConfiguration.ITERATIONS))
             computeBatch();
     }
 
@@ -101,7 +104,6 @@ public class JobStatistics{
 
 
     }
-
 
     /**
      * Updates means and variance of class 1 jobs
@@ -151,28 +153,20 @@ public class JobStatistics{
     }
 
 
-    private void updateGlobalIterations(int cloudletOrCloud, int jobClass){
-        if(cloudletOrCloud == 1 && jobClass == 1)
-            cloudletIteration_1++;
-        if(cloudletOrCloud == 1 && jobClass == 2)
-            cloudletIteration_2++;
-        if(cloudletOrCloud == 2 && jobClass == 1)
-            cloudIteration_1++;
-        if(cloudletOrCloud == 2 && jobClass == 2)
-            cloudIteration_2++;
+    private void updateGlobalIterations(){
         actualIteration++;
         globalIteration++;
     }
 
-    private void computeBatch(){
+    public void computeBatch(){
 
-        batchMeans.updateBMCloudletPopulation(this.meanCloudletPopulation);
+        batchMeans.updateBMCloudletPopulation               (this.meanCloudletPopulation);
         batchMeans.setBMCloudletPopulationClass1            (this.meanCloudletPopulation_1);
         batchMeans.setBMCloudletPopulationClass2            (this.meanCloudletPopulation_2);
-        batchMeans.updateBMCloudPopulation(this.meanCloudPopulation);
+        batchMeans.updateBMCloudPopulation                  (this.meanCloudPopulation);
         batchMeans.setBMCloudPopulationClass1               (this.meanCloudPopulation_1);
         batchMeans.setBMCloudPopulationClass2               (this.meanCloudPopulation_2);
-        batchMeans.updateBMGlobalPopulation(this.meanGlobalPopulation);
+        batchMeans.updateBMGlobalPopulation                 (this.meanGlobalPopulation);
         batchMeans.setBMGlobalPopulationClass1              (this.meanGlobalPopulation_1);
         batchMeans.setBMGlobalPopulation_2                  (this.meanGlobalPopulation_2);
 
@@ -185,6 +179,15 @@ public class JobStatistics{
         batchMeans.setBMVarianceGlobalPopulation            (this.varGlobalPopulation / actualIteration);
         batchMeans.setBMVarianceGlobalPopulationClass1      (this.varGlobalPopulation_1 / actualIteration);
         batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 / actualIteration);
+
+        batchMeans.updateBMAvgTroughputArray(meanSystemThroughput,0);
+        batchMeans.updateBMAvgTroughputArray(meanCloudletThroughput,1);
+        batchMeans.updateBMAvgTroughputArray(meanCloudThroughput,2);
+
+        batchMeans.updateBMVarThroughputArray(varSystemThroughput/actualTime,0);
+        batchMeans.updateBMVarThroughputArray(varCloudletThroughput/actualTime,1);
+        batchMeans.updateBMVarThroughputArray(varCloudThroughput/actualTime,2);
+
         resetMeans();
     }
 
@@ -244,6 +247,14 @@ public class JobStatistics{
         return globalTime;
     }
 
+    public void setActualTime(double actualTime) {
+        this.actualTime = actualTime;
+    }
+
+    public double getActualTime() {
+        return actualTime;
+    }
+
 
     //COMPLETED JOBS
     public long getCompletedCloudlet(int jobclass){
@@ -280,6 +291,29 @@ public class JobStatistics{
         }
     }
 
+    @SuppressWarnings("Duplicates")
+    public void updateMeanCloudletCompleted()
+    {
+        double[] CletC = statistics.computeMeanAndVariance(varCloudletThroughput,meanCloudletThroughput,completedCloudlet_1 + completedCloudlet_2, actualIteration);
+        meanCloudletThroughput = CletC[0];
+        varCloudletThroughput = CletC[1];
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void updateMeanCloudCompleted()
+    {
+        double[] CloudC = statistics.computeMeanAndVariance(varCloudThroughput,meanCloudThroughput,completedCloud_1 + completedCloud_2, actualIteration);
+        meanCloudThroughput = CloudC[0];
+        varCloudThroughput = CloudC[1];
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void updateMeanGlobalCompleted()
+    {
+        double[] GC = statistics.computeMeanAndVariance(varSystemThroughput,meanSystemThroughput,getPackets(0), actualIteration);
+        meanSystemThroughput = GC[0];
+        varSystemThroughput = GC[1];
+    }
 
     //POPULATION
     public double getMeanCloudletPopulation(int jobclass) {
@@ -390,6 +424,7 @@ public class JobStatistics{
         this.completedCloudlet_2        = 0;
         this.completedCloud_2           = 0;
         this.globalTime                 = 0;
+        this.actualTime                 = 0;
         this.globalIteration            = 0;
         resetMeans();
     }
@@ -404,6 +439,7 @@ public class JobStatistics{
         this.meanGlobalPopulation_2     = 0;
         this.meanCloudletPopulation_2   = 0;
         this.meanCloudPopulation_2      = 0;
+
         this.varGlobalPopulation        = 0;
         this.varCloudletPopulation      = 0;
         this.varCloudPopulation         = 0;
@@ -413,6 +449,16 @@ public class JobStatistics{
         this.varGlobalPopulation_2      = 0;
         this.varCloudletPopulation_2    = 0;
         this.varCloudPopulation_2       = 0;
+
+        this.meanSystemThroughput       = 0;
+        this.meanCloudletThroughput     = 0;
+        this.meanCloudThroughput        = 0;
+
+        this.varSystemThroughput        = 0;
+        this.varCloudletThroughput      = 0;
+        this.varCloudThroughput         = 0;
+
+        this.actualTime                 = 0;
         this.actualIteration            = 0;
     }
 

@@ -45,8 +45,6 @@ public class DispatchAlgorithm {
      * Basic algoritm
      */
     public void defaultAlgorithm(Event e){
-        int cloudletOrCloud;
-        int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
         Cloudlet.getInstance().timeHasPassed(arrivalTime);
         Cloud.getInstance().timeHasPassed(arrivalTime);
@@ -55,13 +53,11 @@ public class DispatchAlgorithm {
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
 
         if(totalJobsInCloudlet >= numberOfServers){
-            cloudletOrCloud = 2;
             Cloud.getInstance().processArrival(e);
         }else{
-            cloudletOrCloud = 1;
             Cloudlet.getInstance().processArrival(e);
         }
-        jobStatistics.updatePopulationMeans(cloudletOrCloud, jobClass, numberOfJobsInCloudlet, numberOfJobsInCloud);
+        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
     }
 
 
@@ -70,7 +66,6 @@ public class DispatchAlgorithm {
      */
 
     public void thresholdAlgorithm(Event e, int soglia){
-        int cloudletOrCloud;
         int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
         Cloudlet.getInstance().timeHasPassed(arrivalTime);
@@ -85,13 +80,11 @@ public class DispatchAlgorithm {
          *
          */
         if((totalJobsInCloudlet >= numberOfServers) || (totalJobsInCloudlet > soglia && jobClass == 2)){
-            cloudletOrCloud = 2;
             Cloud.getInstance().processArrival(e);
         }else{
-            cloudletOrCloud = 1;
             Cloudlet.getInstance().processArrival(e);
         }
-        jobStatistics.updatePopulationMeans(cloudletOrCloud, jobClass, numberOfJobsInCloudlet, numberOfJobsInCloud);
+        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
     }
 
 
@@ -115,7 +108,7 @@ public class DispatchAlgorithm {
             cloudletOrCloud = 1;
             Cloudlet.getInstance().processArrival(e);
         }
-        jobStatistics.updatePopulationMeans(cloudletOrCloud, jobClass, numberOfJobsInCloudlet, numberOfJobsInCloud);
+        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
     }
 
 
@@ -140,7 +133,7 @@ public class DispatchAlgorithm {
             cloudletOrCloud = 1;
             Cloudlet.getInstance().processArrival(e);
         }
-        jobStatistics.updatePopulationMeans(cloudletOrCloud, jobClass, numberOfJobsInCloudlet, numberOfJobsInCloud);
+        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
     }
 }
 

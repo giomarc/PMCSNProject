@@ -1,5 +1,7 @@
 package statistics;
 
+import cloud.Cloud;
+import cloudlet.Cloudlet;
 import system.SystemConfiguration;
 
 import java.util.ArrayList;
@@ -34,6 +36,14 @@ public class BatchMeans {
     private ArrayList<Double> BMVarCloudletPopulation_2;
     private ArrayList<Double> BMVarCloudPopulation_2;
 
+    //THROUGHPUT
+    private ArrayList<Double> avgSystemT;
+    private ArrayList<Double> avgCloudletT;
+    private ArrayList<Double> avgCloudT;
+    private ArrayList<Double> varSystemT;
+    private ArrayList<Double> varCloudletT;
+    private ArrayList<Double> varCloudT;
+
 
 
     private BatchMeans(){
@@ -56,13 +66,6 @@ public class BatchMeans {
     }
 
 
-
-    /**
-     * Methods to insert welford means into arrays at the end of the batch
-     */
-    public void updateBMG(ArrayList<Double> listToUpdate,double valueToInsert) {
-        listToUpdate.add(valueToInsert);
-    }
 
     public double getBMMean(ArrayList<Double> values) {
         if(SystemConfiguration.BATCH) {
@@ -165,7 +168,6 @@ public class BatchMeans {
         return var;
     }
 
-
     /**
      * GETTER FOR STATISTICS
      */
@@ -230,6 +232,66 @@ public class BatchMeans {
         }
         return res;
     }
+
+    public ArrayList<Double> getAvgThroughputArray(int index){
+        ArrayList<Double> var = new ArrayList<>();
+        switch (index){
+            case 0: var = avgSystemT; break;
+            case 1: var = avgCloudletT; break;
+            case 2: var = avgCloudT; break;
+        }
+        return var;
+    }
+
+    public void updateBMAvgTroughputArray(double currentValue, int index)
+    {
+        switch (index){
+            case 0: avgSystemT.add(currentValue); break;
+            case 1: avgCloudletT.add(currentValue); break;
+            case 2: avgCloudT.add(currentValue);break;
+        }
+    }
+
+    public double getBMAvgThroughput(int index){
+        double res = 0.0;
+        switch (index){
+            case 0: res = getBMMean(avgSystemT); break;
+            case 1: res = getBMMean(avgCloudletT); break;
+            case 2: res = getBMMean(avgCloudT); break;
+        }
+        return res;
+    }
+
+    public ArrayList<Double> getVarThroughputArray(int index){
+        ArrayList<Double> var = new ArrayList<>();
+        switch (index){
+            case 0: var = varSystemT; break;
+            case 1: var = varCloudletT; break;
+            case 2: var = varCloudT; break;
+        }
+        return var;
+    }
+
+    public void updateBMVarThroughputArray(double currentValue, int index)
+    {
+        switch (index){
+            case 0: varSystemT.add(currentValue); break;
+            case 1: varCloudletT.add(currentValue); break;
+            case 2: varCloudT.add(currentValue);break;
+        }
+    }
+
+    public double getBMVarThroughput(int index){
+        double res = 0.0;
+        switch (index){
+            case 0: res = getBMMean(varSystemT); break;
+            case 1: res = getBMMean(varCloudletT); break;
+            case 2: res = getBMMean(varCloudT); break;
+        }
+        return res;
+    }
+
+
 
 
     /**
@@ -334,5 +396,12 @@ public class BatchMeans {
         BMVarGlobalPopulation_2 = new ArrayList<>();
         BMVarCloudletPopulation_2 = new ArrayList<>();
         BMVarCloudPopulation_2 = new ArrayList<>();
+
+        avgSystemT = new ArrayList<>();
+        avgCloudletT = new ArrayList<>();
+        avgCloudT =  new ArrayList<>();
+        varSystemT = new ArrayList<>();
+        varCloudletT = new ArrayList<>();
+        varCloudT =  new ArrayList<>();
     }
 }

@@ -41,8 +41,10 @@ public class Simulation {
             Event e = EventGenerator.getInstance().generateArrival();
             cloudletController.dispatchArrivals(e);
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
+            jobStatistics.setActualTime(jobStatistics.getActualTime() + e.getJob().getArrivalTime());
         }
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + cloudletController.endSimulation());
+
         PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
         //BatchMeans.getInstance().computeBatchMeans();
 

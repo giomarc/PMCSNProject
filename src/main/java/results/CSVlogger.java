@@ -16,7 +16,13 @@ import java.util.ArrayList;
 public class CSVlogger {
 
     private static CSVlogger instance = new CSVlogger();
+
+    private int maxRowsStored = 1000;
     private int totalMeansDuringSimulations = 2000;
+    private int totalResponseTimeMeansDuringSimulations = 200000;
+
+    private static int iterationsInOneBatch = (int) (SystemConfiguration.ITERATIONS/SystemConfiguration.NUM_BATCH) - 1;
+
     private String fileResponseTime;
     private String fileThroughput;
     private String fileAVGjobs;
@@ -26,6 +32,7 @@ public class CSVlogger {
     private String fileBatchVariance;
     private String fileVarianceJobs;
     private String fileSystemSimulation;
+    private String fileResponseTimeMeansInOneSimulation;
 
     private CSVlogger(){}
 
@@ -44,6 +51,7 @@ public class CSVlogger {
             this.fileBatchMeans = "BatchMeans.csv";
             this.fileBatchVariance = "BatchVariances.csv";
             this.fileSystemSimulation = "SystemSimulation.csv";
+            this.fileResponseTimeMeansInOneSimulation = "ResponseTimeMeansInOneSimulation.csv";
 
 
             try {
@@ -54,15 +62,16 @@ public class CSVlogger {
                     }
                 }
 
-                File fileRT = new File("./RESULT_OUTPUT/" + fileResponseTime);
-                File fileX = new File("./RESULT_OUTPUT/" + fileThroughput);
-                File fileEN = new File("./RESULT_OUTPUT/" + fileAVGjobs);
-                File fileVJ = new File("./RESULT_OUTPUT/" + fileVarianceJobs);
-                File fileMS = new File("./RESULT_OUTPUT/" + fileMeansInOneSimulation);
-                File fileSV = new File("./RESULT_OUTPUT/" + fileServerStatus);
-                File fileBM = new File("./RESULT_OUTPUT/" + fileBatchMeans);
-                File fileBV = new File("./RESULT_OUTPUT/" + fileBatchVariance);
-                File fileSS = new File("./RESULT_OUTPUT/" + fileSystemSimulation);
+                File fileRT   = new File("./RESULT_OUTPUT/" + fileResponseTime);
+                File fileX    = new File("./RESULT_OUTPUT/" + fileThroughput);
+                File fileEN   = new File("./RESULT_OUTPUT/" + fileAVGjobs);
+                File fileVJ   = new File("./RESULT_OUTPUT/" + fileVarianceJobs);
+                File fileMS   = new File("./RESULT_OUTPUT/" + fileMeansInOneSimulation);
+                File fileRTOS = new File("./RESULT_OUTPUT/" + fileResponseTimeMeansInOneSimulation);
+                File fileSV   = new File("./RESULT_OUTPUT/" + fileServerStatus);
+                File fileBM   = new File("./RESULT_OUTPUT/" + fileBatchMeans);
+                File fileBV   = new File("./RESULT_OUTPUT/" + fileBatchVariance);
+                File fileSS   = new File("./RESULT_OUTPUT/" + fileSystemSimulation);
 
                 if (fileRT.createNewFile()) {
                     BufferedWriter outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTime, true));
@@ -110,11 +119,18 @@ public class CSVlogger {
                     fileMS.delete();
                     if (fileMS.createNewFile()) {
                         BufferedWriter outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
-                        System.out.println("File Means in one simulation jobs has been created.");
+                        System.out.println("File Means in one simulation has been created.");
                         outMS.write("seed,  global_time, cloudlet_class1, cloudlet_class2, "
                                 + "cloudletGeneral, cloud_class1, cloud_class2,"
                                 + "cloudGeneral, class1, class2");
                         outMS.flush();
+                    }
+                    fileRTOS.delete();
+                    if (fileRTOS.createNewFile()) {
+                        BufferedWriter outRTOS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTimeMeansInOneSimulation, true));
+                        System.out.println("File Response Time in one simulation has been created.");
+                        outRTOS.write("seed,  class, cloudlet_or_cloud, response_time");
+                        outRTOS.flush();
                     }
                     fileSV.delete();
                     if (fileSV.createNewFile()) {
@@ -155,7 +171,7 @@ public class CSVlogger {
         }
     }
 
-    public void writeOnFiles(double globaltime){
+    void writeOnFiles(double globaltime){
         JobStatistics js = JobStatistics.getInstance();
         TimeStatistics ts = TimeStatistics.getInstance();
         BatchMeans bm = BatchMeans.getInstance();
@@ -175,7 +191,7 @@ public class CSVlogger {
         }
     }
 
-    public void writeResponseTime(TimeStatistics ts){
+    private void writeResponseTime(TimeStatistics ts){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
         int algorithm = SystemConfiguration.ALGORITHM;
@@ -212,39 +228,6 @@ public class CSVlogger {
             e.printStackTrace();
         }
 
-    }
-
-    public void writeMeansInOneSimulation(JobStatistics js){
-        if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
-            if (totalMeansDuringSimulations > 0) {
-                totalMeansDuringSimulations--;
-
-                long seed = SystemConfiguration.SEED;
-                double globalTime = js.getGlobalTime();
-
-                double meanCloudletPopulation = js.getMeanCloudletPopulation(0);
-                double meanCloudletPopulationClass1 = js.getMeanCloudletPopulation(1);
-                double meanCloudletPopulationClass2 = js.getMeanCloudletPopulation(2);
-
-                double meanCloudPopulation = js.getMeanCloudPopulation(0);
-                double meanCloudPopulationClass1 = js.getMeanCloudPopulation(1);
-                double meanCloudPopulationClass2 = js.getMeanCloudPopulation(2);
-
-                double meanClass1Population = js.getMeanGlobalPopulation(1);
-                double meanClass2Population = js.getMeanGlobalPopulation(2);
-
-                BufferedWriter outMS;
-                try {
-                    outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
-                    outMS.write("\n" + seed + "," + globalTime + "," + meanCloudletPopulationClass1 + "," + meanCloudletPopulationClass2 + ","
-                            + meanCloudletPopulation + "," + meanCloudPopulationClass1 + "," + meanCloudPopulationClass2 + ","
-                            + meanCloudPopulation + "," + meanClass1Population + "," + meanClass2Population);
-                    outMS.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     private void writeServerStatistics(double globalTime){
@@ -515,4 +498,124 @@ public class CSVlogger {
     }
 
 
+    public void writePopulationMeanInOneSimulation(JobStatistics js){
+        if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
+            if(totalMeansDuringSimulations > iterationsInOneBatch)
+                totalMeansDuringSimulations = iterationsInOneBatch;
+            if (totalMeansDuringSimulations > 0) {
+                totalMeansDuringSimulations--;
+
+                PopOneSimulationToWrite.instance.globalTime.add(js.getGlobalTime());
+                PopOneSimulationToWrite.instance.meanCloudletPopulation.add(js.getMeanCloudletPopulation(0));
+                PopOneSimulationToWrite.instance.meanCloudletPopulationClass1.add(js.getMeanCloudletPopulation(1));
+                PopOneSimulationToWrite.instance.meanCloudletPopulationClass2.add(js.getMeanCloudletPopulation(2));
+                PopOneSimulationToWrite.instance.meanCloudPopulation.add(js.getMeanCloudPopulation(0));
+                PopOneSimulationToWrite.instance.meanCloudPopulationClass1.add(js.getMeanCloudPopulation(1));
+                PopOneSimulationToWrite.instance.meanCloudPopulationClass2.add(js.getMeanCloudPopulation(2));
+                PopOneSimulationToWrite.instance.meanClass1Population.add(js.getMeanGlobalPopulation(1));
+                PopOneSimulationToWrite.instance.meanClass2Population.add(js.getMeanGlobalPopulation(2));
+
+                if(PopOneSimulationToWrite.instance.globalTime.size() == maxRowsStored || totalMeansDuringSimulations == 0){
+                    BufferedWriter outMS;
+                    try {
+                        outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
+                        for(int i = 0; i < PopOneSimulationToWrite.instance.globalTime.size(); i++){
+                            outMS.write("\n" + SystemConfiguration.SEED + "," +
+                                    PopOneSimulationToWrite.instance.globalTime.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanCloudletPopulationClass1.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanCloudletPopulationClass2.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanCloudletPopulation.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanCloudPopulationClass1.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanCloudPopulationClass2.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanCloudPopulation.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanClass1Population.get(i) + "," +
+                                    PopOneSimulationToWrite.instance.meanClass2Population.get(i) );
+                        }
+                        outMS.flush();
+                        PopOneSimulationToWrite.instance.reset();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public void writResponseTimeMeanInOneSimulation(int jobClass, int cloudletOrCloud, double responseTime){
+        if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
+            if (totalResponseTimeMeansDuringSimulations > 0) {
+                totalResponseTimeMeansDuringSimulations--;
+
+                RTOneSimulationToWrite.instance.jobClass.add(jobClass);
+                RTOneSimulationToWrite.instance.cloudletOrCloud.add(cloudletOrCloud);
+                RTOneSimulationToWrite.instance.responseTime.add(responseTime);
+
+                long seed = SystemConfiguration.SEED;
+
+                if(RTOneSimulationToWrite.instance.jobClass.size() == maxRowsStored || totalResponseTimeMeansDuringSimulations == 0){
+                    BufferedWriter outMS;
+                    try {
+                        outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTimeMeansInOneSimulation, true));
+                        for(int i = 0; i < maxRowsStored ; i++) {
+                            outMS.write("\n" + seed + "," +
+                                    RTOneSimulationToWrite.instance.jobClass.get(i) + "," +
+                                    RTOneSimulationToWrite.instance.cloudletOrCloud.get(i) + "," +
+                                    RTOneSimulationToWrite.instance.responseTime.get(i));
+                        }
+                        outMS.flush();
+                        RTOneSimulationToWrite.instance.reset();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }
+    }
+
+    private static class PopOneSimulationToWrite {
+
+        private static PopOneSimulationToWrite instance = new PopOneSimulationToWrite();
+
+
+        ArrayList<Double> globalTime = new ArrayList<>();
+        ArrayList<Double> meanCloudletPopulation = new ArrayList<>();
+        ArrayList<Double> meanCloudletPopulationClass1 = new ArrayList<>();
+        ArrayList<Double> meanCloudletPopulationClass2 = new ArrayList<>();
+        ArrayList<Double> meanCloudPopulation = new ArrayList<>();
+        ArrayList<Double> meanCloudPopulationClass1 = new ArrayList<>();
+        ArrayList<Double> meanCloudPopulationClass2 = new ArrayList<>();
+        ArrayList<Double> meanClass1Population = new ArrayList<>();
+        ArrayList<Double> meanClass2Population = new ArrayList<>();
+
+        void reset(){
+            this.globalTime = new ArrayList<>();
+            this.meanCloudletPopulation = new ArrayList<>();
+            this.meanCloudletPopulationClass1 = new ArrayList<>();
+            this.meanCloudletPopulationClass2 = new ArrayList<>();
+            this.meanCloudPopulation = new ArrayList<>();
+            this.meanCloudPopulationClass1 = new ArrayList<>();
+            this.meanCloudPopulationClass2 = new ArrayList<>();
+            this.meanClass1Population = new ArrayList<>();
+            this.meanClass2Population = new ArrayList<>();
+        }
+    }
+
+    private static class RTOneSimulationToWrite{
+
+        private static RTOneSimulationToWrite instance = new RTOneSimulationToWrite();
+
+        ArrayList<Integer> jobClass = new ArrayList<>();
+        ArrayList<Integer> cloudletOrCloud = new ArrayList<>();
+        ArrayList<Double> responseTime = new ArrayList<>();
+
+        void reset(){
+            jobClass = new ArrayList<>();
+            cloudletOrCloud = new ArrayList<>();
+            responseTime = new ArrayList<>();
+        }
+    }
 }
+
+

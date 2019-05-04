@@ -5,6 +5,7 @@ import event.Event;
 import statistics.JobStatistics;
 import system.SystemConfiguration;
 
+@SuppressWarnings("ALL")
 public class DispatchAlgorithm {
 
     int algorithmType;

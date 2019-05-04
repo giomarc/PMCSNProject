@@ -68,11 +68,10 @@ public class JobStatistics{
         updateClass1(cloudletPopulation[0],cloudPopulation[0]);
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
-        CSVlogger.getInstance().writeMeansInOneSimulation(this);
-        if(SystemConfiguration.BATCH && (actualIteration > batchMeans.getBatchSize() || globalIteration == SystemConfiguration.ITERATIONS))
+        CSVlogger.getInstance().writePopulationMeanInOneSimulation(this);
+        if((SystemConfiguration.BATCH && (actualIteration > batchMeans.getBatchSize())) || globalIteration == SystemConfiguration.ITERATIONS)
             computeBatch();
     }
-
 
     /**
      * Updates means and variance of class 1 and class 2 jobs
@@ -99,7 +98,6 @@ public class JobStatistics{
 
     }
 
-
     /**
      * Updates means and variance of class 1 jobs
      * @param cloudlet1 actual number of class 1 jobs in cloudlet
@@ -121,7 +119,6 @@ public class JobStatistics{
         varCloudPopulation_1 = C1[1];
 
     }
-
 
     /**
      * Updates means and variance of class 2 jobs
@@ -145,15 +142,14 @@ public class JobStatistics{
 
     }
 
-
     private void updateGlobalIterations(int cloudletOrCloud, int jobClass){
         if(cloudletOrCloud == 1 && jobClass == 1)
             cloudletIteration_1++;
-        if(cloudletOrCloud == 1 && jobClass == 2)
+        else if(cloudletOrCloud == 1 && jobClass == 2)
             cloudletIteration_2++;
-        if(cloudletOrCloud == 2 && jobClass == 1)
+        else if(cloudletOrCloud == 2 && jobClass == 1)
             cloudIteration_1++;
-        if(cloudletOrCloud == 2 && jobClass == 2)
+        else if(cloudletOrCloud == 2 && jobClass == 2)
             cloudIteration_2++;
         actualIteration++;
         globalIteration++;
@@ -183,9 +179,6 @@ public class JobStatistics{
         batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 /    actualIteration);
         resetMeans();
     }
-
-
-
 
     /**
      * THROUGHPUT

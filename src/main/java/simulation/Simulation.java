@@ -33,6 +33,7 @@ public class Simulation {
 
     }
 
+    @SuppressWarnings("Duplicates")
     private static void run(){
         initialize();
         PerformanceLogger.getInstance().printInitialConfiguration();

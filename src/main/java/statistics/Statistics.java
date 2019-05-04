@@ -1,8 +1,7 @@
 package statistics;
 
 import event.Event;
-
-import java.sql.Time;
+import results.CSVlogger;
 
 public class Statistics {
 
@@ -41,11 +40,12 @@ public class Statistics {
     }
 
     public double[] computeMeanAndVariance(double oldVar, double oldMean, double newValue, long n){
+
         double diff = (newValue -  oldMean);
         double[] MV = new double[2];
         double i = (double) n;
         if(i!= 0){
-            MV[1] = oldVar + diff * diff*(i-1)/i;
+            MV[1] = oldVar + (diff * diff*(i-1)/i);
             MV[0] = oldMean + (diff/i);
         }
         return MV;
@@ -56,17 +56,19 @@ public class Statistics {
         double serviceTime = e.getJob().getServiceTime();
 
         if(e.getType() == 1) {//cloudlet
-            handleCloudletCompletion(e,jobClass,serviceTime);
+            CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass, 1, serviceTime);
+            handleCloudletCompletion(jobClass,serviceTime);
         }
         else if(e.getType() == 2) {     //cloud
-            handleCloudCompletion(e,jobClass,serviceTime);
+            CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass, 2, serviceTime);
+            handleCloudCompletion(jobClass,serviceTime);
         }
         else
             System.exit(-1);
         updateResponseTime(jobClass,serviceTime);
     }
 
-    public void handleCloudletCompletion(Event e, int jobclass, double serviceTime){
+    public void handleCloudletCompletion(int jobclass, double serviceTime){
 
         TimeStatistics ts = TimeStatistics.getInstance();
         JobStatistics js = JobStatistics.getInstance();
@@ -81,7 +83,7 @@ public class Statistics {
         }
     }
 
-    public void handleCloudCompletion(Event e, int jobclass, double serviceTime){
+    public void handleCloudCompletion(int jobclass, double serviceTime){
         TimeStatistics ts = TimeStatistics.getInstance();
         JobStatistics js = JobStatistics.getInstance();
         ts.setMeanResponseTimeCloud(computeMean(ts.getMeanResponseTimeCloud(), serviceTime, (int) js.getCompletedCloud(0)));

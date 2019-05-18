@@ -1,7 +1,5 @@
 package statistics;
 
-import cloud.Cloud;
-import cloudlet.Cloudlet;
 import system.SystemConfiguration;
 
 import java.util.ArrayList;

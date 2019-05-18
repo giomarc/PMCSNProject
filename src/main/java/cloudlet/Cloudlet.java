@@ -1,8 +1,10 @@
 package cloudlet;
 
+import event.CompletionHandler;
 import event.Event;
 import event.EventGenerator;
 import job.Job;
+import simulation.Simulation;
 import statistics.Statistics;
 import system.SystemConfiguration;
 import variablesGenerator.Services;
@@ -26,52 +28,35 @@ public class Cloudlet {
         initServers();
     }
 
-
     public static Cloudlet getInstance(){
         if(instance == null)
             instance = new Cloudlet();
         return instance;
     }
 
-
-
     public void processArrival(Event e) {
         Job job = e.getJob();
         double completionTime = Services.getInstance().getCloudletServiceTime(job.getJobClass(), job.getOperations());
+        int i = 0;
         for(Server s: serverList){
             if(!s.isBusy()){
                 increaseN(job.getJobClass());
                 s.setBusy(true);
                 job.setCompletionTime(completionTime);
                 s.setJobInService(job);
+                sendComplitionToSimulation(job, i);
                 break;
             }
+            i++;
         }
     }
 
-
-
-    void timeHasPassed(double arrival){
-        removeCompletedJobs(arrival);
+    public void processCompletion(Event e){
+        Server s = serverList.get(e.getAdditionalInfo());
+        s.setBusy(false);
+        CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+        decreaseN(s.getJobInService().getJobClass());
     }
-
-
-    void removeCompletedJobs(double arrivalTime){
-        for(Server s: serverList){
-            if(s.isBusy()) {
-                if (s.getJobInService().getCompletionTime() <= arrivalTime) {
-                    s.setBusy(false);
-                    Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
-                    decreaseN(s.getJobInService().getJobClass());
-                }
-                else
-                    s.getJobInService().setCompletionTime(s.getJobInService().getCompletionTime() - arrivalTime);
-            }
-        }
-    }
-
-
-
 
     public int [] getJobsInCloudlet(){
         return new int[]{n1, n2};
@@ -91,29 +76,12 @@ public class Cloudlet {
             n2++;
     }
 
-
     private void initServers(){
         serverList = new ArrayList<>();
         for (int i = 0; i<numberOfServers; i++) {
             serverList.add(new Server(i));
         }
     }
-
-    double endSimulation() {
-        double max = 0.0;
-        for(Server s: serverList){
-            if(s.isBusy()) {
-                Statistics.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
-                decreaseN(s.getJobInService().getJobClass());
-                s.setBusy(false);
-
-                if(s.getJobInService().getCompletionTime() > max)
-                    max = s.getJobInService().getCompletionTime();
-            }
-        }
-        return max;
-    }
-
 
     public void reset(){
         n1 = 0;
@@ -125,5 +93,11 @@ public class Cloudlet {
 
     public ArrayList<Server> getServerList(){
         return this.serverList;
+    }
+
+    private void sendComplitionToSimulation(Job j, int serverID){
+        Event e = new Event(1, j);
+        e.setAdditionalInfo(serverID);
+        Simulation.addComplitionToEventList(e);
     }
 }

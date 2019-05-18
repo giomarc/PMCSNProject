@@ -47,8 +47,6 @@ public class DispatchAlgorithm {
      */
     public void defaultAlgorithm(Event e){
         double arrivalTime = e.getJob().getArrivalTime();
-        Cloudlet.getInstance().timeHasPassed(arrivalTime);
-        Cloud.getInstance().timeHasPassed(arrivalTime);
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
         int[] numberOfJobsInCloud = Cloud.getInstance().returnJobsInCloud();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
@@ -69,8 +67,6 @@ public class DispatchAlgorithm {
     public void thresholdAlgorithm(Event e, int soglia){
         int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
-        Cloudlet.getInstance().timeHasPassed(arrivalTime);
-        Cloud.getInstance().timeHasPassed(arrivalTime);
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
         int[] numberOfJobsInCloud = Cloud.getInstance().returnJobsInCloud();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
@@ -97,8 +93,6 @@ public class DispatchAlgorithm {
         int cloudletOrCloud;
         int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
-        Cloudlet.getInstance().timeHasPassed(arrivalTime);
-        Cloud.getInstance().timeHasPassed(arrivalTime);
 
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
         int[] numberOfJobsInCloud = Cloud.getInstance().returnJobsInCloud();
@@ -121,8 +115,6 @@ public class DispatchAlgorithm {
         int cloudletOrCloud;
         int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
-        Cloudlet.getInstance().timeHasPassed(arrivalTime);
-        Cloud.getInstance().timeHasPassed(arrivalTime);
         double operations = e.getJob().getOperations();
 
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();

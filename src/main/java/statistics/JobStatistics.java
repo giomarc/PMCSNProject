@@ -75,7 +75,7 @@ public class JobStatistics{
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
         CSVlogger.getInstance().writeMeansInOneSimulation(this);
-        if(SystemConfiguration.BATCH && (actualIteration > batchMeans.getBatchSize()|| globalIteration == SystemConfiguration.ITERATIONS))
+        if(SystemConfiguration.BATCH && (actualIteration > batchMeans.getBatchSize() || globalIteration == SystemConfiguration.ITERATIONS))
             computeBatch();
     }
 
@@ -85,7 +85,7 @@ public class JobStatistics{
      * @param cloudletPopulation actual number of jobs in cloudlet
      * @param cloudPopulation actual number of jobs in cloud
      */
-    public void updateGlobal(int[] cloudletPopulation, int[] cloudPopulation){
+    private void updateGlobal(int[] cloudletPopulation, int[] cloudPopulation){
 
         int totcloudletPopulation = cloudletPopulation[0] + cloudletPopulation[1];
         int totcloudPopulation = cloudPopulation[0] + cloudPopulation[1];
@@ -113,7 +113,7 @@ public class JobStatistics{
      *               cloudlet  = 1
      *               cloud  = 2
      */
-    public void updateClass1(int cloudlet1, int cloud1){
+    private void updateClass1(int cloudlet1, int cloud1){
         int totalClass1 = cloudlet1 + cloud1;
 
         double[] GP1 = statistics.computeMeanAndVariance(varGlobalPopulation_1,meanGlobalPopulation_1, totalClass1, actualIteration);
@@ -136,7 +136,7 @@ public class JobStatistics{
      * @param cloudlet2 actual number of class 2 jobs in cloudlet
      * @param cloud2 actual number of class 2 jobs in cloud
      */
-    public void updateClass2(int cloudlet2, int cloud2){
+    private void updateClass2(int cloudlet2, int cloud2){
         int totalClass2 = cloudlet2 + cloud2;
 
         double[] GP2 = statistics.computeMeanAndVariance(varGlobalPopulation_2,meanGlobalPopulation_2, totalClass2, actualIteration);
@@ -153,13 +153,12 @@ public class JobStatistics{
 
     }
 
-
-    public void updateGlobalIterations(){
+    private void updateGlobalIterations(){
         actualIteration++;
         globalIteration++;
     }
 
-    public void computeBatch(){
+    private void computeBatch(){
 
         batchMeans.updateBMCloudletPopulation               (this.meanCloudletPopulation);
         batchMeans.setBMCloudletPopulationClass1            (this.meanCloudletPopulation_1);
@@ -189,12 +188,6 @@ public class JobStatistics{
         batchMeans.updateBMVarThroughputArray(varSystemThroughput/actualTime,0);
         batchMeans.updateBMVarThroughputArray(varCloudletThroughput/actualTime,1);
         batchMeans.updateBMVarThroughputArray(varCloudThroughput/actualTime,2);
-
-        if(globalIteration == SystemConfiguration.ITERATIONS){
-            for(int i = 0; i < 64; i++){
-                System.out.println(batchMeans.getAvgThroughputArray(0).get(i) + " " + batchMeans.getAvgThroughputArray(1).get(i) + " " + batchMeans.getAvgThroughputArray(2).get(i) );
-            }
-        }
 
         resetMeans();
     }
@@ -299,25 +292,19 @@ public class JobStatistics{
         }
     }
 
-    @SuppressWarnings("Duplicates")
-    public void updateMeanCloudletCompleted()
-    {
+    public void updateMeanCloudletCompleted() {
         double[] CletC = statistics.computeMeanAndVariance(varCloudletThroughput,meanCloudletThroughput,(completedCloudlet_1 + completedCloudlet_2)/actualTime, actualIteration+1);
         meanCloudletThroughput = CletC[0];
         varCloudletThroughput = CletC[1];
     }
 
-    @SuppressWarnings("Duplicates")
-    public void updateMeanCloudCompleted()
-    {
+    public void updateMeanCloudCompleted() {
         double[] CloudC = statistics.computeMeanAndVariance(varCloudThroughput,meanCloudThroughput,(completedCloud_1 + completedCloud_2)/actualTime, actualIteration+1);
         meanCloudThroughput = CloudC[0];
         varCloudThroughput = CloudC[1];
     }
 
-    @SuppressWarnings("Duplicates")
-    public void updateMeanGlobalCompleted()
-    {
+    public void updateMeanGlobalCompleted() {
         double[] GC = statistics.computeMeanAndVariance(varSystemThroughput,meanSystemThroughput,getPackets(0)/actualTime, actualIteration+1);
         meanSystemThroughput = GC[0];
         varSystemThroughput = GC[1];
@@ -437,7 +424,7 @@ public class JobStatistics{
         resetMeans();
     }
 
-    public void resetMeans(){
+    private void resetMeans(){
         this.meanGlobalPopulation       = 0;
         this.meanCloudletPopulation     = 0;
         this.meanCloudPopulation        = 0;

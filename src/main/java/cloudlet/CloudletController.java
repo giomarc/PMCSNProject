@@ -24,12 +24,4 @@ public class CloudletController {
 
     }
 
-
-    public double endSimulation(){
-        double cloudletEndTime = Cloudlet.getInstance().endSimulation();
-        double cloudEndTime = Cloud.getInstance().endSimulation();
-        return Math.max(cloudletEndTime, cloudEndTime);
-    }
-
-
 }

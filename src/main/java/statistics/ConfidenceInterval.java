@@ -1,7 +1,6 @@
 package statistics;
 
 import variablesGenerator.InitGenerator;
-
 import java.util.ArrayList;
 
 public class ConfidenceInterval {

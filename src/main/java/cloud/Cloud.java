@@ -7,14 +7,15 @@ import job.Job;
 import simulation.Simulation;
 import statistics.Statistics;
 import variablesGenerator.Services;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Cloud {
 
     private static Cloud instance = new Cloud();
     private int n1;
     private int n2;
+
+    private double meanServiceTime = 0;
+    private int iteration = 0;
 
 
     private Cloud(){
@@ -25,30 +26,31 @@ public class Cloud {
     public static Cloud getInstance(){ return instance;}
 
     public void processArrival(Event e) {
-        processCurrentJob(e.getJob());
-    }
-
-    private void processCurrentJob(Job j){
+        Job j = e.getJob();
         int jobclass = j.getJobClass();
         double completionTime = Services.getInstance().getCloudServiceTime(jobclass, j.getOperations());
+
+//        if(jobclass == 1) {
+//            iteration++;
+//            meanServiceTime = Statistics.getInstance().computeMean(meanServiceTime, completionTime, iteration);
+//            if(iteration % 50000 == 0)
+//                System.out.println(meanServiceTime);
+//        }
+
         j.setCompletionTime(completionTime);
-        sendComplitionToSimulation(j);
         increaseN(jobclass);
+        sendComplitionToSimulation(j);
     }
 
     public void processCompletion(Event e){
-        CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(2, e.getJob()));
         decreaseN(e.getJob().getJobClass());
+        CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(2, e.getJob()));
     }
-
-
-
 
     public void reset(){
         n1 = 0;
         n2 = 0;
     }
-
 
     private void decreaseN(int jobClass){
         if(jobClass == 1) n1--;

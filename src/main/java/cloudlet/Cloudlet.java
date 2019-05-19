@@ -54,8 +54,8 @@ public class Cloudlet {
     public void processCompletion(Event e){
         Server s = serverList.get(e.getAdditionalInfo());
         s.setBusy(false);
-        CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
         decreaseN(s.getJobInService().getJobClass());
+        CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
     }
 
     public int [] getJobsInCloudlet(){

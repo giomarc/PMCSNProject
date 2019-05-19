@@ -26,7 +26,6 @@ public class DispatchAlgorithm {
         return instance;
     }
 
-
     public void getAlgorithm(Event e){
         switch (algorithmType){
             case 1: defaultAlgorithm(e);
@@ -37,33 +36,29 @@ public class DispatchAlgorithm {
                 break;
             case 4: thresholdAlgorithm(e, SystemConfiguration.THRESHOLD);
                 break;
-
         }
     }
-
 
     /**
      * Basic algoritm
      */
     public void defaultAlgorithm(Event e){
-        double arrivalTime = e.getJob().getArrivalTime();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
         int[] numberOfJobsInCloud = Cloud.getInstance().returnJobsInCloud();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
 
-        if(totalJobsInCloudlet >= numberOfServers){
+        if(totalJobsInCloudlet == numberOfServers){
             Cloud.getInstance().processArrival(e);
-        }else{
+        }
+        else{
             Cloudlet.getInstance().processArrival(e);
         }
-        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+//        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
     }
-
 
     /**
      * Threshold based algorithm
      */
-
     public void thresholdAlgorithm(Event e, int soglia){
         int jobClass = e.getJob().getJobClass();
         double arrivalTime = e.getJob().getArrivalTime();
@@ -74,7 +69,6 @@ public class DispatchAlgorithm {
 
         /**
          * in cloud se n1 + n2 > soglia e classe == 2 || n1 + n2 > server
-         *
          */
         if((totalJobsInCloudlet >= numberOfServers) || (totalJobsInCloudlet > soglia && jobClass == 2)){
             Cloud.getInstance().processArrival(e);
@@ -82,9 +76,8 @@ public class DispatchAlgorithm {
             Cloudlet.getInstance().processArrival(e);
         }
 
-        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+//        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud, time);
     }
-
 
     /**
      * Algorithm: only class1 jobs go into cloudlet
@@ -104,9 +97,8 @@ public class DispatchAlgorithm {
             cloudletOrCloud = 1;
             Cloudlet.getInstance().processArrival(e);
         }
-        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+//        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud, time);
     }
-
 
     /**
      * Size-based algorithm
@@ -127,7 +119,7 @@ public class DispatchAlgorithm {
             cloudletOrCloud = 1;
             Cloudlet.getInstance().processArrival(e);
         }
-        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+//        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud, time);
     }
 }
 

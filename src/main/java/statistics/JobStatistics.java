@@ -52,7 +52,6 @@ public class JobStatistics{
     private double globalTime;
     private double actualTime;
 
-
     private JobStatistics(){
         resetStatistics();
         statistics = Statistics.getInstance();
@@ -75,8 +74,11 @@ public class JobStatistics{
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
         CSVlogger.getInstance().writeMeansInOneSimulation(this);
-        if(SystemConfiguration.BATCH && (actualIteration > batchMeans.getBatchSize() || globalIteration == SystemConfiguration.ITERATIONS))
+        if(SystemConfiguration.BATCH &&
+                (actualIteration > batchMeans.getBatchSize()*2 ||
+                        globalIteration == SystemConfiguration.ITERATIONS*2)) { // devo considerare sia gli arrivi che i completamenti
             computeBatch();
+        }
     }
 
 
@@ -129,7 +131,6 @@ public class JobStatistics{
         varCloudPopulation_1 = C1[1];
 
     }
-
 
     /**
      * Updates means and variance of class 2 jobs
@@ -281,6 +282,7 @@ public class JobStatistics{
             case 1: completedCloudlet_1++;
                 break;
             case 2: completedCloudlet_2++;
+                break;
         }
     }
 
@@ -289,6 +291,7 @@ public class JobStatistics{
             case 1: completedCloud_1++;
                 break;
             case 2: completedCloud_2++;
+                break;
         }
     }
 
@@ -421,6 +424,7 @@ public class JobStatistics{
         this.globalTime                 = 0;
         this.actualTime                 = 0;
         this.globalIteration            = 0;
+
         resetMeans();
     }
 

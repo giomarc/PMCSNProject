@@ -7,8 +7,10 @@ import cloudlet.Cloudlet;
 import cloudlet.CloudletController;
 import event.Event;
 import event.EventGenerator;
+import results.Printer;
 import statistics.BatchMeans;
 import statistics.JobStatistics;
+import statistics.Statistics;
 import statistics.TimeStatistics;
 import system.SystemConfiguration;
 import variablesGenerator.InitGenerator;
@@ -62,47 +64,67 @@ public class Simulation {
         eventList.sort((o1, o2) -> {
             if (o1.getEventTime() < o2.getEventTime())
                 return -1;
-            else
+            else if(o1.getEventTime() == o2.getEventTime()){
+                if(o1.getType() != 0)
+                    return -1;
+                else
+                    return 1;
+            }
                 return 1;
         });
 
     }
 
     private static double handleEvent(){
+
+//        printEventList();
+
         Iterator i = eventList.iterator();
         double time = 0;
+        int[] numberOfJobsInCloudlet = {0,0};
+        int[] numberOfJobsInCloud = {0,0};
         while(i.hasNext()){
+
+            numberOfJobsInCloudlet =  Cloudlet.getInstance().getJobsInCloudlet();
+            numberOfJobsInCloud =     Cloud.getInstance().returnJobsInCloud();
+
             Event e = (Event) i.next();
+            time = e.getEventTime();
+
             if(e.getType() == 0){               // arrival
                 break;
             }
             else if(e.getType() == 1){          // cloudlet
                 cloudlet.processCompletion(e);
-                time = e.getEventTime();
                 i.remove();
+                jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
             }
             else{                               // cloud
                 cloud.processCompletion(e);
-                time = e.getEventTime();
                 i.remove();
+                jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
             }
         }
 
         if(eventList.size() != 0) {
+
+            jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
             Event e = eventList.get(0);
             cloudletController.dispatchArrivals(e);
-            time = e.getEventTime();
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
-            jobStatistics.setActualTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
+            jobStatistics.setActualTime(jobStatistics.getActualTime() + e.getJob().getArrivalTime());
             eventList.remove(0);
 
             for (Event event : eventList) {
                 event.setEventTime(event.getEventTime() - time);
             }
+
         }
-        else{
+
+        else {
             return time;
         }
+
         return 0;
 
     }
@@ -145,6 +167,17 @@ public class Simulation {
 
     public static void addComplitionToEventList(Event e){
         eventList.add(e);
+    }
+
+    public static void printEventList(){
+        System.out.println("list");
+        for(Event e : eventList) {
+            if(e.getType() == 0)
+                Printer.getInstance().print("0 : " + e.getEventTime() + " |","yellow");
+            else
+                System.out.print(e.getType() + " : " + e.getEventTime()+ " | ");
+        }
+        System.out.println();
     }
 }
 

@@ -5,7 +5,7 @@ public class Job {
     private double  arrivalTime;
     private double  completionTime;
     private int     jobClass;
-    private double operations;
+    private double  operations;
 
     public Job(int jobClass, double arrivalTime, double operations){
         this.completionTime = 0.0;

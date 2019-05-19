@@ -32,11 +32,11 @@ public class CompletionHandler {
         JobStatistics.getInstance().updateMeanCloudletCompleted();
         JobStatistics.getInstance().updateMeanCloudCompleted();
 
-        if(e.getType() == 1) {//cloudlet
+        if(e.getType() == 1) {                                  //cloudlet
             handleCloudletCompletion(jobClass,serviceTime);
             CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass,1,serviceTime);
         }
-        else if(e.getType() == 2) {     //cloud
+        else if(e.getType() == 2) {                             //cloud
             handleCloudCompletion(jobClass,serviceTime);
             CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass,2,serviceTime);
         }

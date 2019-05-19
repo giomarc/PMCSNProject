@@ -43,6 +43,22 @@ public class Simulation {
 
     }
 
+    private static void runWithCustomSeed(long customSeed) {
+        initialize();
+        InitGenerator.getInstance().putNewSeed(customSeed);
+        PerformanceLogger.getInstance().printInitialConfiguration();
+        for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
+            PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
+            Event e = EventGenerator.getInstance().generateArrival();
+            eventList.add(e);
+            sortEventList();
+            handleEvent();
+        }
+        jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + handleEvent());
+
+        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
+    }
+
     private static void run(){
         initialize();
         PerformanceLogger.getInstance().printInitialConfiguration();
@@ -56,7 +72,6 @@ public class Simulation {
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + handleEvent());
 
         PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
-
     }
 
     private static void sortEventList(){
@@ -137,20 +152,6 @@ public class Simulation {
 
         return 0;
 
-    }
-
-    private static void runWithCustomSeed(long customSeed) {
-        initialize();
-        InitGenerator.getInstance().putNewSeed(customSeed);
-        PerformanceLogger.getInstance().printInitialConfiguration();
-        for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
-            PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
-            Event e = EventGenerator.getInstance().generateArrival();
-            cloudletController.dispatchArrivals(e);
-            jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
-        }
-        jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + handleEvent());
-        PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics,batchMeans);
     }
 
     private static void initialize(){

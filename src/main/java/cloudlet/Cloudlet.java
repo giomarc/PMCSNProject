@@ -53,6 +53,8 @@ public class Cloudlet {
 
     public void processCompletion(Event e){
         Server s = serverList.get(e.getAdditionalInfo());
+        if(!s.isBusy())
+            System.exit(-1);
         s.setBusy(false);
         decreaseN(s.getJobInService().getJobClass());
         CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));

@@ -70,6 +70,7 @@ public class Simulation {
                 else
                     return 1;
             }
+            else
                 return 1;
         });
 
@@ -78,6 +79,10 @@ public class Simulation {
     private static double handleEvent(){
 
 //        printEventList();
+
+        for (Event event: eventList){
+            event.setValid(true);
+        }
 
         Iterator i = eventList.iterator();
         double time = 0;
@@ -95,14 +100,18 @@ public class Simulation {
                 break;
             }
             else if(e.getType() == 1){          // cloudlet
-                cloudlet.processCompletion(e);
-                i.remove();
-                jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+                if(e.isValid()) {
+                    cloudlet.processCompletion(e);
+                    i.remove();
+                    jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+                }
             }
             else{                               // cloud
-                cloud.processCompletion(e);
-                i.remove();
-                jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+                if(e.isValid()) {
+                    cloud.processCompletion(e);
+                    i.remove();
+                    jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+                }
             }
         }
 
@@ -116,7 +125,8 @@ public class Simulation {
             eventList.remove(0);
 
             for (Event event : eventList) {
-                event.setEventTime(event.getEventTime() - time);
+                if(event.isValid())
+                    event.setEventTime(event.getEventTime() - time);
             }
 
         }
@@ -166,6 +176,7 @@ public class Simulation {
     }
 
     public static void addComplitionToEventList(Event e){
+        e.setValid(false);
         eventList.add(e);
     }
 

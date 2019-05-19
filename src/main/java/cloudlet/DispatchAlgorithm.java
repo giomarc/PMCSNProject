@@ -44,7 +44,6 @@ public class DispatchAlgorithm {
      */
     public void defaultAlgorithm(Event e){
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
-        int[] numberOfJobsInCloud = Cloud.getInstance().returnJobsInCloud();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
 
         if(totalJobsInCloudlet == numberOfServers){

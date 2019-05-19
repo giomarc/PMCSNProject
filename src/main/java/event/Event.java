@@ -8,6 +8,7 @@ public class Event {
     private Job job;    //event job
     private double eventTime;
     private int additionalInfo;
+    private boolean valid;
 
     public Event(int type, Job job){
         this.job = job;
@@ -16,6 +17,7 @@ public class Event {
             eventTime = job.getArrivalTime();
         else
             eventTime = job.getCompletionTime();
+        this.valid = true;
     }
 
     public int getType() {
@@ -40,5 +42,13 @@ public class Event {
 
     public void setAdditionalInfo(int additionalInfo) {
         this.additionalInfo = additionalInfo;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

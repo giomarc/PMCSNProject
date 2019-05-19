@@ -5,7 +5,6 @@ import event.Event;
 import event.EventGenerator;
 import job.Job;
 import simulation.Simulation;
-import statistics.Statistics;
 import variablesGenerator.Services;
 
 public class Cloud {
@@ -13,9 +12,6 @@ public class Cloud {
     private static Cloud instance = new Cloud();
     private int n1;
     private int n2;
-
-    private double meanServiceTime = 0;
-    private int iteration = 0;
 
 
     private Cloud(){
@@ -29,13 +25,6 @@ public class Cloud {
         Job j = e.getJob();
         int jobclass = j.getJobClass();
         double completionTime = Services.getInstance().getCloudServiceTime(jobclass, j.getOperations());
-
-//        if(jobclass == 1) {
-//            iteration++;
-//            meanServiceTime = Statistics.getInstance().computeMean(meanServiceTime, completionTime, iteration);
-//            if(iteration % 50000 == 0)
-//                System.out.println(meanServiceTime);
-//        }
 
         j.setCompletionTime(completionTime);
         increaseN(jobclass);

@@ -1,7 +1,7 @@
 function plotResponseTimeInOneSimulation()
 
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\ResponseTimeMeansInOneSimulation.csv');
+M = readmatrix('../RESULT_OUTPUT/ResponseTimeMeansInOneSimulation.csv');
 
 tmpRSMClass1 = M((M(:, 2) == 1), [3 4]);
 tmpRSMClass2 = M((M(:, 2) == 2), [3 4]);

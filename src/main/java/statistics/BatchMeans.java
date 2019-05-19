@@ -252,12 +252,13 @@ public class BatchMeans {
 
     public double getBMAvgThroughput(int index){
         double res = 0.0;
+        double time = JobStatistics.getInstance().getGlobalTime();
         switch (index){
             case 0: res = getBMMean(avgSystemT,"m"); break;
             case 1: res = getBMMean(avgCloudletT,"m"); break;
             case 2: res = getBMMean(avgCloudT,"m"); break;
         }
-        return res;
+        return res/time;
     }
 
     public ArrayList<Double> getVarThroughputArray(int index){

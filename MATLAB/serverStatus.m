@@ -1,6 +1,6 @@
 function serverStatus
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\ServerStatus.csv');
+M = readmatrix('../RESULT_OUTPUT/ServerStatus.csv');
 x = M(:, 7) + 1;
 y = M(:, 8);
 figure();

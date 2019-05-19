@@ -1,6 +1,6 @@
 function plotSteadyState(analyticsGlobal, analyticCloudlet, analyticCloud)
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\ResponseTime.csv');
+M = readmatrix('../RESULT_OUTPUT/ResponseTime.csv');
 
 globaltimeStandardAlgorithm = sortrows(M(M(:, 3) == 1, [4 7]), 1);
 cloudletStandardAlgorithm = sortrows(M(M(:, 3) == 1, [4 9]), 1);

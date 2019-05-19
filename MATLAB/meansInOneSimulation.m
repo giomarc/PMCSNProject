@@ -1,6 +1,6 @@
 function meansInOneSimulation(analyticsGlobal, analyticCloudlet, analyticCloud)
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\MeansInOneSimulation.csv');
+M = readmatrix('../RESULT_OUTPUT/MeansInOneSimulation.csv');
 
 cloudletPopulation = M(:, [2 5]);
 cloudPopulation = M(:, [2 8]);

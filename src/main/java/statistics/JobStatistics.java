@@ -186,9 +186,9 @@ public class JobStatistics{
         batchMeans.updateBMAvgTroughputArray(meanCloudletThroughput,1);
         batchMeans.updateBMAvgTroughputArray(meanCloudThroughput,2);
 
-        batchMeans.updateBMVarThroughputArray(varSystemThroughput/actualTime,0);
-        batchMeans.updateBMVarThroughputArray(varCloudletThroughput/actualTime,1);
-        batchMeans.updateBMVarThroughputArray(varCloudThroughput/actualTime,2);
+        batchMeans.updateBMVarThroughputArray(varSystemThroughput,0);
+        batchMeans.updateBMVarThroughputArray(varCloudletThroughput,1);
+        batchMeans.updateBMVarThroughputArray(varCloudThroughput,2);
 
         if(globalIteration == SystemConfiguration.ITERATIONS){
             for(int i = 0; i < 64; i++){

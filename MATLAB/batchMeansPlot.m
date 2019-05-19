@@ -1,6 +1,6 @@
 function batchMeansPlot
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\BatchMeans.csv');
+M = readmatrix('../RESULT_OUTPUT/BatchMeans.csv');
 x = M(:, 1) + 1;
 y = M(:, 10);
 

@@ -1,6 +1,6 @@
 function avgJobs(analyticsGlobal, analyticCloudlet, analyticCloud)
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\AVGjobs.csv');
+M = readmatrix('../RESULT_OUTPUT/AVGjobs.csv');
 
 avgjobsglobalSA = sortrows(M(M(:, 3) == 1, [4 7]), 1);
 avgjobscloudletSA = sortrows(M(M(:, 3) == 1, [4 9]), 1);

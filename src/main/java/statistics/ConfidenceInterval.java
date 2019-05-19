@@ -42,8 +42,8 @@ public class ConfidenceInterval {
             width = (t_student*stddev)/Math.sqrt(n-1);
         }
         double[] confidenceInterval = {sampleMean - width, sampleMean + width};
-        System.out.println("( " + confidenceInterval[0] + " , " + confidenceInterval[1] + " )");
-        System.out.println("mean point CI: " + (confidenceInterval[0] + confidenceInterval[1])/2);
+        //System.out.println("( " + confidenceInterval[0] + " , " + confidenceInterval[1] + " )");
+        //System.out.println("mean point CI: " + (confidenceInterval[0] + confidenceInterval[1])/2);
         return confidenceInterval;
     }
 

@@ -242,18 +242,18 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("\nTHROUGHPUT", "yellow");
         Printer.getInstance().print("Mean global throughput", "green");
         System.out.println(bm.getBMAvgThroughput(0));
-        Printer.getInstance().print("Var global throughput", "green");
-        System.out.println(bm.getBMVarThroughput(0));
+        //Printer.getInstance().print("Var global throughput", "green");
+        //System.out.println(bm.getBMVarThroughput(0));
 
         Printer.getInstance().print("Mean cloudlet throughput", "green");
         System.out.println(bm.getBMAvgThroughput(1));
-        Printer.getInstance().print("Var cloudlet throughput", "green");
-        System.out.println(bm.getBMVarThroughput(1));
+        //Printer.getInstance().print("Var cloudlet throughput", "green");
+        //System.out.println(bm.getBMVarThroughput(1));
 
         Printer.getInstance().print("Mean cloud throughput", "green");
         System.out.println(bm.getBMAvgThroughput(2));
-        Printer.getInstance().print("Var cloud throughput", "green");
-        System.out.println(bm.getBMVarThroughput(2));
+        //Printer.getInstance().print("Var cloud throughput", "green");
+        //System.out.println(bm.getBMVarThroughput(2));
     }
 
 

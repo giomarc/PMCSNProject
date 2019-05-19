@@ -55,18 +55,20 @@ public class Statistics {
 
         if(e.getType() == 1) {//cloudlet
             handleCloudletCompletion(jobClass,serviceTime);
+            JobStatistics.getInstance().updateMeanCloudletCompleted();
             CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass,1,serviceTime);
         }
         else if(e.getType() == 2) {     //cloud
             handleCloudCompletion(jobClass,serviceTime);
+            JobStatistics.getInstance().updateMeanCloudCompleted();
             CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass,2,serviceTime);
         }
         else
             System.exit(-1);
         updateResponseTime(jobClass,serviceTime);
         JobStatistics.getInstance().updateMeanGlobalCompleted();
-        JobStatistics.getInstance().updateMeanCloudletCompleted();
-        JobStatistics.getInstance().updateMeanCloudCompleted();
+        //JobStatistics.getInstance().updateMeanCloudletCompleted();
+        //JobStatistics.getInstance().updateMeanCloudCompleted();
     }
 
     public void handleCloudletCompletion(int jobclass, double serviceTime){

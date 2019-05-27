@@ -85,8 +85,8 @@ public class PerformanceLogger implements Runnable {
         if(SystemConfiguration.VERBOSE) {
             Printer.getInstance().print("Execution started with VERBOSE=true. To reduce logs start again the execution setting VERBOSE=false", "cyan");
             printSystemConfiguration();
-            startTest();
         }
+        startTest();
     }
 
     public void printFinalResults(JobStatistics js, TimeStatistics ts, BatchMeans bm){

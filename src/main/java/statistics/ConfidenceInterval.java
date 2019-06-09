@@ -40,9 +40,7 @@ public class ConfidenceInterval {
             t_student = InitGenerator.getInstance().idfStudent(n-1,u);
             width = (t_student*stddev)/Math.sqrt(n-1);
         }
-        double[] confidenceInterval = {sampleMean - width, sampleMean + width};
-        System.out.println("( " + confidenceInterval[0] + " , " + confidenceInterval[1] + " )");
-        System.out.println("mean point CI: " + (confidenceInterval[0] + confidenceInterval[1])/2);
+        double[] confidenceInterval = {sampleMean,width};
         return confidenceInterval;
     }
 

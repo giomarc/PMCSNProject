@@ -106,7 +106,6 @@ public class JobStatistics{
         meanCloudPopulation = MVCloud[0];
         varCloudPopulation = MVCloud[1];
 
-
     }
 
     /**
@@ -183,13 +182,9 @@ public class JobStatistics{
         batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 / actualIteration);
 
         //System.out.println("Batch: " + );
-        batchMeans.updateBMAvgTroughputArray(meanSystemThroughput,0);
-        batchMeans.updateBMAvgTroughputArray(meanCloudletThroughput,1);
-        batchMeans.updateBMAvgTroughputArray(meanCloudThroughput,2);
-
-        batchMeans.updateBMVarThroughputArray(varSystemThroughput/actualTime,0);
-        batchMeans.updateBMVarThroughputArray(varCloudletThroughput/actualTime,1);
-        batchMeans.updateBMVarThroughputArray(varCloudThroughput/actualTime,2);
+        batchMeans.updateBMAvgTroughputArray(getSystemThroughput(),0);
+        batchMeans.updateBMAvgTroughputArray(getCloudletThroughput(),1);
+        batchMeans.updateBMAvgTroughputArray(getCloudThroughput(),2);
 
         resetMeans();
     }
@@ -200,6 +195,18 @@ public class JobStatistics{
     /**
      * THROUGHPUT
      */
+    public double getSystemThroughput(){
+        return (getCloudThroughput() + getCloudletThroughput());
+    }
+
+    public double getSystemClass1Throughput(){
+        return (getCloudletClass1Throughput() + getCloudClass1Throughput());
+    }
+
+    public double getSystemClass2Throughput(){
+        return (getCloudletClass2Throughput() + getCloudClass2Throughput());
+    }
+
     public double getCloudletThroughput(){
         return (completedCloudlet_1 + completedCloudlet_2)/globalTime;
     }
@@ -296,7 +303,7 @@ public class JobStatistics{
         }
     }
 
-    public void updateMeanCloudletCompleted() {
+    /*public void updateMeanCloudletCompleted() {
         double[] CletC = statistics.computeMeanAndVariance(varCloudletThroughput,meanCloudletThroughput,(completedCloudlet_1 + completedCloudlet_2)/actualTime, actualIteration+1);
         meanCloudletThroughput = CletC[0];
         varCloudletThroughput = CletC[1];
@@ -312,7 +319,7 @@ public class JobStatistics{
         double[] GC = statistics.computeMeanAndVariance(varSystemThroughput,meanSystemThroughput,getPackets(0)/actualTime, actualIteration+1);
         meanSystemThroughput = GC[0];
         varSystemThroughput = GC[1];
-    }
+    }*/
 
     //POPULATION
     public double getMeanCloudletPopulation(int jobclass) {

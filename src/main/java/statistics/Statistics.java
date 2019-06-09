@@ -39,7 +39,7 @@ public class Statistics {
     public double[] computeMeanAndVariance(double oldVar, double oldMean, double newValue, long n){
         double diff = (newValue -  oldMean);
         double[] MV = new double[2];
-        MV[1] = oldVar + (diff * diff * (n - 1) / n);
+        MV[1] = oldVar + diff * diff * (n - 1) / n;
         MV[0] = oldMean + (diff / n);
 
         return MV;

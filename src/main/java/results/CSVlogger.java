@@ -18,7 +18,7 @@ public class CSVlogger {
     private static CSVlogger instance = new CSVlogger();
 
     private int maxRowsStored = 1000;
-    private int totalMeansDuringSimulations = 2000;
+    private int totalMeansDuringSimulations = 2500;
     private int totalResponseTimeMeansDuringSimulations = 200000;
 
     private static int iterationsInOneBatch = (int) (SystemConfiguration.ITERATIONS/SystemConfiguration.NUM_BATCH) - 1;
@@ -80,7 +80,8 @@ public class CSVlogger {
                 if (fileRT.createNewFile()) {
                     BufferedWriter outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTime, true));
                     System.out.println("File Response Time has been created.");
-                    outRT.write("distribution, operations, algorithm, threshold, iterations, seed, Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
+                    outRT.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, "
+                            + "Global_sys_response_time, Cloud_response_time, Cloudlet_response_time, "
                             + "Global_class1_response_time, Cloud_class1_response_time, Cloudlet_class1_response_time , "
                             + "Global_class2_response_time , Cloud_class2_response_time, Cloudlet_class2_response_time");
                     outRT.flush();
@@ -88,7 +89,7 @@ public class CSVlogger {
                 if (fileX.createNewFile()) {
                     BufferedWriter outX = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughput, true));
                     System.out.println("File Throughput has been created.");
-                    outX.write("distribution, operations, algorithm, threshold, iterations, seed, " +
+                    outX.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, " +
                             "Global_sys_throughput, Cloud_throughput, Cloudlet_throughput, "
                             + "Global_class1_throughput, Cloud_class1_throughput, Cloudlet_class1_throughput,"
                             + "Global_class2_throughput, Cloud_class2_throughput, Cloudlet_class2_throughput");
@@ -97,7 +98,7 @@ public class CSVlogger {
                 if (fileEN.createNewFile()) {
                     BufferedWriter outEN = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileAVGjobs, true));
                     System.out.println("File AVG jobs has been created.");
-                    outEN.write("distribution, operations, algorithm, threshold, iterations, seed,  " +
+                    outEN.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, " +
                             " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs, "
                             + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs,"
                             + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs");
@@ -106,7 +107,7 @@ public class CSVlogger {
                 if (fileVJ.createNewFile()) {
                     BufferedWriter outVJ = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileVarianceJobs, true));
                     System.out.println("File Variance jobs has been created.");
-                    outVJ.write("distribution, operations, algorithm, threshold, iterations, seed,  " +
+                    outVJ.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, " +
                             " Global_sys_variance_jobs, Cloud_variance_jobs, Cloudlet_variance_jobs, "
                             + "Global_class1_variance_jobs, Cloud_class1_variance_jobs, Cloudlet_class1_variance_jobs,"
                             + "Global_class2_variance_jobs, Cloud_class2_variance_jobs, Cloudlet_class2_variance_jobs");
@@ -115,7 +116,7 @@ public class CSVlogger {
                 if (fileSS.createNewFile()) {
                     BufferedWriter outSS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileSystemSimulation, true));
                     System.out.println("File System simulation has been created.");
-                    outSS.write("distribution, operations, algorithm, threshold, iterations, seed,  " +
+                    outSS.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, " +
                             " Real_time, Simulation_time, RAM_Usage");
                     outSS.flush();
                 }
@@ -140,7 +141,8 @@ public class CSVlogger {
                     if (fileSV.createNewFile()) {
                         BufferedWriter outSV = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileServerStatus, true));
                         System.out.println("File Server Status in one simulation jobs has been created.");
-                        outSV.write("distribution, operations, algorithm, threshold, iterations, seed, id, utilization, packets_completed");
+                        outSV.write("distribution, operations, algorithm, threshold, iterations, seed, " +
+                                "n_server, id, utilization, packets_completed");
                         outSV.flush();
                     }
                     fileBM.delete();
@@ -149,7 +151,8 @@ public class CSVlogger {
                         if (fileBM.createNewFile()) {
                             BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
                             System.out.println("File Batch Means Mean Population has been created.");
-                            outBM.write("batch_iteration, distribution, operations, algorithm, threshold, iterations, seed,  " +
+                            outBM.write("batch_iteration, distribution, operations, algorithm, threshold, " +
+                                    "iterations, seed, n_server, " +
                                     " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs, "
                                     + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs,"
                                     + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs");
@@ -158,8 +161,10 @@ public class CSVlogger {
                         if(fileTBM.createNewFile()){
                             BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
                             System.out.println("File Throughput Batch Means has been created.");
-                            outBM.write("batch_iteration, distribution, operations, algorithm, iterations, seed,  " +
-                                    "System throughput, System variance, Cloudlet Throughput, Cloudlet variance, Cloud Throuhput, Cloud variance");
+                            outBM.write("batch_iteration, distribution, operations, algorithm, treshold, " +
+                                    "iterations, seed, n_server,  " +
+                                    "System throughput, System variance, Cloudlet Throughput, Cloudlet variance, " +
+                                    "Cloud Throuhput, Cloud variance");
                             outBM.flush();
                         }
                     }
@@ -168,10 +173,13 @@ public class CSVlogger {
                         if (fileBV.createNewFile()) {
                             BufferedWriter outBV = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchVariance, true));
                             System.out.println("File Batch Means Population Variance has been created.");
-                            outBV.write("batch_iteration, distribution, operations, algorithm, threshold, iterations, seed,  " +
+                            outBV.write("batch_iteration, distribution, operations, algorithm, " +
+                                    "threshold, iterations, seed, n_server, " +
                                     " Global_sys_variance_jobs, Cloud_variance_jobs, Cloudlet_variance_jobs, "
-                                    + "Global_class1_variance_jobs, Cloud_class1_variance_jobs, Cloudlet_class1_variance_jobs,"
-                                    + "Global_class2_variance_jobs, Cloud_class2_variance_jobs, Cloudlet_class2_variance_jobs");
+                                    + "Global_class1_variance_jobs, Cloud_class1_variance_jobs, " +
+                                    "Cloudlet_class1_variance_jobs,"
+                                    + "Global_class2_variance_jobs, Cloud_class2_variance_jobs, " +
+                                    "Cloudlet_class2_variance_jobs");
                             outBV.flush();
                         }
                     }
@@ -217,6 +225,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
         ArrayList<Double> systemThroughput = bm.getAvgThroughputArray(0);
         ArrayList<Double> cloudletThroughput = bm.getAvgThroughputArray(1);
         ArrayList<Double> cloudThroughput = bm.getAvgThroughputArray(2);
@@ -228,8 +237,10 @@ public class CSVlogger {
         try {
             outAVG = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
             for(int i = 0; i < SystemConfiguration.NUM_BATCH; i++) {
-                outAVG.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
-                        systemThroughput.get(i) + "," + varSystemThroughput + "," + cloudletThroughput.get(i) + "," + varCloudletThroughput + ","
+                outAVG.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
+                        threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
+                        systemThroughput.get(i) + "," + varSystemThroughput + "," + cloudletThroughput.get(i) + "," +
+                        varCloudletThroughput + ","
                         + cloudThroughput.get(i) + "," + varCloudThroughput);
             }
             outAVG.flush();
@@ -238,7 +249,6 @@ public class CSVlogger {
         }
 
     }
-
 
     public void writeResponseTime(TimeStatistics ts){
         long seed = SystemConfiguration.SEED;
@@ -253,6 +263,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
 
         double meanGlobalServiceTime = ts.getMeanResponseTime();
         double meanCloudletServiceTime = ts.getMeanResponseTimeCloudlet();
@@ -267,9 +278,11 @@ public class CSVlogger {
         BufferedWriter outRT;
         try {
             outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTime, true));
-            outRT.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+            outRT.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " +
+                    iterations + "," + seed + "," + numberOfServers + ',' +
                     meanGlobalServiceTime + "," + meanCloudServiceTime + "," + meanCloudletServiceTime + "," +
-                    meanClass1ServiceTime + "," + meanCloudServiceTimeClass1 + "," + meanCloudletServiceTimeClass1 + "," +
+                    meanClass1ServiceTime + "," + meanCloudServiceTimeClass1 + "," +
+                    meanCloudletServiceTimeClass1 + "," +
                     meanClass2ServiceTime + "," + meanCloudServiceTimeClass2 + "," + meanCloudletServiceTimeClass2
             );
             outRT.flush();
@@ -279,38 +292,38 @@ public class CSVlogger {
 
     }
 
-    public void writeMeansInOneSimulation(JobStatistics js){
-        if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
-            if (totalMeansDuringSimulations > 0) {
-                totalMeansDuringSimulations--;
-
-                long seed = SystemConfiguration.SEED;
-                double globalTime = js.getGlobalTime();
-
-                double meanCloudletPopulation = js.getMeanCloudletPopulation(0);
-                double meanCloudletPopulationClass1 = js.getMeanCloudletPopulation(1);
-                double meanCloudletPopulationClass2 = js.getMeanCloudletPopulation(2);
-
-                double meanCloudPopulation = js.getMeanCloudPopulation(0);
-                double meanCloudPopulationClass1 = js.getMeanCloudPopulation(1);
-                double meanCloudPopulationClass2 = js.getMeanCloudPopulation(2);
-
-                double meanClass1Population = js.getMeanGlobalPopulation(1);
-                double meanClass2Population = js.getMeanGlobalPopulation(2);
-
-                BufferedWriter outMS;
-                try {
-                    outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
-                    outMS.write("\n" + seed + "," + globalTime + "," + meanCloudletPopulationClass1 + "," + meanCloudletPopulationClass2 + ","
-                            + meanCloudletPopulation + "," + meanCloudPopulationClass1 + "," + meanCloudPopulationClass2 + ","
-                            + meanCloudPopulation + "," + meanClass1Population + "," + meanClass2Population);
-                    outMS.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+//    public void writeMeansInOneSimulation(JobStatistics js){
+//        if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
+//            if (totalMeansDuringSimulations > 0) {
+//                totalMeansDuringSimulations--;
+//
+//                long seed = SystemConfiguration.SEED;
+//                double globalTime = js.getGlobalTime();
+//
+//                double meanCloudletPopulation = js.getMeanCloudletPopulation(0);
+//                double meanCloudletPopulationClass1 = js.getMeanCloudletPopulation(1);
+//                double meanCloudletPopulationClass2 = js.getMeanCloudletPopulation(2);
+//
+//                double meanCloudPopulation = js.getMeanCloudPopulation(0);
+//                double meanCloudPopulationClass1 = js.getMeanCloudPopulation(1);
+//                double meanCloudPopulationClass2 = js.getMeanCloudPopulation(2);
+//
+//                double meanClass1Population = js.getMeanGlobalPopulation(1);
+//                double meanClass2Population = js.getMeanGlobalPopulation(2);
+//
+//                BufferedWriter outMS;
+//                try {
+//                    outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
+//                    outMS.write("\n" + seed + "," + globalTime + "," + meanCloudletPopulationClass1 + "," + meanCloudletPopulationClass2 + ","
+//                            + meanCloudletPopulation + "," + meanCloudPopulationClass1 + "," + meanCloudPopulationClass2 + ","
+//                            + meanCloudPopulation + "," + meanClass1Population + "," + meanClass2Population);
+//                    outMS.flush();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
     private void writeServerStatistics(double globalTime){
 
@@ -326,6 +339,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
 
         int id;
         double utilization;
@@ -337,7 +351,9 @@ public class CSVlogger {
                 utilization = s.getTimeBusy()/globalTime;
                 jobsCompleted = s.getJobProcessed();
                 outServer = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileServerStatus, true));
-                outServer.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," + id + "," + utilization + "," + jobsCompleted);
+                outServer.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold +
+                        ", " + iterations + "," + seed + "," + numberOfServers + ',' + id +
+                        "," + utilization + "," + jobsCompleted);
                 outServer.flush();
             }
         } catch (IOException e) {
@@ -359,6 +375,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
 
         double cloudletThroughput = js.getCloudletThroughput();
         double cloudThroughput = js.getCloudThroughput();
@@ -373,7 +390,8 @@ public class CSVlogger {
         BufferedWriter outRT;
         try {
             outRT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughput, true));
-            outRT.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+            outRT.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold +
+                    ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                     globalThroughput + "," + cloudThroughput + "," + cloudletThroughput + "," +
                     class1Throughput + "," + cloudThroughputClass1 + "," + cloudletThroughputClass1 + "," +
                     class2Throughput + "," + cloudThroughputClass2 + "," + cloudletThroughputClass2
@@ -397,6 +415,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
         double meanGlobalAvgJobs;
         double meanCloudletAvgJobs;
         double meanCloudAvgJobs;
@@ -434,7 +453,8 @@ public class CSVlogger {
         BufferedWriter outAVG;
         try {
             outAVG = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileAVGjobs, true));
-            outAVG.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+            outAVG.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold +
+                    ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                     meanGlobalAvgJobs + "," + meanCloudAvgJobs + "," + meanCloudletAvgJobs + "," +
                     meanClass1AvgJobs + "," + meanCloudAvgJobsClass1 + "," + meanCloudletAvgJobsClass1 + "," +
                     meanClass2AvgJobs + "," + meanCloudAvgJobsClass2 + "," + meanCloudletAvgJobsClass2
@@ -458,6 +478,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
 
         double varianceGlobalAvgJobs;
         double varianceCloudletAvgJobs;
@@ -496,7 +517,8 @@ public class CSVlogger {
         BufferedWriter outVar;
         try {
             outVar = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileVarianceJobs, true));
-            outVar.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+            outVar.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold +
+                    ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                     varianceGlobalAvgJobs + "," + varianceCloudAvgJobs + "," +       varianceCloudletAvgJobs + "," +
                     varianceClass1AvgJobs + "," + varianceCloudAvgJobsClass1 + "," + varianceCloudletAvgJobsClass1 + "," +
                     varianceClass2AvgJobs + "," + varianceCloudAvgJobsClass2 + "," + varianceCloudletAvgJobsClass2
@@ -521,6 +543,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
 
         long real_time =          pl.getRealTime();
         long simulation_time =    pl.getSimulationTime();
@@ -530,7 +553,8 @@ public class CSVlogger {
         BufferedWriter outVar;
         try {
             outVar = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileSystemSimulation, true));
-            outVar.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+            outVar.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " + threshold +
+                    ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                     real_time + "," + simulation_time + "," +  RAM);
             outVar.flush();
         } catch (IOException e) {
@@ -551,6 +575,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
 
         ArrayList<Double> meanGlobalAvgJobs = bm.getBMGlobalPopulation(0);
         ArrayList<Double> meanCloudletAvgJobs = bm.getBMCloudletPopulation(0);
@@ -567,7 +592,8 @@ public class CSVlogger {
         try {
             outAVG = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
             for(int i = 0; i < SystemConfiguration.NUM_BATCH; i++) {
-                outAVG.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                outAVG.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
+                        threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                         meanGlobalAvgJobs.get(i) + "," + meanCloudAvgJobs.get(i) + "," + meanCloudletAvgJobs.get(i) + "," +
                         meanClass1AvgJobs.get(i) + "," + meanCloudAvgJobsClass1.get(i) + "," + meanCloudletAvgJobsClass1.get(i) + "," +
                         meanClass2AvgJobs.get(i) + "," + meanCloudAvgJobsClass2.get(i) + "," + meanCloudletAvgJobsClass2.get(i)
@@ -592,6 +618,7 @@ public class CSVlogger {
         else
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
 
         ArrayList<Double> varianceGlobalAvgJobs =           bm.getBMVarianceGlobalPopulation(0);
         ArrayList<Double> varianceCloudletAvgJobs =         bm.getBMVarianceCloudletPopulation(0);
@@ -608,7 +635,8 @@ public class CSVlogger {
         try {
             outVar = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchVariance, true));
             for(int i = 0; i < SystemConfiguration.NUM_BATCH; i++) {
-                outVar.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " + threshold + ", " + iterations + "," + seed + "," +
+                outVar.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
+                        threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                         varianceGlobalAvgJobs.get(i) + "," + varianceCloudAvgJobs.get(i) + "," +       varianceCloudletAvgJobs.get(i) + "," +
                         varianceClass1AvgJobs.get(i) + "," + varianceCloudAvgJobsClass1.get(i) + "," + varianceCloudletAvgJobsClass1.get(i) + "," +
                         varianceClass2AvgJobs.get(i) + "," + varianceCloudAvgJobsClass2.get(i) + "," + varianceCloudletAvgJobsClass2.get(i)
@@ -683,7 +711,7 @@ public class CSVlogger {
                     BufferedWriter outMS;
                     try {
                         outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileResponseTimeMeansInOneSimulation, true));
-                        for(int i = 0; i < maxRowsStored ; i++) {
+                        for(int i = 0; i < Math.min(maxRowsStored, totalResponseTimeMeansDuringSimulations) ; i++) {
                             outMS.write("\n" + seed + "," +
                                     RTOneSimulationToWrite.instance.jobClass.get(i) + "," +
                                     RTOneSimulationToWrite.instance.cloudletOrCloud.get(i) + "," +
@@ -742,6 +770,7 @@ public class CSVlogger {
             responseTime = new ArrayList<>();
         }
     }
+
 
 }
 

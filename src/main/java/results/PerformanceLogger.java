@@ -80,11 +80,13 @@ public class PerformanceLogger implements Runnable {
     }
 
     public void printInitialConfiguration(){
-        if(SystemConfiguration.CSVLOGGER)
-            Printer.getInstance().print("Execution started with CSVLOGGER=true. To avoid writing results on CSV start again the execution setting CSVLOGGER=false", "cyan");
-        if(SystemConfiguration.VERBOSE) {
-            Printer.getInstance().print("Execution started with VERBOSE=true. To reduce logs start again the execution setting VERBOSE=false", "cyan");
-            printSystemConfiguration();
+        if(!SystemConfiguration.MULTI_RUN) {
+            if (SystemConfiguration.CSVLOGGER)
+                Printer.getInstance().print("Execution started with CSVLOGGER=true. To avoid writing results on CSV start again the execution setting CSVLOGGER=false", "cyan");
+            if (SystemConfiguration.VERBOSE) {
+                Printer.getInstance().print("Execution started with VERBOSE=true. To reduce logs start again the execution setting VERBOSE=false", "cyan");
+                printSystemConfiguration();
+            }
         }
         startTest();
     }

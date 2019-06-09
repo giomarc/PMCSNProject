@@ -80,7 +80,6 @@ public class Services {
         //exponential without using operations
         else
             return getCloudletServiceTimeWithoutOperations(jobclass);
-
     }
 
     @SuppressWarnings("Duplicates")

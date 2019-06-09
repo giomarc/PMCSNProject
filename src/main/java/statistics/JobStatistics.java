@@ -73,7 +73,8 @@ public class JobStatistics{
         updateClass1(cloudletPopulation[0],cloudPopulation[0]);
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
-        CSVlogger.getInstance().writeMeansInOneSimulation(this);
+//        CSVlogger.getInstance().writeMeansInOneSimulation(this);
+        CSVlogger.getInstance().writePopulationMeanInOneSimulation(this);
         if(SystemConfiguration.BATCH &&
                 (actualIteration > batchMeans.getBatchSize()*2 ||
                         globalIteration == SystemConfiguration.ITERATIONS*2)) { // devo considerare sia gli arrivi che i completamenti

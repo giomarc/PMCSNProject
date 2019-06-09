@@ -19,9 +19,7 @@ public class CloudletController {
 
 
     public void dispatchArrivals(Event e){
-
         DispatchAlgorithm.getInstance().getAlgorithm(e);
-
     }
 
 }

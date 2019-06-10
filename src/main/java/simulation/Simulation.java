@@ -118,14 +118,12 @@ public class Simulation {
                 if(e.isValid()) {
                     cloudlet.processCompletion(e);
                     i.remove();
-                    jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
                 }
             }
             else{                               // cloud
                 if(e.isValid()) {
                     cloud.processCompletion(e);
                     i.remove();
-                    jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
                 }
             }
         }

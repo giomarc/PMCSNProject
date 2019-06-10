@@ -1,5 +1,6 @@
 package statistics;
 
+import javafx.scene.chart.ValueAxis;
 import system.SystemConfiguration;
 
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class BatchMeans {
 
 
     public double[] getBMMean(ArrayList<Double> values, String meanOrVar) {
+
             double value = 0.0;
             double[] ConfInt = new double[2];
             if(values.size()!=num_batch){
@@ -80,11 +82,15 @@ public class BatchMeans {
                 System.exit(-1);
             }
             for (double d : values) {
-                value += d;
+                 value += d;
             }
-            if(meanOrVar.contains("m"))
+            if(meanOrVar.contains("m")) {
                 ConfInt = confidenceInterval.computeConfidenceInterval(values);
-            //return value /num_batch;
+                //System.out.println(ConfInt[0] + ConfInt[1]);
+            }
+            else{
+                ConfInt[0] = ConfInt[1] = value/num_batch;
+            }
         return ConfInt;
     }
 
@@ -240,7 +246,7 @@ public class BatchMeans {
     public ArrayList<Double> getAvgThroughputArray(int index){
         ArrayList<Double> var = new ArrayList<>();
         switch (index){
-            case 0: var = avgSystemT; break;
+            case 0: var = avgSystemT;break;
             case 1: var = avgCloudletT; break;
             case 2: var = avgCloudT; break;
         }
@@ -279,22 +285,17 @@ public class BatchMeans {
     public double[] getBMAvgThroughput(int index){
         double[] res = new double[2];
         switch (index){
-            case 0: res = getBMMean(avgSystemT,"m"); break;
-            case 1: res = getBMMean(avgCloudletT,"m"); break;
-            case 2: res = getBMMean(avgCloudT,"m"); break;
+            case 0: res = getBMMean(avgSystemT,"m");
+                break;
+            case 1: res = getBMMean(avgCloudletT,"m");
+                break;
+            case 2: res = getBMMean(avgCloudT,"m");
+                break;
         }
         return res;
     }
 
-    /*public ArrayList<Double> getVarThroughputArray(int index){
-        ArrayList<Double> var = new ArrayList<>();
-        switch (index){
-            case 0: var = varSystemT; break;
-            case 1: var = varCloudletT; break;
-            case 2: var = varCloudT; break;
-        }
-        return var;
-    }*/
+
 
     public void updateBMVarThroughputArray(double currentValue, int index)
     {

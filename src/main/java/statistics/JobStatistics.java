@@ -51,6 +51,8 @@ public class JobStatistics{
     private long actualIteration;
     private double globalTime;
     private double actualTime;
+    private double batchSize;
+    private int actualBatch;
 
     private JobStatistics(){
         resetStatistics();
@@ -67,21 +69,30 @@ public class JobStatistics{
 
     public void updatePopulationMeans(int[] cloudletPopulation, int[] cloudPopulation){
 
-        updateGlobalIterations();
 
+        updateGlobalIterations();
         updateGlobal(cloudletPopulation,cloudPopulation);
         updateClass1(cloudletPopulation[0],cloudPopulation[0]);
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
-//        CSVlogger.getInstance().writeMeansInOneSimulation(this);
         CSVlogger.getInstance().writePopulationMeanInOneSimulation(this);
         if(SystemConfiguration.BATCH &&
-                (actualIteration > batchMeans.getBatchSize()*2 ||
-                        globalIteration == SystemConfiguration.ITERATIONS*2)) { // devo considerare sia gli arrivi che i completamenti
+                ((actualIteration >= batchSize))){ // devo considerare sia gli arrivi che i completamenti
             computeBatch();
+            actualBatch++;
+            setBatchSize();
         }
     }
 
+
+    public void setBatchSize(){
+        if( ((SystemConfiguration.ITERATIONS % SystemConfiguration.NUM_BATCH) != 0) && actualBatch == (SystemConfiguration.NUM_BATCH-1)){
+            batchSize = (SystemConfiguration.ITERATIONS - (SystemConfiguration.NUM_BATCH*batchMeans.getBatchSize()))+1;
+        }else{
+            batchSize = batchMeans.getBatchSize();
+        }
+
+    }
 
     /**
      * Updates means and variance of class 1 and class 2 jobs
@@ -181,7 +192,6 @@ public class JobStatistics{
         batchMeans.setBMVarianceGlobalPopulationClass1      (this.varGlobalPopulation_1 / actualIteration);
         batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 / actualIteration);
 
-        //System.out.println("Batch: " + );
         batchMeans.updateBMAvgTroughputArray(getSystemThroughput(),0);
         batchMeans.updateBMAvgTroughputArray(getCloudletThroughput(),1);
         batchMeans.updateBMAvgTroughputArray(getCloudThroughput(),2);
@@ -432,7 +442,7 @@ public class JobStatistics{
         this.globalTime                 = 0;
         this.actualTime                 = 0;
         this.globalIteration            = 0;
-
+        this.actualBatch                = 0;
         resetMeans();
     }
 

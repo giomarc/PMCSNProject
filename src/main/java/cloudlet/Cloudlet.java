@@ -5,7 +5,6 @@ import event.Event;
 import event.EventGenerator;
 import job.Job;
 import simulation.Simulation;
-import statistics.Statistics;
 import system.SystemConfiguration;
 import variablesGenerator.Services;
 

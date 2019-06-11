@@ -58,6 +58,7 @@ public class JobStatistics{
         resetStatistics();
         statistics = Statistics.getInstance();
         batchMeans = BatchMeans.getInstance();
+        batchSize = batchMeans.getBatchSize();
     }
 
     public static JobStatistics getInstance(){
@@ -88,10 +89,7 @@ public class JobStatistics{
     public void setBatchSize(){
         if( ((SystemConfiguration.ITERATIONS % SystemConfiguration.NUM_BATCH) != 0) && actualBatch == (SystemConfiguration.NUM_BATCH-1)){
             batchSize = (SystemConfiguration.ITERATIONS - (SystemConfiguration.NUM_BATCH*batchMeans.getBatchSize()))+1;
-        }else{
-            batchSize = batchMeans.getBatchSize();
         }
-
     }
 
     /**

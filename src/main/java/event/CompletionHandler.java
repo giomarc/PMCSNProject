@@ -28,9 +28,6 @@ public class CompletionHandler {
         double serviceTime = e.getJob().getCompletionTime();
 
         updateResponseTime(jobClass,serviceTime);
-        //JobStatistics.getInstance().updateMeanGlobalCompleted();
-        //JobStatistics.getInstance().updateMeanCloudletCompleted();
-        //JobStatistics.getInstance().updateMeanCloudCompleted();
 
         if(e.getType() == 1) {                                  //cloudlet
             handleCloudletCompletion(jobClass,serviceTime);

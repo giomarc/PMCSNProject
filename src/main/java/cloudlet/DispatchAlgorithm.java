@@ -101,6 +101,8 @@ public class DispatchAlgorithm {
 //        jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud, time);
     }
 
+    int delete = 0;
+    int cavolo = 0;
     /**
      * Size-based algorithm
      */
@@ -113,7 +115,7 @@ public class DispatchAlgorithm {
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
 //        int[] numberOfJobsInCloud = Cloud.getInstance().returnJobsInCloud();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
-        if(totalJobsInCloudlet >= numberOfServers || (jobClass == 2 && operations > 0.6) || (jobClass == 1 && operations > 1)){
+        if(totalJobsInCloudlet >= numberOfServers || (jobClass == 2 && operations > 1) || (jobClass == 1 && operations > 1)){ //0.6 class 2
 //            cloudletOrCloud = 2;
             Cloud.getInstance().processArrival(e);
         }else{

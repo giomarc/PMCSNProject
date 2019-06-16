@@ -2,33 +2,33 @@ function plotSteadyState(analyticsGlobal, analyticCloudlet, analyticCloud)
 digits(15);
 M = readmatrix('..\RESULT_OUTPUT\ResponseTime.csv');
 
-globaltimeStandardAlgorithm = sortrows(M(M(:, 3) == 1, [4 7]), 1);
-cloudletStandardAlgorithm = sortrows(M(M(:, 3) == 1, [4 9]), 1);
-cloudStandardAlgorithm = sortrows(M(M(:, 3) == 1, [4 8]), 1);
+globaltimeStandardAlgorithm = M(((M(:, 3) == 1) & (M(:, 7) == 3)), 8);
+cloudletStandardAlgorithm = M(((M(:, 3) == 1) & (M(:, 7) == 3)), 10);
+cloudStandardAlgorithm = M(((M(:, 3) == 1) & (M(:, 7) == 3)), 9);
 
 figure;
 subplot(3,1,1);
-plot(globaltimeStandardAlgorithm(:, 2));
+plot(globaltimeStandardAlgorithm(:, 1));
 yline(double(analyticsGlobal));
-yline(mean(globaltimeStandardAlgorithm(:, 2)), 'b');
-title('global response time per iterations STANDARD ALGORITHM');
+yline(mean(globaltimeStandardAlgorithm(:, 1)), 'b');
+title('global response time, standard algorithm, n=3');
 xlabel('iteration');
-ylabel('response time (j)');
+ylabel('response time (s)');
 
 subplot(3,1,2);
-plot(cloudletStandardAlgorithm(:, 2));
+plot(cloudletStandardAlgorithm(:, 1));
 yline(double(analyticCloudlet));
-yline(mean(cloudletStandardAlgorithm(:, 2)));
-title('cloudlet response time per iterations STANDARD ALGORITHM');
+yline(mean(cloudletStandardAlgorithm(:, 1)));
+title('cloudlet response time, standard algorithm, n=3');
 xlabel('iteration');
-ylabel('response time (j)');
+ylabel('response time (s)');
 
 subplot(3,1,3);
-plot(cloudStandardAlgorithm(:, 2));
+plot(cloudStandardAlgorithm(:, 1));
 yline(double(analyticCloud));
-yline(mean(cloudStandardAlgorithm(:, 2)));
-title('cloud response time per iterations STANDARD ALGORITHM');
+yline(mean(cloudStandardAlgorithm(:, 1)));
+title('cloud response time, standard algorithm, n=3');
 xlabel('iteration');
-ylabel('response time (j)');
+ylabel('response time (s)');
 
 end

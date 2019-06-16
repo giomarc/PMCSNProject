@@ -48,9 +48,5 @@ h = histogram(avgRMSCloud);
 title('Response Time on Cloud');
 
 
-
-
-
-
 end
 

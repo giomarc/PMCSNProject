@@ -1,8 +1,8 @@
 function serverStatus
 digits(15);
 M = readmatrix('..\RESULT_OUTPUT\ServerStatus.csv');
-x = M(:, 7) + 1;
-y = M(:, 8);
+x = M(:, 8) + 1;
+y = M(:, 9);
 figure();
 bar(y);
 title('Server utilization');

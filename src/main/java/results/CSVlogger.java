@@ -314,38 +314,6 @@ public class CSVlogger {
 
     }
 
-//    public void writeMeansInOneSimulation(JobStatistics js){
-//        if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
-//            if (totalMeansDuringSimulations > 0) {
-//                totalMeansDuringSimulations--;
-//
-//                long seed = SystemConfiguration.SEED;
-//                double globalTime = js.getGlobalTime();
-//
-//                double meanCloudletPopulation = js.getMeanCloudletPopulation(0);
-//                double meanCloudletPopulationClass1 = js.getMeanCloudletPopulation(1);
-//                double meanCloudletPopulationClass2 = js.getMeanCloudletPopulation(2);
-//
-//                double meanCloudPopulation = js.getMeanCloudPopulation(0);
-//                double meanCloudPopulationClass1 = js.getMeanCloudPopulation(1);
-//                double meanCloudPopulationClass2 = js.getMeanCloudPopulation(2);
-//
-//                double meanClass1Population = js.getMeanGlobalPopulation(1);
-//                double meanClass2Population = js.getMeanGlobalPopulation(2);
-//
-//                BufferedWriter outMS;
-//                try {
-//                    outMS = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileMeansInOneSimulation, true));
-//                    outMS.write("\n" + seed + "," + globalTime + "," + meanCloudletPopulationClass1 + "," + meanCloudletPopulationClass2 + ","
-//                            + meanCloudletPopulation + "," + meanCloudPopulationClass1 + "," + meanCloudPopulationClass2 + ","
-//                            + meanCloudPopulation + "," + meanClass1Population + "," + meanClass2Population);
-//                    outMS.flush();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
 
     private void writeServerStatistics(double globalTime){
 

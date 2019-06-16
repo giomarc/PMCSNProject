@@ -32,16 +32,17 @@ public class Statistics {
         return valueToUpdate;
     }
 
-    public double[] computeMeanAndVariance(double oldVar, double oldMean, double newValue, long n){
-        double diff = (newValue -  oldMean);
-        double[] MV = new double[2];
-        if(n != 0){
-            MV[1] = oldVar + diff * diff * (n - 1) / n;
-            MV[0] = oldMean + (diff / n);
-        }
 
-        return MV;
+    public double computeWelfordMean(double oldMean, double newValue, long n)
+    {
+        double diff = (newValue -  oldMean);
+        double mean = 0.0;
+        if(n!=0){
+            mean = oldMean + (diff / n);
+        }
+        return mean;
     }
+
 
 
 }

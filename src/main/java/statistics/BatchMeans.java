@@ -23,17 +23,6 @@ public class BatchMeans {
     private ArrayList<Double> BMCloudletPopulation_2;
     private ArrayList<Double> BMCloudPopulation_2;
 
-    //BATCH VARIANCE
-    private ArrayList<Double> BMVarGlobalPopulation;
-    private ArrayList<Double> BMVarCloudletPopulation;
-    private ArrayList<Double> BMVarCloudPopulation;
-    private ArrayList<Double> BMVarGlobalPopulation_1;
-    private ArrayList<Double> BMVarCloudletPopulation_1;
-    private ArrayList<Double> BMVarCloudPopulation_1;
-    private ArrayList<Double> BMVarGlobalPopulation_2;
-    private ArrayList<Double> BMVarCloudletPopulation_2;
-    private ArrayList<Double> BMVarCloudPopulation_2;
-
     //THROUGHPUT
     private ArrayList<Double> avgSystemT;
     private ArrayList<Double> avgCloudletT;
@@ -45,7 +34,15 @@ public class BatchMeans {
     private ArrayList<Double> avgCloudletT2;
     private ArrayList<Double> avgCloudT2;
 
-    private ArrayList<Double> BMThroughput;
+    private ArrayList<Double> BMSysThroughput;
+    private ArrayList<Double> BMSysThroughput1;
+    private ArrayList<Double> BMSysThroughput2;
+    private ArrayList<Double> BMCletThroughput;
+    private ArrayList<Double> BMCletThroughput1;
+    private ArrayList<Double> BMCletThroughput2;
+    private ArrayList<Double> BMCloudThroughput;
+    private ArrayList<Double> BMCloudThroughput1;
+    private ArrayList<Double> BMCloudThroughput2;
 
 
 
@@ -70,25 +67,13 @@ public class BatchMeans {
 
 
 
-    public double[] getBMMean(ArrayList<Double> values, String meanOrVar) {
+    public double[] getBMMean(ArrayList<Double> values) {
 
-            double value = 0.0;
-            double[] ConfInt = new double[2];
             if(values.size()!=num_batch){
                 System.out.println("cicli: " + values.size() +  ", num_batch: " + num_batch);
                 System.exit(-1);
             }
-            for (double d : values) {
-                 value += d;
-            }
-            if(meanOrVar.contains("m")) {
-                ConfInt = confidenceInterval.computeConfidenceInterval(values);
-                //System.out.println(ConfInt[0] + ConfInt[1]);
-            }
-            else{
-                ConfInt[0] = ConfInt[1] = value/num_batch;
-            }
-        return ConfInt;
+            return confidenceInterval.computeConfidenceInterval(values);
     }
 
 
@@ -137,44 +122,7 @@ public class BatchMeans {
     }
 
 
-    public ArrayList<Double> getBMVarianceGlobalPopulation(int classId) {
-        ArrayList<Double> var = new ArrayList<>();
-        switch (classId){
-            case 0: var = BMVarGlobalPopulation;
-                break;
-            case 1: var =  BMVarGlobalPopulation_1;
-                break;
-            case 2: var =  BMVarGlobalPopulation_2;
-                break;
-        }
-        return var;
-    }
 
-    public ArrayList<Double> getBMVarianceCloudletPopulation(int classId) {
-        ArrayList<Double> var = new ArrayList<>();
-        switch (classId){
-            case 0: var = BMVarCloudletPopulation;
-                break;
-            case 1: var =  BMVarCloudletPopulation_1;
-                break;
-            case 2: var =  BMVarCloudletPopulation_2;
-                break;
-        }
-        return var;
-    }
-
-    public ArrayList<Double> getBMVarianceCloudPopulation(int classId) {
-        ArrayList<Double> var = new ArrayList<>();
-        switch (classId){
-            case 0: var = BMVarCloudPopulation;
-                break;
-            case 1: var =  BMVarCloudPopulation_1;
-                break;
-            case 2: var =  BMVarCloudPopulation_2;
-                break;
-        }
-        return var;
-    }
 
     /**
      * GETTER FOR STATISTICS
@@ -182,9 +130,9 @@ public class BatchMeans {
     public double[] getMeanBMGlobalPopulation(int classId) {
         double[] res = new double[2];
         switch (classId){
-            case 0: res = getBMMean(BMGlobalPopulation,"m"); break;
-            case 1: res = getBMMean(BMGlobalPopulation_1,"m"); break;
-            case 2: res = getBMMean(BMGlobalPopulation_2,"m"); break;
+            case 0: res = getBMMean(BMGlobalPopulation); break;
+            case 1: res = getBMMean(BMGlobalPopulation_1); break;
+            case 2: res = getBMMean(BMGlobalPopulation_2); break;
         }
         return res;
     }
@@ -192,9 +140,9 @@ public class BatchMeans {
     public double[] getMeanBMCloudletPopulation(int classId) {
         double[] res = new double[2];
         switch (classId){
-            case 0: res = getBMMean(BMCloudletPopulation,"m"); break;
-            case 1: res = getBMMean(BMCloudletPopulation_1,"m"); break;
-            case 2: res = getBMMean(BMCloudletPopulation_2,"m"); break;
+            case 0: res = getBMMean(BMCloudletPopulation); break;
+            case 1: res = getBMMean(BMCloudletPopulation_1); break;
+            case 2: res = getBMMean(BMCloudletPopulation_2); break;
         }
         return res;
     }
@@ -202,44 +150,13 @@ public class BatchMeans {
     public double[] getMeanBMCloudPopulation(int classId) {
         double[] res = new double[2];
         switch (classId){
-            case 0: res = getBMMean(BMCloudPopulation,"m"); break;
-            case 1: res = getBMMean(BMCloudPopulation_1,"m"); break;
-            case 2: res = getBMMean(BMCloudPopulation_2,"m"); break;
+            case 0: res = getBMMean(BMCloudPopulation); break;
+            case 1: res = getBMMean(BMCloudPopulation_1); break;
+            case 2: res = getBMMean(BMCloudPopulation_2); break;
         }
         return res;
     }
 
-
-
-    public double[] getMeanBMVarianceGlobalPopulation(int classId) {
-        double[] res = new double[2];
-        switch (classId){
-            case 0: res = getBMMean(BMVarGlobalPopulation,"v"); break;
-            case 1: res = getBMMean(BMVarGlobalPopulation_1,"v"); break;
-            case 2: res = getBMMean(BMVarGlobalPopulation_2,"v"); break;
-        }
-        return res;
-    }
-
-    public double[] getMeanBMVarianceCloudletPopulation(int classId) {
-        double[] res = new double[2];
-        switch (classId){
-            case 0: res = getBMMean(BMVarCloudletPopulation,"v"); break;
-            case 1: res = getBMMean(BMVarCloudletPopulation_1,"v"); break;
-            case 2: res = getBMMean(BMVarCloudletPopulation_2,"v"); break;
-        }
-        return res;
-    }
-
-    public double[] getMeanBMVarianceCloudPopulation(int classId) {
-        double[] res = new double[2];
-        switch (classId){
-            case 0: res = getBMMean(BMVarCloudPopulation,"v"); break;
-            case 1: res = getBMMean(BMVarCloudPopulation_1,"v"); break;
-            case 2: res = getBMMean(BMVarCloudPopulation_2,"v"); break;
-        }
-        return res;
-    }
 
     public ArrayList<Double> getAvgThroughputArray(int index, String s){
         ArrayList<Double> var = new ArrayList<>();
@@ -301,24 +218,62 @@ public class BatchMeans {
      * NEWWWWWWWW
      */
 
-    public void updateNewThroughputBMArray(double value){
-        BMThroughput.add(value);
+    public void updateNewThroughputBMArray(double value, String s, int index){
+        switch(s){
+            case "sys":
+                switch(index){
+                    case 0: BMSysThroughput.add(value);break;
+                    case 1: BMSysThroughput1.add(value); break;
+                    case 2: BMSysThroughput2.add(value); break;
+                }break;
+            case "clet":
+                switch(index){
+                    case 0: BMCletThroughput.add(value);break;
+                    case 1: BMCletThroughput1.add(value); break;
+                    case 2: BMCletThroughput2.add(value); break;
+                }break;
+            case "cloud":
+                switch(index){
+                    case 0: BMCloudThroughput.add(value);break;
+                    case 1: BMCloudThroughput1.add(value); break;
+                    case 2: BMCloudThroughput2.add(value); break;
+                }break;
+        }
     }
 
-    public double[] getNewBMThroughput(){
+    public double[] getNewBMThroughput(String s, int index){
         double[] res = new double[2];
-        res = getBMMean(BMThroughput,"m");
+        switch(s){
+            case "sys":
+                switch(index){
+                    case 0: res = getBMMean(BMSysThroughput);break;
+                    case 1: res = getBMMean(BMSysThroughput1); break;
+                    case 2: res = getBMMean(BMSysThroughput2); break;
+                }break;
+            case "clet":
+                switch(index){
+                    case 0: res = getBMMean(BMCletThroughput);break;
+                    case 1: res = getBMMean(BMCletThroughput1);break;
+                    case 2: res = getBMMean(BMCletThroughput2);break;
+                }break;
+            case "cloud":
+                switch(index){
+                    case 0: res = getBMMean(BMCloudThroughput);break;
+                    case 1: res = getBMMean(BMCloudThroughput1);break;
+                    case 2: res = getBMMean(BMCloudThroughput2);break;
+                }break;
+        }
         return res;
     }
 
     public double[] getBMAvgSystemThroughput(int index){
         double[] res = new double[2];
         switch (index){
-            case 0: res = getBMMean(avgSystemT,"m");
+            case 0: res = getBMMean(avgSystemT);
                 break;
-            case 1: res = getBMMean(avgSystemT1,"m");
+            case 1: res = getBMMean(avgSystemT1);
                 break;
-            case 2: res = getBMMean(avgSystemT2,"m");
+            case 2: res = getBMMean(avgSystemT2);
                 break;
         }
         return res;
@@ -327,11 +282,11 @@ public class BatchMeans {
     public double[] getBMAvgCletThroughput(int index){
         double[] res = new double[2];
         switch (index){
-            case 0: res = getBMMean(avgCloudletT,"m");
+            case 0: res = getBMMean(avgCloudletT);
                 break;
-            case 1: res = getBMMean(avgCloudletT1,"m");
+            case 1: res = getBMMean(avgCloudletT1);
                 break;
-            case 2: res = getBMMean(avgCloudletT2,"m");
+            case 2: res = getBMMean(avgCloudletT2);
                 break;
         }
         return res;
@@ -341,42 +296,15 @@ public class BatchMeans {
     public double[] getBMAvgCloudThroughput(int index){
         double[] res = new double[2];
         switch (index){
-            case 0: res = getBMMean(avgCloudT,"m");
+            case 0: res = getBMMean(avgCloudT);
                 break;
-            case 1: res = getBMMean(avgCloudT1,"m");
+            case 1: res = getBMMean(avgCloudT1);
                 break;
-            case 2: res = getBMMean(avgCloudT2,"m");
+            case 2: res = getBMMean(avgCloudT2);
                 break;
         }
         return res;
     }
-
-
-
-
-
-
-    /* <------- ELIMINARE!!!!!!!!! -------->
-    public void updateBMVarThroughputArray(double currentValue, int index)
-    {
-        switch (index){
-            case 0: varSystemT.add(currentValue); break;
-            case 1: varCloudletT.add(currentValue); break;
-            case 2: varCloudT.add(currentValue);break;
-        }
-    }
-
-   /* public double getBMVarThroughput(int index){
-        double res = 0.0;
-        switch (index){
-            case 0: res = getBMMean(varSystemT,"v"); break;
-            case 1: res = getBMMean(varCloudletT,"v"); break;
-            case 2: res = getBMMean(varCloudT,"v"); break;
-        }
-        return res;
-    }*/
-
-   // <------- ELIMINARE!!!!!!!!! -------->
 
 
 
@@ -421,42 +349,6 @@ public class BatchMeans {
 
 
 
-    void setBMVarianceGlobalPopulation(double currentValue) {
-        BMVarGlobalPopulation.add(currentValue);
-    }
-
-    void setBMVarianceCloudletPopulation(double currentValue) {
-        BMVarCloudletPopulation.add(currentValue);
-    }
-
-    void setBMVarianceCloudPopulation(double currentValue) {
-        BMVarCloudPopulation.add(currentValue);
-    }
-
-    void setBMVarianceGlobalPopulationClass1(double currentValue) {
-        BMVarGlobalPopulation_1.add(currentValue);
-    }
-
-    void setBMVarianceCloudletPopulationClass1(double currentValue) {
-        BMVarCloudletPopulation_1.add(currentValue);
-    }
-
-    void setBMVarianceCloudPopulationClass1(double currentValue) {
-        BMVarCloudPopulation_1.add(currentValue);
-    }
-
-    void setBMVarianceGlobalPopulationClass2(double currentValue) {
-        BMVarGlobalPopulation_2.add(currentValue);
-    }
-
-    void setBMVarianceCloudletPopulationClass2(double currentValue) {
-        BMVarCloudletPopulation_2.add(currentValue);
-    }
-
-    void setBMVarianceCloudPopulationClass2(double currentValue) {
-        BMVarCloudPopulation_2.add(currentValue);
-    }
-
 
     public void reset(){
         init();
@@ -475,16 +367,6 @@ public class BatchMeans {
         BMCloudletPopulation_2 = new ArrayList<>();
         BMCloudPopulation_2 = new ArrayList<>();
 
-        BMVarGlobalPopulation = new ArrayList<>();
-        BMVarCloudletPopulation = new ArrayList<>();
-        BMVarCloudPopulation = new ArrayList<>();
-        BMVarGlobalPopulation_1 = new ArrayList<>();
-        BMVarCloudletPopulation_1 = new ArrayList<>();
-        BMVarCloudPopulation_1 = new ArrayList<>();
-        BMVarGlobalPopulation_2 = new ArrayList<>();
-        BMVarCloudletPopulation_2 = new ArrayList<>();
-        BMVarCloudPopulation_2 = new ArrayList<>();
-
         avgSystemT = new ArrayList<>();
         avgSystemT1 = new ArrayList<>();
         avgSystemT2 = new ArrayList<>();
@@ -496,7 +378,17 @@ public class BatchMeans {
         avgCloudT2 =  new ArrayList<>();
 
         //NEW
-        BMThroughput = new ArrayList<>();
+        BMSysThroughput = new ArrayList<>();
+        BMSysThroughput1 = new ArrayList<>();
+        BMSysThroughput2= new ArrayList<>();
+        BMCletThroughput = new ArrayList<>();
+        BMCletThroughput1 = new ArrayList<>();
+        BMCletThroughput2 = new ArrayList<>();
+        BMCloudThroughput = new ArrayList<>();
+        BMCloudThroughput1 = new ArrayList<>();
+        BMCloudThroughput2 = new ArrayList<>();
+
+
 
     }
 }

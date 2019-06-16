@@ -252,8 +252,30 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("Mean cloud class 2 throughput", "green");
         System.out.println(bm.getBMAvgCloudThroughput(2)[0] + " \u00B1 " +  bm.getBMAvgCloudThroughput(2)[1]);
 
-        Printer.getInstance().print("Throughput batch new", "green");
-        System.out.println(bm.getNewBMThroughput()[0] + " \u00B1 " + bm.getNewBMThroughput()[1]);
+
+        System.out.println("\n");
+        //NEW THROUGHPUT BATCH
+        Printer.getInstance().print("Throughput System batch new", "green");
+        System.out.println(bm.getNewBMThroughput("sys",0)[0] + " \u00B1 " + bm.getNewBMThroughput("sys",0)[1]);
+        Printer.getInstance().print("Throughput System Class 1 batch new", "green");
+        System.out.println(bm.getNewBMThroughput("sys",1)[0] + " \u00B1 " + bm.getNewBMThroughput("sys",1)[1]);
+        Printer.getInstance().print("Throughput System Class 2batch new", "green");
+        System.out.println(bm.getNewBMThroughput("sys",2)[0] + " \u00B1 " + bm.getNewBMThroughput("sys",2)[1]);
+
+        Printer.getInstance().print("Throughput Cloudlet batch new", "green");
+        System.out.println(bm.getNewBMThroughput("clet",0)[0] + " \u00B1 " + bm.getNewBMThroughput("clet",0)[1]);
+        Printer.getInstance().print("Throughput Cloudlet class 1batch new", "green");
+        System.out.println(bm.getNewBMThroughput("clet",1)[0] + " \u00B1 " + bm.getNewBMThroughput("clet",1)[1]);
+        Printer.getInstance().print("Throughput Cloudlet class 2 batch new", "green");
+        System.out.println(bm.getNewBMThroughput("clet",2)[0] + " \u00B1 " + bm.getNewBMThroughput("clet",2)[1]);
+
+        Printer.getInstance().print("Throughput Cloud batch new", "green");
+        System.out.println(bm.getNewBMThroughput("cloud",0)[0] + " \u00B1 " + bm.getNewBMThroughput("cloud",0)[1]);
+        Printer.getInstance().print("Throughput Cloud class 1 batch new", "green");
+        System.out.println(bm.getNewBMThroughput("cloud",1)[0] + " \u00B1 " + bm.getNewBMThroughput("cloud",1)[1]);
+        Printer.getInstance().print("Throughput Cloud class 2 batch new", "green");
+        System.out.println(bm.getNewBMThroughput("cloud",2)[0] + " \u00B1 " + bm.getNewBMThroughput("cloud",2)[1]);
+
 
     }
 

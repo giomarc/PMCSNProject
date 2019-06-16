@@ -14,7 +14,15 @@ public class CompletionHandler {
     private TimeStatistics ts = TimeStatistics.getInstance();
     private JobStatistics js = JobStatistics.getInstance();
     private double meanSystemThroughput;
-    private double varSystemThroughput;
+    private double meanSystemThroughput1;
+    private double meanSystemThroughput2;
+    private double meanCletThroughput;
+    private double meanCletThroughput1;
+    private double meanCletThroughput2;
+    private double meanCloudThroughput;
+    private double meanCloudThroughput1;
+    private double meanCloudThroughput2;
+
 
     private CompletionHandler(){}
 
@@ -89,23 +97,73 @@ public class CompletionHandler {
     }
 
 
-    public void resetThroughputStatistics(){
-        this.meanSystemThroughput       = 0;
-        this.varSystemThroughput        = 0;
-    }
+
 
     public void updateThroughputStatistics(){
 
         double sysT = JobStatistics.getInstance().getSystemThroughput();
+        double sysT1 = JobStatistics.getInstance().getSystemClass1Throughput();
+        double sysT2 = JobStatistics.getInstance().getSystemClass2Throughput();
+        double cletT = JobStatistics.getInstance().getCloudletThroughput();
+        double cletT1 = JobStatistics.getInstance().getCloudletClass1Throughput();
+        double cletT2 = JobStatistics.getInstance().getCloudletClass2Throughput();
+        double cloudT = JobStatistics.getInstance().getCloudThroughput();
+        double cloudT1 = JobStatistics.getInstance().getCloudClass1Throughput();
+        double cloudT2 = JobStatistics.getInstance().getCloudClass2Throughput();
         long iterations = JobStatistics.getInstance().getActuallIteration();
-        double[] TH = Statistics.getInstance().computeMeanAndVariance(varSystemThroughput,meanSystemThroughput,sysT, iterations);
-        meanSystemThroughput = TH[0];
-        varSystemThroughput = TH[1];
+
+        meanSystemThroughput = Statistics.getInstance().computeWelfordMean(meanSystemThroughput,sysT, iterations);
+        meanSystemThroughput1 = Statistics.getInstance().computeWelfordMean(meanSystemThroughput1,sysT1, iterations);
+        meanSystemThroughput2 = Statistics.getInstance().computeWelfordMean(meanSystemThroughput2,sysT2, iterations);
+
+        meanCletThroughput = Statistics.getInstance().computeWelfordMean(meanCletThroughput,cletT, iterations);
+        meanCletThroughput = Statistics.getInstance().computeWelfordMean(meanCletThroughput1,cletT1, iterations);
+        meanCletThroughput = Statistics.getInstance().computeWelfordMean(meanCletThroughput2,cletT2, iterations);
+
+        meanCloudThroughput = Statistics.getInstance().computeWelfordMean(meanCloudThroughput,cloudT, iterations);
+        meanCloudThroughput1 = Statistics.getInstance().computeWelfordMean(meanCloudThroughput1,cloudT1, iterations);
+        meanCloudThroughput2 = Statistics.getInstance().computeWelfordMean(meanCloudThroughput2,cloudT2, iterations);
+
+
     }
 
 
-    public double getThroughputStatistics(){
-        return meanSystemThroughput;
+    public double getThroughputStatistics(int index, String s){
+        double res = 0.0;
+        switch (s){
+            case "sys":
+                switch(index){
+                    case 0: res = meanSystemThroughput;break;
+                    case 1: res = meanSystemThroughput1; break;
+                    case 2: res = meanSystemThroughput2; break;
+                }break;
+            case "clet":
+                switch(index){
+                    case 0: res = meanCletThroughput;break;
+                    case 1: res = meanCletThroughput1; break;
+                    case 2: res = meanCletThroughput2; break;
+                }break;
+            case "cloud":
+                switch(index){
+                    case 0: res = meanCloudThroughput;break;
+                    case 1: res = meanCloudThroughput1; break;
+                    case 2: res = meanCloudThroughput2; break;
+                }break;
+        }
+        return res;
+    }
+
+    public void resetThroughputStatistics(){
+        this.meanSystemThroughput       = 0;
+        this.meanSystemThroughput1      = 0;
+        this.meanSystemThroughput2      = 0;
+        this.meanCletThroughput         = 0;
+        this.meanCletThroughput1        = 0;
+        this.meanCletThroughput2        = 0;
+        this.meanCloudThroughput        = 0;
+        this.meanCloudThroughput1       = 0;
+        this.meanCloudThroughput2       = 0;
+
     }
 }
 

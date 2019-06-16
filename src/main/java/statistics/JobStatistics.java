@@ -33,20 +33,13 @@ public class JobStatistics{
     private double varCloudletPopulation_2;
     private double varCloudPopulation_2;
 
+    //COMPLETED
     private long completedCloudlet_1;
     private long completedCloudlet_2;
     private long completedCloud_1;
     private long completedCloud_2;
 
-    private double meanSystemThroughput;
-    private double meanCloudletThroughput;
-    private double meanCloudThroughput;
-    private double varSystemThroughput;
-    private double varCloudletThroughput;
-    private double varCloudThroughput;
-
-
-    //ITERATIONS
+    //ITERATIONS & CLOCK
     private long globalIteration;
     private long actualIteration;
     private double globalTime;
@@ -464,14 +457,6 @@ public class JobStatistics{
         this.varGlobalPopulation_2      = 0;
         this.varCloudletPopulation_2    = 0;
         this.varCloudPopulation_2       = 0;
-
-        this.meanSystemThroughput       = 0;
-        this.meanCloudletThroughput     = 0;
-        this.meanCloudThroughput        = 0;
-
-        this.varSystemThroughput        = 0;
-        this.varCloudletThroughput      = 0;
-        this.varCloudThroughput         = 0;
 
         this.actualTime                 = 0;
         this.actualIteration            = 0;

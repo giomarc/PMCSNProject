@@ -52,13 +52,14 @@ e5000 = std(m5000);
 
 y = [y50 y100 y150 y200 y250 y300 y350 y400 y600 y1000 y1500 y2000 y3000];
 e = [e50 e100 e150 e200 e250 e300 e350 e400 e600 e1000 e1500 e2000 e3000];
-x=[50 100 150 200 250 300 350 400 600 1000 1500 2000 3000];
+x = [50 100 150 200 250 300 350 400 600 1000 1500 2000 3000];
 
 figure;
 errorbar(x,y,e, 'k.');
 yline(4.174377);
-legend('replications', 'analytic')
-title('Cloudlet response time comparison');
+xlim([0 3100])
+legend('replications', 'analytical')
+title('Finite Horizon Response Time');
 xlabel('iteration');
 ylabel('response time (s)');
 

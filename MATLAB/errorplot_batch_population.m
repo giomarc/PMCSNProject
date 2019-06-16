@@ -55,10 +55,11 @@ x=[50 100 150 200 250 300 350 400 600 1000 1500 2000 3000 5000];
 figure;
 errorbar(x,y,e, 'k.');
 yline(51.136112);
-legend('replications', 'analytic')
-title('Cloudlet response time comparison');
+xlim([0 3100])
+legend('replications', 'analytical')
+title('Finite Horizon Population');
 xlabel('iteration');
-ylabel('response time (s)');
+ylabel('Population (j)');
 
 end
 

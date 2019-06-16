@@ -1,0 +1,34 @@
+function expo_hyperexpo()
+digits(15);
+M = readmatrix('..\RESULT_OUTPUT\ResponseTime.csv');
+
+filteredMatrix = M(((M(:, 7) == 3)), :);
+
+expo =  filteredMatrix(((filteredMatrix(:, 1) == 1)), :);
+hyperexpo =  filteredMatrix(((filteredMatrix(:, 1) == 2)), :);
+
+expoGlobal = expo(:, 8);
+expoCloud = expo(:, 9);
+expoCloudlet = expo(:, 10);
+
+hyperexpoGlobal = hyperexpo(:, 8);
+hyperexpoCloud = hyperexpo(:, 9);
+hyperexpoCloudlet = hyperexpo(:, 10);
+
+a = 1:30;
+
+figure;
+plot(a, expoGlobal(1:30, :));
+hold on
+plot(a, hyperexpoGlobal(1:30, :));
+
+%legend('standard', 'first class', 'treshold', 'size based')
+legend('exponential', 'hyper-exponential')
+
+title('global response time comparison');
+xlabel('iteration');
+ylabel('response time (s)');
+
+end
+
+

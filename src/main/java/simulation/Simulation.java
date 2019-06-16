@@ -45,7 +45,7 @@ public class Simulation {
 
     private static void runWithCustomSeed(long customSeed) {
         initialize();
-        InitGenerator.getInstance().putNewSeed(customSeed);
+//        InitGenerator.getInstance().putNewSeed(customSeed);
         PerformanceLogger.getInstance().printInitialConfiguration();
         for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);

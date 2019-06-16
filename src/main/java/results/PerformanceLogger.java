@@ -252,6 +252,9 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("Mean cloud class 2 throughput", "green");
         System.out.println(bm.getBMAvgCloudThroughput(2)[0] + " \u00B1 " +  bm.getBMAvgCloudThroughput(2)[1]);
 
+        Printer.getInstance().print("Throughput batch new", "green");
+        System.out.println(bm.getNewBMThroughput()[0] + " \u00B1 " + bm.getNewBMThroughput()[1]);
+
     }
 
 

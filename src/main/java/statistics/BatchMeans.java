@@ -45,6 +45,8 @@ public class BatchMeans {
     private ArrayList<Double> avgCloudletT2;
     private ArrayList<Double> avgCloudT2;
 
+    private ArrayList<Double> BMThroughput;
+
 
 
     private BatchMeans(){
@@ -88,6 +90,7 @@ public class BatchMeans {
             }
         return ConfInt;
     }
+
 
 
 
@@ -294,6 +297,19 @@ public class BatchMeans {
     }
 
 
+    /**
+     * NEWWWWWWWW
+     */
+
+    public void updateNewThroughputBMArray(double value){
+        BMThroughput.add(value);
+    }
+
+    public double[] getNewBMThroughput(){
+        double[] res = new double[2];
+        res = getBMMean(BMThroughput,"m");
+        return res;
+    }
 
     public double[] getBMAvgSystemThroughput(int index){
         double[] res = new double[2];
@@ -478,6 +494,9 @@ public class BatchMeans {
         avgCloudT =  new ArrayList<>();
         avgCloudT1 =  new ArrayList<>();
         avgCloudT2 =  new ArrayList<>();
+
+        //NEW
+        BMThroughput = new ArrayList<>();
 
     }
 }

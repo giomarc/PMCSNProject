@@ -1,6 +1,7 @@
 package simulation;
 
 import cloud.Cloud;
+import job.Job;
 import results.CSVlogger;
 import results.PerformanceLogger;
 import cloudlet.Cloudlet;
@@ -25,6 +26,7 @@ public class Simulation {
     private static CloudletController cloudletController;
     private static Cloudlet cloudlet;
     private static Cloud cloud;
+    int count = 0;
 
     private static ArrayList<Event> eventList;
 
@@ -124,12 +126,12 @@ public class Simulation {
         }
 
         if(eventList.size() != 0) {
-
-            jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+            //jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
             Event e = eventList.get(0);
-            cloudletController.dispatchArrivals(e);
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
             jobStatistics.setActualTime(jobStatistics.getActualTime() + e.getJob().getArrivalTime());
+            jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+            cloudletController.dispatchArrivals(e);
             eventList.remove(0);
 
             for (Event event : eventList) {

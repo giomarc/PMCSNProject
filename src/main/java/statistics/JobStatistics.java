@@ -1,5 +1,6 @@
 package statistics;
 
+import event.CompletionHandler;
 import results.CSVlogger;
 import system.SystemConfiguration;
 
@@ -39,6 +40,7 @@ public class JobStatistics{
     private long completedCloud_2;
 
     private double meanSystemThroughput;
+    private double varSystemThroughput;
     private double meanCloudletThroughput;
     private double meanCloudThroughput;
 
@@ -111,6 +113,14 @@ public class JobStatistics{
         meanCloudPopulation = MVCloud[0];
         varCloudPopulation = MVCloud[1];
 
+        /*long sysT = completedCloud_1 + completedCloud_2 + completedCloudlet_1 + completedCloudlet_2;
+        double time = actualTime;
+        if(globalIteration < 10)
+            System.out.println("time: " + time + " - sysT: "  + sysT);
+        double[] TH = statistics.computeMeanAndVariance(varSystemThroughput,meanSystemThroughput,sysT/time, actualIteration);
+        meanSystemThroughput = TH[0];
+        varSystemThroughput = TH[1];*/
+
     }
 
     /**
@@ -164,6 +174,10 @@ public class JobStatistics{
         globalIteration++;
     }
 
+    public long getActuallIteration(){
+        return actualIteration;
+    }
+
     private void computeBatch(){
 
         batchMeans.updateBMCloudletPopulation               (this.meanCloudletPopulation);
@@ -198,7 +212,13 @@ public class JobStatistics{
         batchMeans.updateBMAvgCloudTroughputArray(getCloudClass1Throughput(),1);
         batchMeans.updateBMAvgCloudTroughputArray(getCloudClass2Throughput(),2);
 
+        //batchMeans.updateNewThroughputBMArray(this.meanSystemThroughput);
+
+        double systemT = CompletionHandler.getInstance().getThroughputStatistics();
+        batchMeans.updateNewThroughputBMArray(systemT);
+
         resetMeans();
+        CompletionHandler.getInstance().resetThroughputStatistics();
     }
 
 
@@ -220,27 +240,27 @@ public class JobStatistics{
     }
 
     public double getCloudletThroughput(){
-        return (completedCloudlet_1 + completedCloudlet_2)/globalTime;
+        return (completedCloudlet_1 + completedCloudlet_2)/actualTime;
     }
 
     public double getCloudletClass1Throughput(){
-        return completedCloudlet_1/globalTime;
+        return completedCloudlet_1/actualTime;
     }
 
     public double getCloudletClass2Throughput(){
-        return completedCloudlet_2/globalTime;
+        return completedCloudlet_2/actualTime;
     }
 
     public double getCloudThroughput(){
-        return (completedCloud_1 + completedCloud_2)/globalTime;
+        return (completedCloud_1 + completedCloud_2)/actualTime;
     }
 
     public double getCloudClass1Throughput(){
-        return completedCloud_1 /globalTime;
+        return completedCloud_1 /actualTime;
     }
 
     public double getCloudClass2Throughput(){
-        return completedCloud_2 /globalTime;
+        return completedCloud_2 /actualTime;
     }
 
 

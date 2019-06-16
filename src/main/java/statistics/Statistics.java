@@ -1,9 +1,5 @@
 package statistics;
 
-import event.Event;
-import results.CSVlogger;
-
-import java.sql.Time;
 
 public class Statistics {
 
@@ -39,8 +35,10 @@ public class Statistics {
     public double[] computeMeanAndVariance(double oldVar, double oldMean, double newValue, long n){
         double diff = (newValue -  oldMean);
         double[] MV = new double[2];
-        MV[1] = oldVar + diff * diff * (n - 1) / n;
-        MV[0] = oldMean + (diff / n);
+        if(n != 0){
+            MV[1] = oldVar + diff * diff * (n - 1) / n;
+            MV[0] = oldMean + (diff / n);
+        }
 
         return MV;
     }

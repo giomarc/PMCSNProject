@@ -27,11 +27,11 @@ public class ConfidenceInterval {
         double width = 0.0;
         long n = 0;
 
-        for(Double actualValue : givenNumbers){
+        for(Double actualValue : givenNumbers) {
             n++;
             double diff = actualValue - sampleMean;
-            variance += (diff * diff * (n-1)/n);
-            sampleMean += (diff/n);
+            variance += (diff * diff * (n - 1) / n);
+            sampleMean += (diff / n);
         }
         stddev = Math.sqrt(variance);
 

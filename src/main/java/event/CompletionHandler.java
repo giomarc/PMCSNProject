@@ -1,27 +1,28 @@
 package event;
 
 import results.CSVlogger;
-import simulation.Simulation;
 import statistics.JobStatistics;
 import statistics.Statistics;
 import statistics.TimeStatistics;
 
-/**
- * Author : Simone D'Aniello
- * Date :  18/05/2019.
- */
+
+
 public class CompletionHandler {
 
     private static CompletionHandler instance = new CompletionHandler();
     Statistics s = Statistics.getInstance();
     private TimeStatistics ts = TimeStatistics.getInstance();
     private JobStatistics js = JobStatistics.getInstance();
+    private double meanSystemThroughput;
+    private double varSystemThroughput;
 
     private CompletionHandler(){}
 
     public static CompletionHandler getInstance(){
         return instance;
     }
+
+
 
     public void handleCompletion(Event e){
         int jobClass = e.getJob().getJobClass();
@@ -32,15 +33,19 @@ public class CompletionHandler {
         if(e.getType() == 1) {                                  //cloudlet
             handleCloudletCompletion(jobClass,serviceTime);
             CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass,1,serviceTime);
+            updateThroughputStatistics();
         }
         else if(e.getType() == 2) {                             //cloud
             handleCloudCompletion(jobClass,serviceTime);
             CSVlogger.getInstance().writResponseTimeMeanInOneSimulation(jobClass,2,serviceTime);
+            updateThroughputStatistics();
         }
         else {
             System.exit(-1);
         }
     }
+
+
 
     public void handleCloudletCompletion(int jobclass, double serviceTime){
 
@@ -54,6 +59,8 @@ public class CompletionHandler {
         }
         ts.setMeanResponseTimeCloudlet(s.computeMean(ts.getMeanResponseTimeCloudlet(), serviceTime, (int) js.getCompletedCloudlet(0)));
     }
+
+
 
     public void handleCloudCompletion(int jobclass, double serviceTime){
 
@@ -70,6 +77,8 @@ public class CompletionHandler {
 
     }
 
+
+
     public void updateResponseTime(int jobclass, double serviceTime){
 
         if(jobclass == 1)
@@ -78,4 +87,25 @@ public class CompletionHandler {
             ts.setMeanResponseTimeClass2(s.computeMean(ts.getMeanResponseTimeClass2(), serviceTime, (int) (js.getCompletedCloudlet(2) + js.getCompletedCloud(2))));
         ts.setMeanResponseTime(s.computeMean(ts.getMeanResponseTime(), serviceTime, (int) (js.getCompletedCloudlet(0) + js.getCompletedCloud(0) )));
     }
+
+
+    public void resetThroughputStatistics(){
+        this.meanSystemThroughput       = 0;
+        this.varSystemThroughput        = 0;
+    }
+
+    public void updateThroughputStatistics(){
+
+        double sysT = JobStatistics.getInstance().getSystemThroughput();
+        long iterations = JobStatistics.getInstance().getActuallIteration();
+        double[] TH = Statistics.getInstance().computeMeanAndVariance(varSystemThroughput,meanSystemThroughput,sysT, iterations);
+        meanSystemThroughput = TH[0];
+        varSystemThroughput = TH[1];
+    }
+
+
+    public double getThroughputStatistics(){
+        return meanSystemThroughput;
+    }
 }
+

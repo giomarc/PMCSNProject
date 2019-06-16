@@ -1,8 +1,6 @@
 package results;
-/**
- * Author : Simone D'Aniello
- * Date :  25/02/2018.
- */
+
+
 public class Printer {
 
     private static Printer instance = new Printer();

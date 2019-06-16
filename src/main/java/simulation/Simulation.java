@@ -1,6 +1,7 @@
 package simulation;
 
 import cloud.Cloud;
+import job.Job;
 import results.CSVlogger;
 import results.PerformanceLogger;
 import cloudlet.Cloudlet;
@@ -10,11 +11,9 @@ import event.EventGenerator;
 import results.Printer;
 import statistics.BatchMeans;
 import statistics.JobStatistics;
-import statistics.Statistics;
 import statistics.TimeStatistics;
 import system.SystemConfiguration;
 import variablesGenerator.InitGenerator;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -27,6 +26,7 @@ public class Simulation {
     private static CloudletController cloudletController;
     private static Cloudlet cloudlet;
     private static Cloud cloud;
+    int count = 0;
 
     private static ArrayList<Event> eventList;
 
@@ -92,9 +92,6 @@ public class Simulation {
     }
 
     private static double handleEvent(){
-
-//        printEventList();
-
         for (Event event: eventList){
             event.setValid(true);
         }
@@ -129,12 +126,12 @@ public class Simulation {
         }
 
         if(eventList.size() != 0) {
-
-            jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+            //jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
             Event e = eventList.get(0);
-            cloudletController.dispatchArrivals(e);
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
             jobStatistics.setActualTime(jobStatistics.getActualTime() + e.getJob().getArrivalTime());
+            jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+            cloudletController.dispatchArrivals(e);
             eventList.remove(0);
 
             for (Event event : eventList) {
@@ -179,7 +176,9 @@ public class Simulation {
         eventList.add(e);
     }
 
-    public static void printEventList(){
+
+
+    /*public static void printEventList(){
         System.out.println("list");
         for(Event e : eventList) {
             if(e.getType() == 0)
@@ -188,7 +187,7 @@ public class Simulation {
                 System.out.print(e.getType() + " : " + e.getEventTime()+ " | ");
         }
         System.out.println();
-    }
+    }*/
 }
 
 

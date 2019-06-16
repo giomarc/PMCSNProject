@@ -1,9 +1,5 @@
 package statistics;
 
-import event.Event;
-import results.CSVlogger;
-
-import java.sql.Time;
 
 public class Statistics {
 

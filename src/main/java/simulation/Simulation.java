@@ -10,11 +10,9 @@ import event.EventGenerator;
 import results.Printer;
 import statistics.BatchMeans;
 import statistics.JobStatistics;
-import statistics.Statistics;
 import statistics.TimeStatistics;
 import system.SystemConfiguration;
 import variablesGenerator.InitGenerator;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -92,9 +90,6 @@ public class Simulation {
     }
 
     private static double handleEvent(){
-
-//        printEventList();
-
         for (Event event: eventList){
             event.setValid(true);
         }
@@ -179,7 +174,9 @@ public class Simulation {
         eventList.add(e);
     }
 
-    public static void printEventList(){
+
+
+    /*public static void printEventList(){
         System.out.println("list");
         for(Event e : eventList) {
             if(e.getType() == 0)
@@ -188,7 +185,7 @@ public class Simulation {
                 System.out.print(e.getType() + " : " + e.getEventTime()+ " | ");
         }
         System.out.println();
-    }
+    }*/
 }
 
 

@@ -33,6 +33,11 @@ public class Cloudlet {
         return instance;
     }
 
+
+    /**
+     *
+     * @param e: arrival event
+     */
     public void processArrival(Event e) {
         Job job = e.getJob();
         double completionTime = Services.getInstance().getCloudletServiceTime(job.getJobClass(), job.getOperations());
@@ -50,6 +55,11 @@ public class Cloudlet {
         }
     }
 
+
+    /**
+     *
+     * @param e: completion event
+     */
     public void processCompletion(Event e){
         Server s = serverList.get(e.getAdditionalInfo());
         if(!s.isBusy())
@@ -59,10 +69,20 @@ public class Cloudlet {
         CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
     }
 
+
+
+    /**
+     * @return total number of jobs in cloudlet
+     */
     public int [] getJobsInCloudlet(){
         return new int[]{n1, n2};
     }
 
+
+    /**
+     * Decreases jobs in Cloudlet of a given class
+     * @param jobClass: job's class
+     */
     private void decreaseN(int jobClass){
         if(jobClass == 1)
             n1--;
@@ -70,6 +90,11 @@ public class Cloudlet {
             n2--;
     }
 
+
+    /**
+     * Increases jobs in Cloudlet of a given class
+     * @param jobClass
+     */
     private void increaseN(int jobClass){
         if(jobClass == 1)
             n1++;
@@ -77,12 +102,18 @@ public class Cloudlet {
             n2++;
     }
 
+
+    /**
+     * Instantiates Cloudlet's servers
+     */
     private void initServers(){
         serverList = new ArrayList<>();
         for (int i = 0; i<numberOfServers; i++) {
             serverList.add(new Server(i));
         }
     }
+
+
 
     public void reset(){
         n1 = 0;
@@ -91,6 +122,8 @@ public class Cloudlet {
         numberOfServers = SystemConfiguration.N;
         initServers();
     }
+
+
 
     public ArrayList<Server> getServerList(){
         return this.serverList;

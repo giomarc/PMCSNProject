@@ -179,7 +179,8 @@ public class CSVlogger {
                             BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
                             System.out.println("File Throughput Batch Means has been created.");
                             outBM.write("batch_iteration, distribution, operations, algorithm, treshold, " +
-                                    "iterations, seed, n_server, System throughput, Cloudlet Throughput, Cloud Throughput");
+                                    "iterations, seed, n_server, System throughput, Sys class 1, Sys class 2, Cloudlet Throughput, " +
+                                    "Clet class 1, Clet class 2, Cloud Throughput. Cloud class 1, Cloud class 2");
                             outBM.flush();
                         }
                     }
@@ -242,9 +243,17 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
         int numberOfServers = SystemConfiguration.N;
-        ArrayList<Double> systemThroughput = bm.getAvgThroughputArray(0);
-        ArrayList<Double> cloudletThroughput = bm.getAvgThroughputArray(1);
-        ArrayList<Double> cloudThroughput = bm.getAvgThroughputArray(2);
+        ArrayList<Double> systemThroughput = bm.getAvgThroughputArray(0,"sys");
+        ArrayList<Double> systemThroughput1 = bm.getAvgThroughputArray(1,"sys");
+        ArrayList<Double> systemThroughput2 = bm.getAvgThroughputArray(2,"sys");
+
+        ArrayList<Double> cloudletThroughput = bm.getAvgThroughputArray(0,"clet");
+        ArrayList<Double> cloudletThroughput1 = bm.getAvgThroughputArray(1,"clet");
+        ArrayList<Double> cloudletThroughput2 = bm.getAvgThroughputArray(2,"clet");
+
+        ArrayList<Double> cloudThroughput = bm.getAvgThroughputArray(0,"cloud");
+        ArrayList<Double> cloudThroughput1 = bm.getAvgThroughputArray(1,"cloud");
+        ArrayList<Double> cloudThroughput2 = bm.getAvgThroughputArray(2,"cloud");
 
         BufferedWriter outAVG;
         try {
@@ -252,7 +261,9 @@ public class CSVlogger {
             for(int i = 0; i < SystemConfiguration.NUM_BATCH; i++) {
                 outAVG.write("\n" + i + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
                         threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
-                        systemThroughput.get(i) + "," + cloudletThroughput.get(i) + ","+ cloudThroughput.get(i));
+                        systemThroughput.get(i) +  "," +  systemThroughput1.get(i) +  "," +  systemThroughput2.get(i) +
+                        "," + cloudletThroughput.get(i) + "," + cloudletThroughput1.get(i) + "," + cloudletThroughput2.get(i) +
+                        ","+ cloudThroughput.get(i) +  ","+ cloudThroughput1.get(i) +  ","+ cloudThroughput2.get(i) );
             }
             outAVG.flush();
         } catch (IOException e) {

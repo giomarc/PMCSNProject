@@ -41,10 +41,6 @@ public class JobStatistics{
     private double meanSystemThroughput;
     private double meanCloudletThroughput;
     private double meanCloudThroughput;
-    private double varSystemThroughput;
-    private double varCloudletThroughput;
-    private double varCloudThroughput;
-
 
     //ITERATIONS
     private long globalIteration;
@@ -191,8 +187,16 @@ public class JobStatistics{
         batchMeans.setBMVarianceGlobalPopulationClass2      (this.varGlobalPopulation_2 / actualIteration);
 
         batchMeans.updateBMAvgTroughputArray(getSystemThroughput(),0);
-        batchMeans.updateBMAvgTroughputArray(getCloudletThroughput(),1);
-        batchMeans.updateBMAvgTroughputArray(getCloudThroughput(),2);
+        batchMeans.updateBMAvgTroughputArray(getSystemClass1Throughput(),1);
+        batchMeans.updateBMAvgTroughputArray(getSystemClass2Throughput(),2);
+
+        batchMeans.updateBMAvgCletTroughputArray(getCloudletThroughput(),0);
+        batchMeans.updateBMAvgCletTroughputArray(getCloudletClass1Throughput(),1);
+        batchMeans.updateBMAvgCletTroughputArray(getCloudletClass2Throughput(),2);
+
+        batchMeans.updateBMAvgCloudTroughputArray(getCloudThroughput(),0);
+        batchMeans.updateBMAvgCloudTroughputArray(getCloudClass1Throughput(),1);
+        batchMeans.updateBMAvgCloudTroughputArray(getCloudClass2Throughput(),2);
 
         resetMeans();
     }
@@ -468,10 +472,6 @@ public class JobStatistics{
         this.meanSystemThroughput       = 0;
         this.meanCloudletThroughput     = 0;
         this.meanCloudThroughput        = 0;
-
-        this.varSystemThroughput        = 0;
-        this.varCloudletThroughput      = 0;
-        this.varCloudThroughput         = 0;
 
         this.actualTime                 = 0;
         this.actualIteration            = 0;

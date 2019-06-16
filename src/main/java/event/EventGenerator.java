@@ -5,6 +5,8 @@ import system.SystemConfiguration;
 import variablesGenerator.Arrivals;
 import variablesGenerator.Services;
 
+
+
 public class EventGenerator {
 
     private static EventGenerator instance = new EventGenerator();
@@ -12,6 +14,8 @@ public class EventGenerator {
     private EventGenerator(){}
 
     public static EventGenerator getInstance(){return instance;}
+
+
 
     public Event generateArrival(){
         double arrival = Arrivals.getInstance().getArrival();
@@ -22,6 +26,8 @@ public class EventGenerator {
             job = new Job(Arrivals.getInstance().determineJobClass(), arrival, 0);
         return new Event(0, job);
     }
+
+
 
     public Event generateCompletion(int cloudletOrCloud, Job job){
         if(cloudletOrCloud == 1 || cloudletOrCloud == 2)

@@ -1,15 +1,12 @@
 package event;
 
 import results.CSVlogger;
-import simulation.Simulation;
 import statistics.JobStatistics;
 import statistics.Statistics;
 import statistics.TimeStatistics;
 
-/**
- * Author : Simone D'Aniello
- * Date :  18/05/2019.
- */
+
+
 public class CompletionHandler {
 
     private static CompletionHandler instance = new CompletionHandler();
@@ -22,6 +19,8 @@ public class CompletionHandler {
     public static CompletionHandler getInstance(){
         return instance;
     }
+
+
 
     public void handleCompletion(Event e){
         int jobClass = e.getJob().getJobClass();
@@ -42,6 +41,8 @@ public class CompletionHandler {
         }
     }
 
+
+
     public void handleCloudletCompletion(int jobclass, double serviceTime){
 
         if(jobclass == 1){
@@ -54,6 +55,8 @@ public class CompletionHandler {
         }
         ts.setMeanResponseTimeCloudlet(s.computeMean(ts.getMeanResponseTimeCloudlet(), serviceTime, (int) js.getCompletedCloudlet(0)));
     }
+
+
 
     public void handleCloudCompletion(int jobclass, double serviceTime){
 
@@ -69,6 +72,8 @@ public class CompletionHandler {
         ts.setMeanResponseTimeCloud(s.computeMean(ts.getMeanResponseTimeCloud(), serviceTime, (int) js.getCompletedCloud(0)));
 
     }
+
+
 
     public void updateResponseTime(int jobclass, double serviceTime){
 

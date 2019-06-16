@@ -240,27 +240,27 @@ public class JobStatistics{
     }
 
     public double getCloudletThroughput(){
-        return (completedCloudlet_1 + completedCloudlet_2)/actualTime;
+        return (completedCloudlet_1 + completedCloudlet_2)/globalTime;
     }
 
     public double getCloudletClass1Throughput(){
-        return completedCloudlet_1/actualTime;
+        return completedCloudlet_1/globalTime;
     }
 
     public double getCloudletClass2Throughput(){
-        return completedCloudlet_2/actualTime;
+        return completedCloudlet_2/globalTime;
     }
 
     public double getCloudThroughput(){
-        return (completedCloud_1 + completedCloud_2)/actualTime;
+        return (completedCloud_1 + completedCloud_2)/globalTime;
     }
 
     public double getCloudClass1Throughput(){
-        return completedCloud_1 /actualTime;
+        return completedCloud_1 /globalTime;
     }
 
     public double getCloudClass2Throughput(){
-        return completedCloud_2 /actualTime;
+        return completedCloud_2 /globalTime;
     }
 
 

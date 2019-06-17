@@ -23,12 +23,6 @@ public class JobStatistics{
     private double meanCloudletPopulation_2;
     private double meanCloudPopulation_2;
 
-
-    private long completedCloudlet_1;
-    private long completedCloudlet_2;
-    private long completedCloud_1;
-    private long completedCloud_2;
-
     //THROUGHPUT MEANS
     private double meanSystemThroughput;
     private double meanSystemThroughput1;
@@ -49,6 +43,13 @@ public class JobStatistics{
     private double batchSize;
     private int actualBatch;
 
+    private long completedCloudlet_1;
+    private long completedCloudlet_2;
+    private long completedCloud_1;
+    private long completedCloud_2;
+
+
+
     private JobStatistics(){
         resetStatistics();
         statistics = ConfidenceInterval.getInstance();
@@ -64,6 +65,11 @@ public class JobStatistics{
     }
 
 
+    /**
+     * Updates population means statistics
+     * @param cloudletPopulation actual number of jobs into cloudlet
+     * @param cloudPopulation actual number of jobs into cloud
+     */
     public void updatePopulationMeans(int[] cloudletPopulation, int[] cloudPopulation){
 
 
@@ -76,12 +82,15 @@ public class JobStatistics{
         if(SystemConfiguration.BATCH &&
                 ((actualIteration >= batchSize))){ // devo considerare sia gli arrivi che i completamenti
             computeBatch();
-            actualBatch++;
             setBatchSize();
+            actualBatch++;
         }
     }
 
 
+    /**
+     * Utility function
+     */
     public void setBatchSize(){
         if( ((SystemConfiguration.ITERATIONS % SystemConfiguration.NUM_BATCH) != 0) && actualBatch == (SystemConfiguration.NUM_BATCH-1)){
             batchSize = (SystemConfiguration.ITERATIONS - (SystemConfiguration.NUM_BATCH*batchMeans.getBatchSize()))+1;
@@ -89,7 +98,7 @@ public class JobStatistics{
     }
 
     /**
-     * Updates means and variance of class 1 and class 2 jobs
+     * Update system, cloudlet and cloud global population means
      * @param cloudletPopulation actual number of jobs in cloudlet
      * @param cloudPopulation actual number of jobs in cloud
      */
@@ -105,11 +114,9 @@ public class JobStatistics{
     }
 
     /**
-     * Updates means and variance of class 1 jobs
+     * Update means of class 1 jobs for system, cloudlet and cloud
      * @param cloudlet1 actual number of class 1 jobs in cloudlet
      * @param cloud1 actual number of class 1 jobs in cloud
-     *               cloudlet  = 1
-     *               cloud  = 2
      */
     private void updateClass1(int cloudlet1, int cloud1){
         int totalClass1 = cloudlet1 + cloud1;
@@ -118,8 +125,9 @@ public class JobStatistics{
         meanCloudPopulation_1 = statistics.computeWelfordMean(meanCloudPopulation_1, cloud1, actualIteration);
     }
 
+
     /**
-     * Updates means and variance of class 2 jobs
+     * Updates means of class 2 jobs for system, cloudlet and cloud
      * @param cloudlet2 actual number of class 2 jobs in cloudlet
      * @param cloud2 actual number of class 2 jobs in cloud
      */
@@ -130,15 +138,40 @@ public class JobStatistics{
         meanCloudPopulation_2 = statistics.computeWelfordMean(meanCloudPopulation_2, cloud2, actualIteration);
     }
 
-    private void updateGlobalIterations(){
-        actualIteration++;
-        globalIteration++;
+
+    public void updateThroughputStatistics(){
+
+        double sysT = getSystemThroughput();
+        double sysT1 = getSystemClass1Throughput();
+        double sysT2 = getSystemClass2Throughput();
+        double cletT = getCloudletThroughput();
+        double cletT1 = getCloudletClass1Throughput();
+        double cletT2 = getCloudletClass2Throughput();
+        double cloudT = getCloudThroughput();
+        double cloudT1 = getCloudClass1Throughput();
+        double cloudT2 = getCloudClass2Throughput();
+        long iterations = getActuallIteration();
+
+        meanSystemThroughput = statistics.computeWelfordMean(meanSystemThroughput,sysT, iterations);
+        meanSystemThroughput1 = statistics.computeWelfordMean(meanSystemThroughput1,sysT1, iterations);
+        meanSystemThroughput2 = statistics.computeWelfordMean(meanSystemThroughput2,sysT2, iterations);
+
+        meanCletThroughput = statistics.computeWelfordMean(meanCletThroughput,cletT, iterations);
+        meanCletThroughput1 = statistics.computeWelfordMean(meanCletThroughput1,cletT1, iterations);
+        meanCletThroughput2 = statistics.computeWelfordMean(meanCletThroughput2,cletT2, iterations);
+
+        meanCloudThroughput = statistics.computeWelfordMean(meanCloudThroughput,cloudT, iterations);
+        meanCloudThroughput1 = statistics.computeWelfordMean(meanCloudThroughput1,cloudT1, iterations);
+        meanCloudThroughput2 = statistics.computeWelfordMean(meanCloudThroughput2,cloudT2, iterations);
+
+
     }
 
-    public long getActuallIteration(){
-        return actualIteration;
-    }
 
+
+    /**
+     * Updates Batch Means Array for population with current mean values, throughput and response time
+     */
     private void computeBatch(){
 
         batchMeans.updateBMCloudletPopulation               (this.meanCloudletPopulation);
@@ -158,6 +191,9 @@ public class JobStatistics{
     }
 
 
+    /**
+     * Updates Batch Means throughput arrays with current mean values
+     */
     public void computeThroughputBatch(){
         batchMeans.updateThroughputBMArray(meanSystemThroughput,"sys",0);
         batchMeans.updateThroughputBMArray(meanSystemThroughput1,"sys",1);
@@ -172,9 +208,25 @@ public class JobStatistics{
     }
 
 
+    /**
+     * Increase value of actual and global iterations
+     */
+    private void updateGlobalIterations(){
+        actualIteration++;
+        globalIteration++;
+    }
+
 
     /**
-     * THROUGHPUT
+     * Return actual iteration
+     */
+    public long getActuallIteration(){
+        return actualIteration;
+    }
+
+
+    /*
+     * Computes throughput in terms of (completed tasks)/time
      */
     public double getSystemThroughput(){
         return (getCloudThroughput() + getCloudletThroughput());
@@ -214,7 +266,7 @@ public class JobStatistics{
 
 
     /**
-     * PLOSS
+     * Computes Cloudlet Ploss
      */
     public double calculatePLoss(){
         double allPackets = completedCloudlet_1 +
@@ -247,7 +299,10 @@ public class JobStatistics{
     }
 
 
-    //COMPLETED JOBS
+    /*
+     * Compute completed job into system, cloudlet and cloud
+     * @param jobclass 0: both class 1 and 2, 1: class 1, 2: class 2
+     */
     public long getCompletedCloudlet(int jobclass){
         if(jobclass == 0)
             return completedCloudlet_1 + completedCloudlet_2;
@@ -285,7 +340,19 @@ public class JobStatistics{
     }
 
 
-    //POPULATION
+    public long getGlobalCompleted(int jobclass){
+        if(jobclass == 0)
+            return  completedCloudlet_1 + completedCloudlet_2 + completedCloud_1 + completedCloud_2;
+        else if(jobclass == 1)
+            return completedCloudlet_1 + completedCloud_1;
+        else
+            return completedCloudlet_2 + completedCloud_2;
+    }
+
+
+    /*
+     * Return actual population means
+     */
     public double getMeanCloudletPopulation(int jobclass) {
         double mean = 0.0;
         switch (jobclass){
@@ -323,46 +390,9 @@ public class JobStatistics{
     }
 
 
-    public long getPackets(int jobclass){
-        if(jobclass == 0)
-            return  completedCloudlet_1 + completedCloudlet_2 + completedCloud_1 + completedCloud_2;
-        else if(jobclass == 1)
-            return completedCloudlet_1 + completedCloud_1;
-        else
-            return completedCloudlet_2 + completedCloud_2;
-    }
 
-
-    public void updateThroughputStatistics(){
-
-        double sysT = getSystemThroughput();
-        double sysT1 = getSystemClass1Throughput();
-        double sysT2 = getSystemClass2Throughput();
-        double cletT = getCloudletThroughput();
-        double cletT1 = getCloudletClass1Throughput();
-        double cletT2 = getCloudletClass2Throughput();
-        double cloudT = getCloudThroughput();
-        double cloudT1 = getCloudClass1Throughput();
-        double cloudT2 = getCloudClass2Throughput();
-        long iterations = getActuallIteration();
-
-        meanSystemThroughput = statistics.computeWelfordMean(meanSystemThroughput,sysT, iterations);
-        meanSystemThroughput1 = statistics.computeWelfordMean(meanSystemThroughput1,sysT1, iterations);
-        meanSystemThroughput2 = statistics.computeWelfordMean(meanSystemThroughput2,sysT2, iterations);
-
-        meanCletThroughput = statistics.computeWelfordMean(meanCletThroughput,cletT, iterations);
-        meanCletThroughput1 = statistics.computeWelfordMean(meanCletThroughput1,cletT1, iterations);
-        meanCletThroughput2 = statistics.computeWelfordMean(meanCletThroughput2,cletT2, iterations);
-
-        meanCloudThroughput = statistics.computeWelfordMean(meanCloudThroughput,cloudT, iterations);
-        meanCloudThroughput1 = statistics.computeWelfordMean(meanCloudThroughput1,cloudT1, iterations);
-        meanCloudThroughput2 = statistics.computeWelfordMean(meanCloudThroughput2,cloudT2, iterations);
-
-
-    }
-
-    /**
-     * RESET METHODS
+    /*
+     * RESET statistics
      */
     public void resetStatistics(){
         this.globalTime                 = 0;

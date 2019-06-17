@@ -28,6 +28,8 @@ public class PerformanceLogger implements Runnable {
         return instance;
     }
 
+
+
     private void startTest(){
         start = Instant.now();
         stop = false;
@@ -35,6 +37,10 @@ public class PerformanceLogger implements Runnable {
         son.start();
     }
 
+
+    /**
+     * Print comparison between simulation time with real-time
+     */
     private void endTest(double simulationTime){
         long memoryUsage = (calculateAverage(memoryUsages));
         stop = true;
@@ -80,6 +86,10 @@ public class PerformanceLogger implements Runnable {
             return -1;
     }
 
+
+    /**
+     * Print on console simulation's configuration
+     */
     public void printInitialConfiguration(){
         if(!SystemConfiguration.MULTI_RUN) {
             if (SystemConfiguration.CSVLOGGER)
@@ -92,6 +102,10 @@ public class PerformanceLogger implements Runnable {
         startTest();
     }
 
+
+    /**
+     * Print on console simulation's results
+     */
     public void printFinalResults(JobStatistics js, TimeStatistics ts, BatchMeans bm){
         System.out.print("\r100%");
         Printer.getInstance().print("\n\nCLOUDLET P_LOSS", "yellow");
@@ -113,6 +127,9 @@ public class PerformanceLogger implements Runnable {
     }
 
 
+    /**
+     * Print on console simulation's configuration
+     */
     private void printSystemConfiguration(){
         Printer.getInstance().print("\nARRIVAL RATES", "yellow");
         System.out.println("lambda_1 = " + SystemConfiguration.ARRIVAL_RATE_1);
@@ -131,6 +148,10 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("\nCompletion Percentage:", "blue");
     }
 
+
+    /**
+     * Print throughput results
+     */
     private void printThroughputResults(JobStatistics js){
         //THROUGHPUT GLOBALI
         Printer.getInstance().print("\nTHROUGHPUT", "yellow");
@@ -158,14 +179,18 @@ public class PerformanceLogger implements Runnable {
         System.out.println(js.getCloudClass2Throughput());
     }
 
+
+    /**
+     * Print completions
+     */
     private void printCompletedJobs(JobStatistics js) {
         Printer.getInstance().print("\nCOMPLETIONS", "yellow");
         Printer.getInstance().print("Job completed", "green");
-        System.out.println(((int) js.getPackets(0)));
+        System.out.println(((int) js.getGlobalCompleted(0)));
         Printer.getInstance().print("Job class 1 completed", "green");
-        System.out.println(((int) js.getPackets(1)));
+        System.out.println(((int) js.getGlobalCompleted(1)));
         Printer.getInstance().print("Job class 2 completed", "green");
-        System.out.println(((int) js.getPackets(2)));
+        System.out.println(((int) js.getGlobalCompleted(2)));
         Printer.getInstance().print("Cloudlet class 1 completed", "green");
         System.out.println(((int) js.getCompletedCloudlet(1)));
         Printer.getInstance().print("Cloudlet class 2 completed", "green");
@@ -180,6 +205,10 @@ public class PerformanceLogger implements Runnable {
         System.out.println(((int) js.getCompletedCloud(0)));
     }
 
+
+    /**
+     * Print response time
+     */
     private void printResponseTime(TimeStatistics ts){
         Printer.getInstance().print("\nSERVICE TIME", "yellow");
         Printer.getInstance().print("Mean global response time", "green");
@@ -203,7 +232,9 @@ public class PerformanceLogger implements Runnable {
     }
 
 
-
+   /**
+    * Print populations confidence interval if batch enabled
+    */
     private void printMeanBatchPopulation(BatchMeans js){
         Printer.getInstance().print("\nAVG POPULATION", "yellow");
         Printer.getInstance().print("Mean global population", "green");
@@ -228,7 +259,10 @@ public class PerformanceLogger implements Runnable {
 
 
 
-    //THROUGHPUT BATCH PRINTSSSSSSSSS
+
+    /**
+     * Print throughput confidence interval if batch enabled
+     */
 
     private void printThroughputBatch(BatchMeans bm){
         System.out.println("\n");
@@ -258,7 +292,9 @@ public class PerformanceLogger implements Runnable {
 
 
 
-    //RESPONSE TIME BATCH PRINTS
+    /**
+     * Print response time confidence interval if batch enabled
+     */
     private void printResponseTimeBatch(BatchMeans bm){
         System.out.println("\n");
         Printer.getInstance().print("Response Time System batch ", "green");
@@ -286,6 +322,9 @@ public class PerformanceLogger implements Runnable {
     }
 
 
+    /**
+     * Print mean populations
+     */
     private void printMeanPopulation(JobStatistics js){
         Printer.getInstance().print("\nAVG POPULATION", "yellow");
         Printer.getInstance().print("Mean global population", "green");
@@ -310,6 +349,9 @@ public class PerformanceLogger implements Runnable {
 
 
 
+    /**
+     * Print percentage of simulation progress
+     */
     public void updateProgress(long current, long max) {
         if(current%10000 == 0) {
             double progressPercentage = ((double) current) / ((double) max);

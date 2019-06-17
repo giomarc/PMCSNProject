@@ -29,6 +29,10 @@ public class TimeStatistics{
     }
 
 
+
+    /*
+     * Getter and Setters
+     */
     public void setMeanResponseTime(double meanResponseTime) {
         this.meanResponseTime = meanResponseTime;
     }
@@ -66,23 +70,6 @@ public class TimeStatistics{
     }
 
 
-
-    public void computeResponseTimeBatch(){
-        batchMeans.updateTimeBMArray(meanResponseTime,"sys",0);
-        batchMeans.updateTimeBMArray(meanResponseTimeClass1,"sys",1);
-        batchMeans.updateTimeBMArray(meanResponseTimeClass2,"sys",2);
-        batchMeans.updateTimeBMArray(meanResponseTimeCloudlet,"clet",0);
-        batchMeans.updateTimeBMArray(meanResponseTimeClass1Cloudlet,"clet",1);
-        batchMeans.updateTimeBMArray(meanResponseTimeClass2Cloudlet,"clet",2);
-        batchMeans.updateTimeBMArray(meanResponseTimeCloud,"cloud",0);
-        batchMeans.updateTimeBMArray(meanResponseTimeClass1Cloud,"cloud",1);
-        batchMeans.updateTimeBMArray(meanResponseTimeClass2Cloud,"cloud",2);
-    }
-
-
-    /**
-     * Getters and Setters
-     */
     public double getMeanResponseTime() {
         return meanResponseTime;
     }
@@ -121,7 +108,27 @@ public class TimeStatistics{
 
 
 
+    /*
+     Insert into Batch Means response time arrays the actual mean value of each response time
+     */
 
+    public void computeResponseTimeBatch(){
+        batchMeans.updateTimeBMArray(meanResponseTime,"sys",0);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass1,"sys",1);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass2,"sys",2);
+        batchMeans.updateTimeBMArray(meanResponseTimeCloudlet,"clet",0);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass1Cloudlet,"clet",1);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass2Cloudlet,"clet",2);
+        batchMeans.updateTimeBMArray(meanResponseTimeCloud,"cloud",0);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass1Cloud,"cloud",1);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass2Cloud,"cloud",2);
+    }
+
+
+
+    /*
+     * Reset time statistics
+     */
     public void resetStatistics(){
         this.meanResponseTime                = 0.0;
         this.meanResponseTimeCloudlet        = 0.0;

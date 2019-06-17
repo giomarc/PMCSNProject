@@ -18,6 +18,10 @@ public class Printer {
     private static final String ANSI_PURPLE = "\u001B[35m";
     private static final String ANSI_CYAN = "\u001B[36m";
 
+
+    /*
+     * Color print setup
+     */
     public void print(String text, String color) {
         switch (color) {
             case "blue":

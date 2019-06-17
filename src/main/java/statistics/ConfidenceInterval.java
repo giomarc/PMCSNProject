@@ -18,6 +18,13 @@ public class ConfidenceInterval {
     }
 
 
+    /**
+     * Computes one-pass Welford Mean
+     * @param oldMean: value to update
+     * @param newValue: new value
+     * @param n: actual iteration
+     * @return
+     */
     public double computeWelfordMean(double oldMean, double newValue, long n)
     {
         double diff = (newValue -  oldMean);
@@ -29,6 +36,11 @@ public class ConfidenceInterval {
     }
 
 
+    /**
+     * Computes Confidence Interval from an array of values
+     * @param givenNumbers: array of doubles
+     * @return
+     */
     public double[] computeConfidenceInterval(ArrayList<Double> givenNumbers) {
 
         double sampleMean = 0.0;
@@ -55,21 +67,4 @@ public class ConfidenceInterval {
         return confidenceInterval;
     }
 
-
-    /**
-     * Returns number of outliers respect confidence interval
-     */
-    private void findOutliers(Double min, Double max, ArrayList<Double> givenNumbers){
-        //System.out.println("( " + min + " , " + max + " )");
-        double outliers = 0.0;
-        double tot = 1.0;
-        for (Double d : givenNumbers){
-            if((d< min) || (d > max))
-                outliers++;
-            tot++;
-        }
-        //System.out.println("percentage of outliers " + outliers/(tot-1));
-        //System.out.println("mean: " + ((min+max)/2));
-
-    }
 }

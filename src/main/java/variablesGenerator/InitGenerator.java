@@ -41,24 +41,37 @@ public class InitGenerator {
         return instance;
     }
 
+
+    /**
+     * Select a stream from index selected
+     * @param indexStream
+     */
     public void selectStream (int indexStream){
         rvgs.rngs.selectStream(indexStream);
     }
 
 
     /**
-     * Return distributions
+     * Return exponential distribution
      */
     public double exponential(double rate, int stream){
         selectStream(stream);
         return this.rvgs.exponential(1/rate);
     }
 
+
+    /**
+     * Return uniform distribution
+     */
     public double uniform(){
         selectStream(1);
         return this.rvgs.uniform(0.0,1.0);
     }
 
+
+    /**
+     * Return t-student distribution
+     */
     public double idfStudent(long n, double u){
         return rvms.idfStudent(n,u);
     }

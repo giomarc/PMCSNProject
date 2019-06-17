@@ -7,9 +7,7 @@ public class SystemConfiguration {
 
 
     public static final String FILENAME = "src/main/resources/config.properties";
-    public static double SETUP_TIME = 0.0;
     public static int N = 0;
-    public static int S = 0;
     public static double ARRIVAL_RATE_1 = 0.0;
     public static double ARRIVAL_RATE_2 = 0.0;
     public static double CLOUDLET_M1 = 0.0;
@@ -17,8 +15,6 @@ public class SystemConfiguration {
     public static double CLOUD_M1 = 0.0;
     public static double CLOUD_M2 = 0.0;
     public static double PHASE_P = 0.0;
-    public static double START = 0.0;
-    public static double STOP = 0.0;
     public static boolean VERBOSE = true;
     public static boolean MULTI_RUN = false;
     public static long SEED = 0;
@@ -32,6 +28,10 @@ public class SystemConfiguration {
     public static boolean BATCH = false;
     public static int NUM_BATCH;
 
+
+    /**
+     * Read config params from config.properties file and parse parameters
+     */
     public static void getConfigParams() {
         try {
 
@@ -39,7 +39,6 @@ public class SystemConfiguration {
             FileInputStream inputStream = new FileInputStream(FILENAME);
             prop.load(inputStream);
 
-            SETUP_TIME = Double.parseDouble(prop.getProperty("SETUP_TIME"));
             ARRIVAL_RATE_1 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_1"));
             ARRIVAL_RATE_2 = Double.parseDouble(prop.getProperty("ARRIVAL_RATE_2"));
             CLOUDLET_M1 = Double.parseDouble(prop.getProperty("CLOUDLET_M1"));
@@ -47,8 +46,6 @@ public class SystemConfiguration {
             CLOUD_M1 = Double.parseDouble(prop.getProperty("CLOUD_M1"));
             CLOUD_M2 = Double.parseDouble(prop.getProperty("CLOUD_M2"));
             PHASE_P = Double.parseDouble(prop.getProperty("PHASE_P"));
-            START = Double.parseDouble(prop.getProperty("START"));
-            STOP = Double.parseDouble(prop.getProperty("STOP"));
             N = Integer.parseInt(prop.getProperty("N"));
             RUNS = Integer.parseInt(prop.getProperty("RUNS"));
             NUM_BATCH = Integer.parseInt(prop.getProperty("NUM_BATCH"));

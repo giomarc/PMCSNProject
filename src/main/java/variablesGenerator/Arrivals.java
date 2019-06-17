@@ -25,7 +25,7 @@ public class Arrivals {
 
 
     /**
-     * Return arrival times
+     * Retur arrival times
      */
     public double getArrival(){
         double total_rate = getTotalRate();

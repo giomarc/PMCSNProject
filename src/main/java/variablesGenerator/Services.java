@@ -5,7 +5,6 @@ import system.SystemConfiguration;
 public class Services {
 
     private static Services instance = null;
-
     private double serviceRatePhase1Class1;
     private double serviceRatePhase1Class2;
     private double serviceRatePhase2Class1;
@@ -19,6 +18,7 @@ public class Services {
         return instance;
     }
 
+
     private Services(){
         double p = SystemConfiguration.PHASE_P;
         serviceRatePhase1Class1 = 2*p*SystemConfiguration.CLOUDLET_M1;
@@ -28,9 +28,12 @@ public class Services {
     }
 
 
-
-
-    // SERVICE TIME CLOUD
+    /**
+     * Redirect to the function to get the service time for a job processed by Cloud
+     * @param jobclass
+     * @param numberOfOperations: job size
+     * @return
+     */
 
     public double getCloudServiceTime(int jobclass, double numberOfOperations){
         if(SystemConfiguration.OPERATIONS_ENABLED)
@@ -39,6 +42,12 @@ public class Services {
             return getCloudServiceTimeWithoutOperations(jobclass);
     }
 
+
+    /**
+     * Get service Time for a job processed by Cloud if operations are not enabled (default config)
+     * @param job_class
+     * @return
+     */
     private double getCloudServiceTimeWithoutOperations(int job_class){
         double service_rate;
         int stream;
@@ -55,6 +64,12 @@ public class Services {
 
 
 
+    /**
+     * Get service Time for a job processed by Cloud if operations are enabled
+     * @param jobClass
+     * @param numberOfOperations: job size
+     * @return
+     */
     private double getCloudServiceTimePerOperation(int jobClass, double numberOfOperations){
         if(jobClass == 1)
             return (1/SystemConfiguration.CLOUD_M1) * numberOfOperations;
@@ -64,8 +79,12 @@ public class Services {
 
 
 
-    // SERVICE TIME CLOUDLET
-
+    /**
+     * Redirect to functions used to compute the service time for Cloudlet system
+     * @param jobclass
+     * @param numberOfOperations: job size
+     * @return
+     */
     public double getCloudletServiceTime(int jobclass, double numberOfOperations){
         //hyperexponential using operations
         if(SystemConfiguration.HYPEREXPO_ENABLED && SystemConfiguration.OPERATIONS_ENABLED)
@@ -86,7 +105,12 @@ public class Services {
 
 
 
-
+    /**
+     * Get service Time for a job processed by Cloud if operations are enabled
+     * @param jobClass
+     * @param numberOfOperations:job size
+     * @return
+     */
     @SuppressWarnings("Duplicates")
     private double getCloudletHyperExpServiceTimePerOperation(int jobClass, double numberOfOperations){
         double serviceRate;
@@ -108,7 +132,11 @@ public class Services {
 
 
 
-
+    /**
+     * Get service time for a job into the Cloudlet when hyper-expo distribution is used and operations enabled
+     * @param jobClass
+     * @return
+     */
     @SuppressWarnings("Duplicates")
     private double getCloudletHyperExpServiceTimeWithoutOperations(int jobClass){
         double serviceRate;
@@ -130,6 +158,12 @@ public class Services {
 
 
 
+    /**
+     * Get service Time for a job processed by Cloudlet if operations are enabled
+     * @param jobClass
+     * @param numberOfOperations: job size
+     * @return
+     */
     private double getCloudletExpServiceTimePerOperation(int jobClass, double numberOfOperations){
         if(jobClass == 1)
             return (1/SystemConfiguration.CLOUDLET_M1) * numberOfOperations;
@@ -139,6 +173,11 @@ public class Services {
 
 
 
+    /**
+     * Get service Time for a job processed by Cloudlet if operations are not enabled (default config)
+     * @param job_class
+     * @return
+     */
     private double getCloudletServiceTimeWithoutOperations(int job_class){
         double service_rate;
         int stream;
@@ -154,9 +193,10 @@ public class Services {
     }
 
 
-    // OTHER
-
-
+    /**
+     * Return job's size
+     * @return
+     */
     public double getJobOperations(){
         return InitGenerator.getInstance().exponential(1, 6);
     }

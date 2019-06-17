@@ -12,7 +12,7 @@ public class BatchMeans {
     private int num_batch;
     private static BatchMeans instance = null;
 
-    //POPULATION BATCH MEANS
+    //POPULATION BATCH MEANS ARRAY
     private ArrayList<Double> BMGlobalPopulation;
     private ArrayList<Double> BMCloudletPopulation;
     private ArrayList<Double> BMCloudPopulation;
@@ -23,7 +23,7 @@ public class BatchMeans {
     private ArrayList<Double> BMCloudletPopulation_2;
     private ArrayList<Double> BMCloudPopulation_2;
 
-    //THROUGHPUT BATCH MEANS
+    //THROUGHPUT BATCH MEANS ARRAY
     private ArrayList<Double> BMSysThroughput;
     private ArrayList<Double> BMSysThroughput1;
     private ArrayList<Double> BMSysThroughput2;
@@ -34,7 +34,7 @@ public class BatchMeans {
     private ArrayList<Double> BMCloudThroughput1;
     private ArrayList<Double> BMCloudThroughput2;
 
-    //RESPONSE TIME BATCH
+    //RESPONSE TIME BATCH ARRAY
     private ArrayList<Double> BMSysTime;
     private ArrayList<Double> BMSysTime1;
     private ArrayList<Double> BMSysTime2;
@@ -56,6 +56,7 @@ public class BatchMeans {
         init();
     }
 
+
     public static BatchMeans getInstance(){
         if(instance == null)
             instance = new BatchMeans();
@@ -63,13 +64,18 @@ public class BatchMeans {
     }
 
 
+    /*
+     * computes batch size
+     */
     double getBatchSize(){
         batch_size = (double) (iterations / num_batch);
         return batch_size;
     }
 
 
-
+    /**
+     * Computes Confidence Interval from batches
+     */
     public double[] getBMMean(ArrayList<Double> values) {
 
             if(values.size()!=num_batch){
@@ -82,8 +88,8 @@ public class BatchMeans {
 
 
 
-    /**
-     * Getter
+    /*
+     * Return array containing batch sample means
      */
     public ArrayList<Double> getBMGlobalPopulation(int classId){
         ArrayList<Double> mean = new ArrayList<>();
@@ -128,7 +134,8 @@ public class BatchMeans {
 
 
     /**
-     * GETTER FOR STATISTICS
+     * Return Confidence Interval from Batch Arrays
+     * @oaram classId: 0: both class 1 and 2, 1: class 1, 2: class 2
      */
     public double[] getMeanBMGlobalPopulation(int classId) {
         double[] res = new double[2];
@@ -162,7 +169,10 @@ public class BatchMeans {
 
 
     /**
-     * NEWWWWWWWW
+     * Insert actual throughput mean into Batch array
+     * @param value actual mean to insert
+     * @param s sys = system, clet = cloudlet, cloud = cloud
+     * @param index 0: both class 1 and 2, 1: class 1, 2: class 2
      */
 
     public void updateThroughputBMArray(double value, String s, int index){
@@ -188,6 +198,13 @@ public class BatchMeans {
         }
     }
 
+
+    /**
+     * Return throughput confidence interval
+     * @param s system to compute (sys = system, clet = cloudlet, cloud = cloud)
+     * @param index (0: both class 1 and 2, 1: class 1, 2 class 2)
+     * @return
+     */
     public double[] getBMThroughput(String s, int index){
         double[] res = new double[2];
         switch(s){
@@ -214,6 +231,9 @@ public class BatchMeans {
     }
 
 
+    /**
+     * Return thoughput array with batches
+     */
     public ArrayList<Double> getBMThroughputArray(int index, String s){
         ArrayList res =  new ArrayList();
         switch(s){
@@ -239,6 +259,10 @@ public class BatchMeans {
         return res;
     }
 
+
+    /**
+     * Insert new mean value into Batch Array
+     */
     public void updateTimeBMArray(double value, String s, int index){
         switch(s){
             case "sys":
@@ -262,6 +286,10 @@ public class BatchMeans {
         }
     }
 
+
+    /**
+     * Compute confidence interval for Response time
+     */
     public double[] getBMTime(String s, int index){
         double[] res = new double[2];
         switch(s){

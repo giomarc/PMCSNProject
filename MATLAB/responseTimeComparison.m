@@ -3,7 +3,6 @@ digits(15);
 M = readmatrix('..\RESULT_OUTPUT\ResponseTime.csv');
 
 filteredMatrix = M(((M(:, 7) == 20)), :);
-%algorithm seed server time
 globalTime = filteredMatrix(:, [3 7 8]);
 
 standardAlgorithm   = globalTime(globalTime(:, 1) == 1, [2 3]);
@@ -32,10 +31,7 @@ hold on
 plot(a, FCA20(1:30, :));
 hold on 
 plot(a, TA20(1:30, :));
-%hold on 
-%plot(a, SBA20(1:30, :));
 
-%legend('standard', 'first class', 'treshold', 'size based')
 legend('standard', 'first class', 'treshold')
 
 title('global response time comparison');

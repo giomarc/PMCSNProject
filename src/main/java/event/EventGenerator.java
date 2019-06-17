@@ -15,8 +15,10 @@ public class EventGenerator {
 
     public static EventGenerator getInstance(){return instance;}
 
-
-
+    /**
+     * generate a new job with an own class, arrival time and (if enabled) the size. Then create a ner arrival event
+     * @return
+     */
     public Event generateArrival(){
         double arrival = Arrivals.getInstance().getArrival();
         Job job;
@@ -27,8 +29,12 @@ public class EventGenerator {
         return new Event(0, job);
     }
 
-
-
+    /**
+     * generate a new completion event
+     * @param cloudletOrCloud: can assume only values {1,2} related to the system which has processed the job
+     * @param job
+     * @return
+     */
     public Event generateCompletion(int cloudletOrCloud, Job job){
         if(cloudletOrCloud == 1 || cloudletOrCloud == 2)
             return new Event(cloudletOrCloud, job);

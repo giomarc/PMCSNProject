@@ -6,7 +6,6 @@ public class Server {
     private int id;
     private Job jobInService;
     private boolean busy;
-
     private double timeBusy;
     private long jobProcessed;
 
@@ -18,31 +17,14 @@ public class Server {
         this.jobProcessed = 0L;
     }
 
-
-
-    /**
-     * Getter and Setters
-     */
     public int getId() {
         return id;
     }
 
-    public Job getJobInService() {
+    //GETTER
+
+    Job getJobInService() {
         return jobInService;
-    }
-
-    public void setJobInService(Job jobInService) {
-        this.jobInService = jobInService;
-        this.timeBusy += jobInService.getCompletionTime();
-        this.jobProcessed++;
-    }
-
-    public boolean isBusy() {
-        return busy;
-    }
-
-    public void setBusy(boolean busy) {
-        this.busy = busy;
     }
 
     public double getTimeBusy() {
@@ -51,5 +33,21 @@ public class Server {
 
     public long getJobProcessed() {
         return jobProcessed;
+    }
+
+    boolean isBusy() {
+        return busy;
+    }
+
+    //SETTER
+
+    void setJobInService(Job jobInService) {
+        this.jobInService = jobInService;
+        this.timeBusy += jobInService.getCompletionTime();
+        this.jobProcessed++;
+    }
+
+    void setBusy(boolean busy) {
+        this.busy = busy;
     }
 }

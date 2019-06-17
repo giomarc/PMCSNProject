@@ -10,7 +10,6 @@ y = SIMREAL(:, 2);
 
 P = polyfit(x,y,1);
 yfit = P(1)*x+P(2);
-string_function = ["function y = " num2str(P(1)) "x + " num2str(P(2))]
 sortrows(RAMREAL(:, 2), 1);
 
 figure;

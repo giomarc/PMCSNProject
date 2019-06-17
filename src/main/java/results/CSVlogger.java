@@ -20,7 +20,6 @@ public class CSVlogger {
     private int maxRowsStored = 1000;
     private int totalMeansDuringSimulations = 2500;
     private int totalResponseTimeMeansDuringSimulations = 200000;
-
     private static int iterationsInOneBatch = (int) (SystemConfiguration.ITERATIONS/SystemConfiguration.NUM_BATCH) - 1;
 
     private String fileResponseTime;
@@ -41,6 +40,9 @@ public class CSVlogger {
         return instance;
     }
 
+    /**
+     * initialize the environment creating several files in the RESULT_OUTPUT directory
+     */
     public void createFileIfNotExists(){
         if(SystemConfiguration.CSVLOGGER) {
             this.fileResponseTime = "ResponseTime.csv";
@@ -177,13 +179,17 @@ public class CSVlogger {
         }
     }
 
-    public void writeOnFiles(double globaltime){
+    /**
+     * write the files in the end of the simulation
+     * @param globaltime
+     */
+    void writeOnFiles(double globaltime){
         JobStatistics js = JobStatistics.getInstance();
         TimeStatistics ts = TimeStatistics.getInstance();
         BatchMeans bm = BatchMeans.getInstance();
         if(SystemConfiguration.CSVLOGGER) {
             writeResponseTime(ts);
-            writeAVGjobsPopulation(bm, js);
+            writeAVGjobsPopulation(js);
             writeThroughput(js);
             writeSystemSimulation();
             if(!SystemConfiguration.MULTI_RUN) {
@@ -197,6 +203,10 @@ public class CSVlogger {
         }
     }
 
+    /**
+     * write the file related to the batch means throughput
+     * @param bm
+     */
     private void writeBatchMeansThroughput(BatchMeans bm) {
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
@@ -240,7 +250,11 @@ public class CSVlogger {
 
     }
 
-    public void writeResponseTime(TimeStatistics ts){
+    /**
+     * write the file related to the response time
+     * @param ts
+     */
+    private void writeResponseTime(TimeStatistics ts){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
         int algorithm = SystemConfiguration.ALGORITHM;
@@ -282,7 +296,10 @@ public class CSVlogger {
 
     }
 
-
+    /**
+     * write the file related to the server statistics
+     * @param globalTime
+     */
     private void writeServerStatistics(double globalTime){
 
         long seed = SystemConfiguration.SEED;
@@ -320,6 +337,10 @@ public class CSVlogger {
 
     }
 
+    /**
+     * write the file related to the throughput
+     * @param js
+     */
     private void writeThroughput(JobStatistics js){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
@@ -360,7 +381,11 @@ public class CSVlogger {
         }
     }
 
-    private void writeAVGjobsPopulation(BatchMeans bm, JobStatistics js){
+    /**
+     * write the file related to the average population for each system and class
+     * @param js
+     */
+    private void writeAVGjobsPopulation(JobStatistics js){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
         int algorithm = SystemConfiguration.ALGORITHM;
@@ -401,8 +426,9 @@ public class CSVlogger {
         }
     }
 
-
-
+    /**
+     * write the file related to the performance of the simulation
+     */
     private void writeSystemSimulation(){
         PerformanceLogger pl = PerformanceLogger.getInstance();
         long seed = SystemConfiguration.SEED;
@@ -436,6 +462,10 @@ public class CSVlogger {
         }
     }
 
+    /**
+     * write the file related to the average population using batch means
+     * @param bm
+     */
     private void writeBatchMeansjobs(BatchMeans bm){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
@@ -479,7 +509,10 @@ public class CSVlogger {
         }
     }
 
-
+    /**
+     * write the file related to the batch means population with confidence interval
+     * @param bm
+     */
     private void writeCIBatchMeansPopulation(BatchMeans bm){
         long seed = SystemConfiguration.SEED;
         long iterations = SystemConfiguration.ITERATIONS;
@@ -505,9 +538,6 @@ public class CSVlogger {
         double[] class1AvgJobs = bm.getMeanBMGlobalPopulation(1);
         double[] class2AvgJobs = bm.getMeanBMGlobalPopulation(2);
 
-
-
-
         BufferedWriter outVar;
         try {
             outVar = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeansPopulation, true));
@@ -520,15 +550,12 @@ public class CSVlogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
-
-    public void reset(){
-        totalMeansDuringSimulations = 1000;
-    }
-
+    /**
+     * write the file related to the population means in one simulation
+     * @param js
+     */
     public void writePopulationMeanInOneSimulation(JobStatistics js){
         if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
             if(totalMeansDuringSimulations > iterationsInOneBatch)
@@ -573,6 +600,12 @@ public class CSVlogger {
         }
     }
 
+    /**
+     * write the file related to the response time means in one simulation
+     * @param jobClass
+     * @param cloudletOrCloud
+     * @param responseTime
+     */
     public void writResponseTimeMeanInOneSimulation(int jobClass, int cloudletOrCloud, double responseTime){
         if(SystemConfiguration.CSVLOGGER && !SystemConfiguration.MULTI_RUN) {
             if (totalResponseTimeMeansDuringSimulations > 0) {
@@ -605,6 +638,16 @@ public class CSVlogger {
         }
     }
 
+    /**
+     * reset the valure of totalMeansDuringSimulation
+     */
+    public void reset(){
+        totalMeansDuringSimulations = 1000;
+    }
+
+    /**
+     * class used to save a batch of data related to the population to write in into the correct file
+     */
     private static class PopOneSimulationToWrite {
 
         private static PopOneSimulationToWrite instance = new PopOneSimulationToWrite();
@@ -633,6 +676,9 @@ public class CSVlogger {
         }
     }
 
+    /**
+     * class used to save a batch of data related to the response time to write in into the correct file
+     */
     private static class RTOneSimulationToWrite{
 
         private static RTOneSimulationToWrite instance = new RTOneSimulationToWrite();

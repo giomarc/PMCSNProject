@@ -20,6 +20,8 @@ public class Event {
         this.valid = true;
     }
 
+    //GETTER
+
     public int getType() {
         return type;
     }
@@ -32,20 +34,22 @@ public class Event {
         return eventTime;
     }
 
-    public void setEventTime(double eventTime) {
-        this.eventTime = eventTime;
-    }
-
     public int getAdditionalInfo() {
         return additionalInfo;
     }
 
-    public void setAdditionalInfo(int additionalInfo) {
-        this.additionalInfo = additionalInfo;
-    }
-
     public boolean isValid() {
         return valid;
+    }
+
+    //SETTER
+
+    public void setEventTime(double eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public void setAdditionalInfo(int additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
     public void setValid(boolean valid) {

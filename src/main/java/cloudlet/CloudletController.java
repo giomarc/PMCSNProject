@@ -16,7 +16,10 @@ public class CloudletController {
         return instance;
     }
 
-
+    /**
+     * choose an algorithm to redirect the packet to the correct system
+     * @param e
+     */
     public void dispatchArrivals(Event e){
         DispatchAlgorithm.getInstance().getAlgorithm(e);
     }

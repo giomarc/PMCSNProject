@@ -33,9 +33,8 @@ public class Cloudlet {
         return instance;
     }
 
-
     /**
-     *
+     * Process a new arrival event
      * @param e: arrival event
      */
     public void processArrival(Event e) {
@@ -57,7 +56,7 @@ public class Cloudlet {
 
 
     /**
-     *
+     * Process a new completion
      * @param e: completion event
      */
     public void processCompletion(Event e){
@@ -69,10 +68,9 @@ public class Cloudlet {
         CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
     }
 
-
-
     /**
-     * @return total number of jobs in cloudlet
+     * get the number of job currently in the Cloudlet
+     * @return
      */
     public int [] getJobsInCloudlet(){
         return new int[]{n1, n2};
@@ -80,7 +78,7 @@ public class Cloudlet {
 
 
     /**
-     * Decreases jobs in Cloudlet of a given class
+     * Decrease the number of jobs in Cloudlet
      * @param jobClass: job's class
      */
     private void decreaseN(int jobClass){
@@ -92,7 +90,7 @@ public class Cloudlet {
 
 
     /**
-     * Increases jobs in Cloudlet of a given class
+     * Increase the number of jobs in Cloudlet
      * @param jobClass
      */
     private void increaseN(int jobClass){
@@ -104,7 +102,7 @@ public class Cloudlet {
 
 
     /**
-     * Instantiates Cloudlet's servers
+     * Initialize the Server list
      */
     private void initServers(){
         serverList = new ArrayList<>();
@@ -114,7 +112,9 @@ public class Cloudlet {
     }
 
 
-
+    /**
+     * Reset the Cloudlet state
+     */
     public void reset(){
         n1 = 0;
         n2 = 0;
@@ -124,11 +124,19 @@ public class Cloudlet {
     }
 
 
-
+    /**
+     * return the server list
+     * @return
+     */
     public ArrayList<Server> getServerList(){
         return this.serverList;
     }
 
+    /**
+     * create a completion event and send it to the eventList
+     * @param j
+     * @param serverID: add an additional information regarding the server which is processing the job
+     */
     private void sendComplitionToSimulation(Job j, int serverID){
         Event e = new Event(1, j);
         e.setAdditionalInfo(serverID);

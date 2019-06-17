@@ -14,6 +14,8 @@ public class Job {
         this.operations = operations;
     }
 
+    //GETTER
+
     public double getArrivalTime() {
         return arrivalTime;
     }
@@ -22,15 +24,17 @@ public class Job {
         return completionTime;
     }
 
-    public void setCompletionTime(double completionTime) {
-        this.completionTime = completionTime;
-    }
-
     public int getJobClass() {
         return jobClass;
     }
 
     public double getOperations() {
         return operations;
+    }
+
+    //SETTER
+
+    public void setCompletionTime(double completionTime) {
+        this.completionTime = completionTime;
     }
 }

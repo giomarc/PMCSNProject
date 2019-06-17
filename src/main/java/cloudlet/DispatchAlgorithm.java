@@ -10,14 +10,11 @@ public class DispatchAlgorithm {
 
     private int algorithmType;
     private int numberOfServers;
-    private static JobStatistics jobStatistics;
     private static DispatchAlgorithm instance;
-
 
     private DispatchAlgorithm(){
         algorithmType = SystemConfiguration.ALGORITHM;
         numberOfServers = SystemConfiguration.N;
-        jobStatistics = JobStatistics.getInstance();
     }
 
     public static DispatchAlgorithm getInstance(){
@@ -26,7 +23,11 @@ public class DispatchAlgorithm {
         return instance;
     }
 
-    public void getAlgorithm(Event e){
+    /**
+     * Choose the correct algorithm depending on what is written in the configuration file
+     * @param e: arrival event
+     */
+    void getAlgorithm(Event e){
         switch (algorithmType){
             case 1: defaultAlgorithm(e);
                 break;
@@ -39,11 +40,11 @@ public class DispatchAlgorithm {
         }
     }
 
-
     /**
-     * Basic algoritm
+     * default algorithm. If Cloudlet is full then send the packet to the Cloud
+     * @param e: arrival event
      */
-    public void defaultAlgorithm(Event e){
+    private void defaultAlgorithm(Event e){
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
 
@@ -55,20 +56,16 @@ public class DispatchAlgorithm {
         }
     }
 
-
-
     /**
-     * Threshold based algorithm
+     * threshold algorithm: if n1 + n2 > soglia and class == 2 || n1 + n2 > server then send to the cloud
+     * @param e: arrival event
+     * @param soglia
      */
-    public void thresholdAlgorithm(Event e, int soglia){
+    private void thresholdAlgorithm(Event e, int soglia){
         int jobClass = e.getJob().getJobClass();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
 
-
-        /**
-         * in cloud se n1 + n2 > soglia e classe == 2 || n1 + n2 > server
-         */
         if((totalJobsInCloudlet >= numberOfServers) || (totalJobsInCloudlet > soglia && jobClass == 2)){
             if(totalJobsInCloudlet > soglia && jobClass == 2)
             Cloud.getInstance().processArrival(e);
@@ -77,12 +74,11 @@ public class DispatchAlgorithm {
         }
     }
 
-
-
     /**
-     * Algorithm: only class1 jobs go into cloudlet
+     * First-Class algorithm: if totalJobsInCloudlet >= numberOfServers || jobClass == 2 then send tto the cloud
+     * @param e: arrival event
      */
-    public void firstClassinCloudletAlgorithm(Event e){
+    private void firstClassinCloudletAlgorithm(Event e){
         int jobClass = e.getJob().getJobClass();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
@@ -94,12 +90,12 @@ public class DispatchAlgorithm {
         }
     }
 
-
-
     /**
-     * Size-based algorithm
+     * Size based algorithm: if (class 1 & Size_1 > E[S_1]) or (class 2 & Size_2 > E[S_2]) and if the cloudlet is full,
+     * then send it on the cloud
+     * @param e: arrival event
      */
-    public void sizeBasedBAlgorithm(Event e){
+    private void sizeBasedBAlgorithm(Event e){
         int jobClass = e.getJob().getJobClass();
         double operations = e.getJob().getOperations();
         int[] numberOfJobsInCloudlet = Cloudlet.getInstance().getJobsInCloudlet();

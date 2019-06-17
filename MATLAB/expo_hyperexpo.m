@@ -17,28 +17,6 @@ hyperexpoCloudlet = hyperexpo(:, 10);
 
 a = 1:50;
 
-%figure;
-%plot(a, expoGlobal(1:50, :));
-%hold on
-%plot(a, hyperexpoGlobal(1:50, :));
-%yline(mean(expoGlobal(:, 1)));
-%yline(mean(hyperexpoGlobal(:, 1)));
-%legend('exponential', 'hyper-exponential')
-%title('global response time comparison');
-%xlabel('iteration');
-%ylabel('response time (s)');
-
-%figure;
-%plot(a, expoCloud(1:50, :));
-%hold on
-%plot(a, hyperexpoCloud(1:50, :));
-%yline(mean(expoCloud(:, 1)));
-%yline(mean(hyperexpoCloud(:, 1)));
-%legend('exponential', 'hyper-exponential')
-%title('Cloud response time comparison');
-%xlabel('iteration');
-%ylabel('response time (s)');
-
 figure;
 plot(a, expoCloudlet(1:50, :));
 hold on

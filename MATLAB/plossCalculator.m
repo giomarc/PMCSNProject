@@ -1,6 +1,4 @@
 function [pstates, ploss,avgPopulation] = plossCalculator
-%PLOSSCALCULATOR Summary of this function goes here
-%   Detailed explanation goes here
 digits(11);
 syms p00 p01 p02 p03 p10 p11 p12 p20 p21 p30 ploss
 lambda1 = 6.00;

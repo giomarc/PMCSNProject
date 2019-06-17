@@ -211,17 +211,17 @@ public class CSVlogger {
             distribution = "exponential";
         boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
         int numberOfServers = SystemConfiguration.N;
-        ArrayList<Double> systemThroughput = bm.getAvgThroughputArray(0,"sys");
-        ArrayList<Double> systemThroughput1 = bm.getAvgThroughputArray(1,"sys");
-        ArrayList<Double> systemThroughput2 = bm.getAvgThroughputArray(2,"sys");
+        ArrayList<Double> systemThroughput = bm.getBMThroughputArray(0,"sys");
+        ArrayList<Double> systemThroughput1 = bm.getBMThroughputArray(1,"sys");
+        ArrayList<Double> systemThroughput2 = bm.getBMThroughputArray(2,"sys");
 
-        ArrayList<Double> cloudletThroughput = bm.getAvgThroughputArray(0,"clet");
-        ArrayList<Double> cloudletThroughput1 = bm.getAvgThroughputArray(1,"clet");
-        ArrayList<Double> cloudletThroughput2 = bm.getAvgThroughputArray(2,"clet");
+        ArrayList<Double> cloudletThroughput = bm.getBMThroughputArray(0,"clet");
+        ArrayList<Double> cloudletThroughput1 = bm.getBMThroughputArray(1,"clet");
+        ArrayList<Double> cloudletThroughput2 = bm.getBMThroughputArray(2,"clet");
 
-        ArrayList<Double> cloudThroughput = bm.getAvgThroughputArray(0,"cloud");
-        ArrayList<Double> cloudThroughput1 = bm.getAvgThroughputArray(1,"cloud");
-        ArrayList<Double> cloudThroughput2 = bm.getAvgThroughputArray(2,"cloud");
+        ArrayList<Double> cloudThroughput = bm.getBMThroughputArray(0,"cloud");
+        ArrayList<Double> cloudThroughput1 = bm.getBMThroughputArray(1,"cloud");
+        ArrayList<Double> cloudThroughput2 = bm.getBMThroughputArray(2,"cloud");
 
         BufferedWriter outAVG;
         try {

@@ -1,6 +1,5 @@
 package statistics;
 
-import event.CompletionHandler;
 import results.CSVlogger;
 import system.SystemConfiguration;
 
@@ -150,47 +149,21 @@ public class JobStatistics{
         batchMeans.setBMGlobalPopulationClass1              (this.meanGlobalPopulation_1);
         batchMeans.setBMGlobalPopulation_2                  (this.meanGlobalPopulation_2);
 
-
-        //OLD Throughput
-        batchMeans.updateBMAvgTroughputArray(getSystemThroughput(),0);
-        batchMeans.updateBMAvgTroughputArray(getSystemClass1Throughput(),1);
-        batchMeans.updateBMAvgTroughputArray(getSystemClass2Throughput(),2);
-
-        batchMeans.updateBMAvgCletTroughputArray(getCloudletThroughput(),0);
-        batchMeans.updateBMAvgCletTroughputArray(getCloudletClass1Throughput(),1);
-        batchMeans.updateBMAvgCletTroughputArray(getCloudletClass2Throughput(),2);
-
-        batchMeans.updateBMAvgCloudTroughputArray(getCloudThroughput(),0);
-        batchMeans.updateBMAvgCloudTroughputArray(getCloudClass1Throughput(),1);
-        batchMeans.updateBMAvgCloudTroughputArray(getCloudClass2Throughput(),2);
-
         computeThroughputBatch();
-
         resetMeans();
-        //CompletionHandler.getInstance().resetThroughputStatistics();
     }
 
 
     public void computeThroughputBatch(){
-        /*double systemT = CompletionHandler.getInstance().getThroughputStatistics(0,"sys");
-        double systemT1 = CompletionHandler.getInstance().getThroughputStatistics(1,"sys");
-        double systemT2 = CompletionHandler.getInstance().getThroughputStatistics(2,"sys");
-        double cletT = CompletionHandler.getInstance().getThroughputStatistics(0,"clet");
-        double cletT1 = CompletionHandler.getInstance().getThroughputStatistics(1,"clet");
-        double cletT2 = CompletionHandler.getInstance().getThroughputStatistics(2,"clet");
-        double cloudT = CompletionHandler.getInstance().getThroughputStatistics(0,"cloud");
-        double cloudT1 = CompletionHandler.getInstance().getThroughputStatistics(1,"cloud");
-        double cloudT2 = CompletionHandler.getInstance().getThroughputStatistics(2,"cloud");*/
-
-        batchMeans.updateNewThroughputBMArray(meanSystemThroughput,"sys",0);
-        batchMeans.updateNewThroughputBMArray(meanSystemThroughput1,"sys",1);
-        batchMeans.updateNewThroughputBMArray(meanSystemThroughput2,"sys",2);
-        batchMeans.updateNewThroughputBMArray(meanCletThroughput,"clet",0);
-        batchMeans.updateNewThroughputBMArray(meanCletThroughput1,"clet",1);
-        batchMeans.updateNewThroughputBMArray(meanCletThroughput2,"clet",2);
-        batchMeans.updateNewThroughputBMArray(meanCloudThroughput,"cloud",0);
-        batchMeans.updateNewThroughputBMArray(meanCloudThroughput1,"cloud",1);
-        batchMeans.updateNewThroughputBMArray(meanCloudThroughput2,"cloud",2);
+        batchMeans.updateThroughputBMArray(meanSystemThroughput,"sys",0);
+        batchMeans.updateThroughputBMArray(meanSystemThroughput1,"sys",1);
+        batchMeans.updateThroughputBMArray(meanSystemThroughput2,"sys",2);
+        batchMeans.updateThroughputBMArray(meanCletThroughput,"clet",0);
+        batchMeans.updateThroughputBMArray(meanCletThroughput1,"clet",1);
+        batchMeans.updateThroughputBMArray(meanCletThroughput2,"clet",2);
+        batchMeans.updateThroughputBMArray(meanCloudThroughput,"cloud",0);
+        batchMeans.updateThroughputBMArray(meanCloudThroughput1,"cloud",1);
+        batchMeans.updateThroughputBMArray(meanCloudThroughput2,"cloud",2);
 
     }
 

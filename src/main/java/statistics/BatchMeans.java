@@ -158,67 +158,11 @@ public class BatchMeans {
     }
 
 
-    public ArrayList<Double> getAvgThroughputArray(int index, String s){
-        ArrayList<Double> var = new ArrayList<>();
-        switch (s){
-            case "sys":
-                switch(index){
-                    case 0: var = avgSystemT;break;
-                    case 1: var = avgSystemT1; break;
-                    case 2: var = avgSystemT2; break;
-                }break;
-            case "clet":
-                switch(index){
-                    case 0: var = avgCloudletT;break;
-                    case 1: var = avgCloudletT1; break;
-                    case 2: var = avgCloudletT2; break;
-                }break;
-            case "cloud":
-                switch(index){
-                    case 0: var =avgCloudT;break;
-                    case 1: var = avgCloudT1; break;
-                    case 2: var = avgCloudT2; break;
-                }break;
-        }
-        return var;
-    }
-
-
-
-
-    public void updateBMAvgTroughputArray(double currentValue, int index)
-    {
-        switch (index){
-            case 0: avgSystemT.add(currentValue); break;
-            case 1: avgSystemT1.add(currentValue); break;
-            case 2: avgSystemT2.add(currentValue);break;
-        }
-    }
-
-    public void updateBMAvgCletTroughputArray(double currentValue, int index)
-    {
-        switch (index){
-            case 0: avgCloudletT.add(currentValue); break;
-            case 1: avgCloudletT1.add(currentValue); break;
-            case 2: avgCloudletT2.add(currentValue);break;
-        }
-    }
-
-    public void updateBMAvgCloudTroughputArray(double currentValue, int index)
-    {
-        switch (index){
-            case 0: avgCloudT.add(currentValue); break;
-            case 1: avgCloudT1.add(currentValue); break;
-            case 2: avgCloudT2.add(currentValue);break;
-        }
-    }
-
-
     /**
      * NEWWWWWWWW
      */
 
-    public void updateNewThroughputBMArray(double value, String s, int index){
+    public void updateThroughputBMArray(double value, String s, int index){
         switch(s){
             case "sys":
                 switch(index){
@@ -241,7 +185,7 @@ public class BatchMeans {
         }
     }
 
-    public double[] getNewBMThroughput(String s, int index){
+    public double[] getBMThroughput(String s, int index){
         double[] res = new double[2];
         switch(s){
             case "sys":
@@ -266,42 +210,28 @@ public class BatchMeans {
         return res;
     }
 
-    public double[] getBMAvgSystemThroughput(int index){
-        double[] res = new double[2];
-        switch (index){
-            case 0: res = getBMMean(avgSystemT);
-                break;
-            case 1: res = getBMMean(avgSystemT1);
-                break;
-            case 2: res = getBMMean(avgSystemT2);
-                break;
-        }
-        return res;
-    }
 
-    public double[] getBMAvgCletThroughput(int index){
-        double[] res = new double[2];
-        switch (index){
-            case 0: res = getBMMean(avgCloudletT);
-                break;
-            case 1: res = getBMMean(avgCloudletT1);
-                break;
-            case 2: res = getBMMean(avgCloudletT2);
-                break;
-        }
-        return res;
-    }
-
-
-    public double[] getBMAvgCloudThroughput(int index){
-        double[] res = new double[2];
-        switch (index){
-            case 0: res = getBMMean(avgCloudT);
-                break;
-            case 1: res = getBMMean(avgCloudT1);
-                break;
-            case 2: res = getBMMean(avgCloudT2);
-                break;
+    public ArrayList<Double> getBMThroughputArray(int index, String s){
+        ArrayList res =  new ArrayList();
+        switch(s){
+            case "sys":
+                switch(index){
+                    case 0: res = BMSysThroughput;break;
+                    case 1: res = BMSysThroughput1; break;
+                    case 2: res = BMSysThroughput2; break;
+                }break;
+            case "clet":
+                switch(index){
+                    case 0: res = BMCletThroughput;break;
+                    case 1: res = BMCletThroughput1 ;break;
+                    case 2: res = BMCletThroughput2; break;
+                }break;
+            case "cloud":
+                switch(index){
+                    case 0: res = BMCloudThroughput;break;
+                    case 1: res = BMCloudThroughput1;break;
+                    case 2: res = BMCloudThroughput2;break;
+                }break;
         }
         return res;
     }

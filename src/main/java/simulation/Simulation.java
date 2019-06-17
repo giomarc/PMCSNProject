@@ -1,19 +1,18 @@
 package simulation;
 
 import cloud.Cloud;
-import job.Job;
-import results.CSVlogger;
-import results.PerformanceLogger;
 import cloudlet.Cloudlet;
 import cloudlet.CloudletController;
 import event.Event;
 import event.EventGenerator;
-import results.Printer;
+import results.CSVlogger;
+import results.PerformanceLogger;
 import statistics.BatchMeans;
 import statistics.JobStatistics;
 import statistics.TimeStatistics;
 import system.SystemConfiguration;
 import variablesGenerator.InitGenerator;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -42,9 +41,13 @@ public class Simulation {
 
     }
 
+    /**
+     * If multi-run is enabled this function starts the simulation putting a new seed at the beginning
+     * @param customSeed
+     */
     private static void runWithCustomSeed(long customSeed) {
         initialize();
-//        InitGenerator.getInstance().putNewSeed(customSeed);
+        InitGenerator.getInstance().putNewSeed(customSeed);
         PerformanceLogger.getInstance().printInitialConfiguration();
         for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
@@ -58,11 +61,17 @@ public class Simulation {
         PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
     }
 
+    /**
+     * start the simulation
+     */
     private static void run(){
         initialize();
         PerformanceLogger.getInstance().printInitialConfiguration();
         for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
+
+            //print the percentage to the console
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
+
             Event e = EventGenerator.getInstance().generateArrival();
             eventList.add(e);
             sortEventList();
@@ -73,6 +82,9 @@ public class Simulation {
         PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
     }
 
+    /**
+     * sort the eventlist using the event time
+     */
     private static void sortEventList(){
 
         eventList.sort((o1, o2) -> {
@@ -90,7 +102,14 @@ public class Simulation {
 
     }
 
+    /**
+     * extract the first event from the eventlist. If this event is a completion then process it and extract a new event.
+     * If the event is an arrival then process it and exit from the cycle
+     * @return
+     */
     private static double handleEvent(){
+
+        //the event is flagged. the event time of flagged events is reduced when an arrival is extracted
         for (Event event: eventList){
             event.setValid(true);
         }
@@ -101,6 +120,7 @@ public class Simulation {
         int[] numberOfJobsInCloud = {0,0};
         while(i.hasNext()){
 
+            //retrieve the system state
             numberOfJobsInCloudlet =  Cloudlet.getInstance().getJobsInCloudlet();
             numberOfJobsInCloud =     Cloud.getInstance().returnJobsInCloud();
 
@@ -124,13 +144,20 @@ public class Simulation {
             }
         }
 
+        //if the simulation is not ended
         if(eventList.size() != 0) {
-            //jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
             Event e = eventList.get(0);
+
+            //update the simulation clock
             jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + e.getJob().getArrivalTime());
             jobStatistics.setActualTime(jobStatistics.getActualTime() + e.getJob().getArrivalTime());
+
+            //update population means
             jobStatistics.updatePopulationMeans(numberOfJobsInCloudlet, numberOfJobsInCloud);
+
+            //process the arrival
             cloudletController.dispatchArrivals(e);
+
             eventList.remove(0);
 
             for (Event event : eventList) {
@@ -148,6 +175,9 @@ public class Simulation {
 
     }
 
+    /**
+     * initialiation function
+     */
     private static void initialize(){
         eventList = new ArrayList<>();
         SystemConfiguration.getConfigParams();
@@ -160,6 +190,9 @@ public class Simulation {
         CSVlogger.getInstance().createFileIfNotExists();
     }
 
+    /**
+     * reset function used for the multi-run
+     */
     public static void resetAll(){
         initialize();
         JobStatistics.getInstance().resetStatistics();
@@ -170,23 +203,15 @@ public class Simulation {
         BatchMeans.getInstance().reset();
     }
 
+    /**
+     * add a completion event to the eventList
+     * @param e
+     */
     public static void addComplitionToEventList(Event e){
         e.setValid(false);
         eventList.add(e);
     }
 
-
-
-    /*public static void printEventList(){
-        System.out.println("list");
-        for(Event e : eventList) {
-            if(e.getType() == 0)
-                Printer.getInstance().print("0 : " + e.getEventTime() + " |","yellow");
-            else
-                System.out.print(e.getType() + " : " + e.getEventTime()+ " | ");
-        }
-        System.out.println();
-    }*/
 }
 
 

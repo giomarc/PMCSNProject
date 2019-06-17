@@ -26,7 +26,6 @@ public class Simulation {
     private static CloudletController cloudletController;
     private static Cloudlet cloudlet;
     private static Cloud cloud;
-    int count = 0;
 
     private static ArrayList<Event> eventList;
 

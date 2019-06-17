@@ -12,7 +12,7 @@ public class BatchMeans {
     private int num_batch;
     private static BatchMeans instance = null;
 
-    //BATCH MEANS
+    //POPULATION BATCH MEANS
     private ArrayList<Double> BMGlobalPopulation;
     private ArrayList<Double> BMCloudletPopulation;
     private ArrayList<Double> BMCloudPopulation;
@@ -23,17 +23,7 @@ public class BatchMeans {
     private ArrayList<Double> BMCloudletPopulation_2;
     private ArrayList<Double> BMCloudPopulation_2;
 
-    //THROUGHPUT
-    private ArrayList<Double> avgSystemT;
-    private ArrayList<Double> avgCloudletT;
-    private ArrayList<Double> avgCloudT;
-    private ArrayList<Double> avgSystemT1;
-    private ArrayList<Double> avgCloudletT1;
-    private ArrayList<Double> avgCloudT1;
-    private ArrayList<Double> avgSystemT2;
-    private ArrayList<Double> avgCloudletT2;
-    private ArrayList<Double> avgCloudT2;
-
+    //THROUGHPUT BATCH MEANS
     private ArrayList<Double> BMSysThroughput;
     private ArrayList<Double> BMSysThroughput1;
     private ArrayList<Double> BMSysThroughput2;
@@ -43,6 +33,19 @@ public class BatchMeans {
     private ArrayList<Double> BMCloudThroughput;
     private ArrayList<Double> BMCloudThroughput1;
     private ArrayList<Double> BMCloudThroughput2;
+
+    //RESPONSE TIME BATCH
+    private ArrayList<Double> BMSysTime;
+    private ArrayList<Double> BMSysTime1;
+    private ArrayList<Double> BMSysTime2;
+    private ArrayList<Double> BMCletTime;
+    private ArrayList<Double> BMCletTime1;
+    private ArrayList<Double> BMCletTime2;
+    private ArrayList<Double> BMCloudTime;
+    private ArrayList<Double> BMCloudTime1;
+    private ArrayList<Double> BMCloudTime2;
+
+
 
 
 
@@ -236,6 +239,54 @@ public class BatchMeans {
         return res;
     }
 
+    public void updateTimeBMArray(double value, String s, int index){
+        switch(s){
+            case "sys":
+                switch(index){
+                    case 0: BMSysTime.add(value);break;
+                    case 1: BMSysTime1.add(value); break;
+                    case 2: BMSysTime2.add(value); break;
+                }break;
+            case "clet":
+                switch(index){
+                    case 0: BMCletTime.add(value);break;
+                    case 1: BMCletTime1.add(value); break;
+                    case 2: BMCletTime2.add(value); break;
+                }break;
+            case "cloud":
+                switch(index){
+                    case 0: BMCloudTime.add(value);break;
+                    case 1: BMCloudTime1.add(value); break;
+                    case 2: BMCloudTime2.add(value); break;
+                }break;
+        }
+    }
+
+    public double[] getBMTime(String s, int index){
+        double[] res = new double[2];
+        switch(s){
+            case "sys":
+                switch(index){
+                    case 0: res = getBMMean(BMSysTime);break;
+                    case 1: res = getBMMean(BMSysTime1); break;
+                    case 2: res = getBMMean(BMSysTime2); break;
+                }break;
+            case "clet":
+                switch(index){
+                    case 0: res = getBMMean(BMCletTime);break;
+                    case 1: res = getBMMean(BMCletTime1);break;
+                    case 2: res = getBMMean(BMCletTime2);break;
+                }break;
+            case "cloud":
+                switch(index){
+                    case 0: res = getBMMean(BMCloudTime);break;
+                    case 1: res = getBMMean(BMCloudTime1);break;
+                    case 2: res = getBMMean(BMCloudTime2);break;
+                }break;
+        }
+        return res;
+    }
+
 
 
     /**
@@ -297,17 +348,6 @@ public class BatchMeans {
         BMCloudletPopulation_2 = new ArrayList<>();
         BMCloudPopulation_2 = new ArrayList<>();
 
-        avgSystemT = new ArrayList<>();
-        avgSystemT1 = new ArrayList<>();
-        avgSystemT2 = new ArrayList<>();
-        avgCloudletT = new ArrayList<>();
-        avgCloudletT1 = new ArrayList<>();
-        avgCloudletT2 = new ArrayList<>();
-        avgCloudT =  new ArrayList<>();
-        avgCloudT1 =  new ArrayList<>();
-        avgCloudT2 =  new ArrayList<>();
-
-        //NEW
         BMSysThroughput = new ArrayList<>();
         BMSysThroughput1 = new ArrayList<>();
         BMSysThroughput2= new ArrayList<>();
@@ -317,6 +357,16 @@ public class BatchMeans {
         BMCloudThroughput = new ArrayList<>();
         BMCloudThroughput1 = new ArrayList<>();
         BMCloudThroughput2 = new ArrayList<>();
+
+        BMSysTime = new ArrayList<>();
+        BMSysTime1 = new ArrayList<>();
+        BMSysTime2 = new ArrayList<>();
+        BMCletTime = new ArrayList<>();
+        BMCletTime1 = new ArrayList<>();
+        BMCletTime2 = new ArrayList<>();
+        BMCloudTime = new ArrayList<>();
+        BMCloudTime1 = new ArrayList<>();
+        BMCloudTime2 = new ArrayList<>();
 
 
 

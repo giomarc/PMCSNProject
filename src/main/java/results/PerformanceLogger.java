@@ -103,6 +103,7 @@ public class PerformanceLogger implements Runnable {
             if(SystemConfiguration.BATCH) {
                 printMeanBatchPopulation(bm);
                 printThroughputBatch(bm);
+                printResponseTimeBatch(bm);
             }else{
                 printMeanPopulation(js);
             }
@@ -230,26 +231,56 @@ public class PerformanceLogger implements Runnable {
     //THROUGHPUT BATCH PRINTSSSSSSSSS
 
     private void printThroughputBatch(BatchMeans bm){
-        Printer.getInstance().print("Throughput System batch new", "green");
+        System.out.println("\n");
+        Printer.getInstance().print("Throughput System batch", "green");
         System.out.println(bm.getBMThroughput("sys",0)[0] + " \u00B1 " + bm.getBMThroughput("sys",0)[1]);
-        Printer.getInstance().print("Throughput System Class 1 batch new", "green");
+        Printer.getInstance().print("Throughput System Class 1 batch", "green");
         System.out.println(bm.getBMThroughput("sys",1)[0] + " \u00B1 " + bm.getBMThroughput("sys",1)[1]);
-        Printer.getInstance().print("Throughput System Class 2batch new", "green");
+        Printer.getInstance().print("Throughput System Class 2batch", "green");
         System.out.println(bm.getBMThroughput("sys",2)[0] + " \u00B1 " + bm.getBMThroughput("sys",2)[1]);
 
-        Printer.getInstance().print("Throughput Cloudlet batch new", "green");
+        Printer.getInstance().print("Throughput Cloudlet batch", "green");
         System.out.println(bm.getBMThroughput("clet",0)[0] + " \u00B1 " + bm.getBMThroughput("clet",0)[1]);
-        Printer.getInstance().print("Throughput Cloudlet class 1batch new", "green");
+        Printer.getInstance().print("Throughput Cloudlet class 1 batch", "green");
         System.out.println(bm.getBMThroughput("clet",1)[0] + " \u00B1 " + bm.getBMThroughput("clet",1)[1]);
-        Printer.getInstance().print("Throughput Cloudlet class 2 batch new", "green");
+        Printer.getInstance().print("Throughput Cloudlet class 2 batch ", "green");
         System.out.println(bm.getBMThroughput("clet",2)[0] + " \u00B1 " + bm.getBMThroughput("clet",2)[1]);
 
-        Printer.getInstance().print("Throughput Cloud batch new", "green");
+        Printer.getInstance().print("Throughput Cloud batch", "green");
         System.out.println(bm.getBMThroughput("cloud",0)[0] + " \u00B1 " + bm.getBMThroughput("cloud",0)[1]);
-        Printer.getInstance().print("Throughput Cloud class 1 batch new", "green");
+        Printer.getInstance().print("Throughput Cloud class 1 batch", "green");
         System.out.println(bm.getBMThroughput("cloud",1)[0] + " \u00B1 " + bm.getBMThroughput("cloud",1)[1]);
-        Printer.getInstance().print("Throughput Cloud class 2 batch new", "green");
+        Printer.getInstance().print("Throughput Cloud class 2 batch", "green");
         System.out.println(bm.getBMThroughput("cloud",2)[0] + " \u00B1 " + bm.getBMThroughput("cloud",2)[1]);
+
+
+    }
+
+
+
+    //RESPONSE TIME BATCH PRINTS
+    private void printResponseTimeBatch(BatchMeans bm){
+        System.out.println("\n");
+        Printer.getInstance().print("Response Time System batch ", "green");
+        System.out.println(bm.getBMTime("sys",0)[0] + " \u00B1 " + bm.getBMTime("sys",0)[1]);
+        Printer.getInstance().print("Response Time System Class 1 batch", "green");
+        System.out.println(bm.getBMTime("sys",1)[0] + " \u00B1 " + bm.getBMTime("sys",1)[1]);
+        Printer.getInstance().print("Response Time System Class 2 batch", "green");
+        System.out.println(bm.getBMTime("sys",2)[0] + " \u00B1 " + bm.getBMTime("sys",2)[1]);
+
+        Printer.getInstance().print("Response Time Cloudlet batch ", "green");
+        System.out.println(bm.getBMTime("clet",0)[0] + " \u00B1 " + bm.getBMTime("clet",0)[1]);
+        Printer.getInstance().print("Response Time Cloudlet class 1 batch", "green");
+        System.out.println(bm.getBMTime("clet",1)[0] + " \u00B1 " + bm.getBMTime("clet",1)[1]);
+        Printer.getInstance().print("Response Time Cloudlet class 2 batch", "green");
+        System.out.println(bm.getBMTime("clet",2)[0] + " \u00B1 " + bm.getBMTime("clet",2)[1]);
+
+        Printer.getInstance().print("Response Time Cloud batch ", "green");
+        System.out.println(bm.getBMTime("cloud",0)[0] + " \u00B1 " + bm.getBMTime("cloud",0)[1]);
+        Printer.getInstance().print("Response Time Cloud class 1 batch", "green");
+        System.out.println(bm.getBMTime("cloud",1)[0] + " \u00B1 " + bm.getBMTime("cloud",1)[1]);
+        Printer.getInstance().print("Response Time Cloud class 2 ", "green");
+        System.out.println(bm.getBMTime("cloud",2)[0] + " \u00B1 " + bm.getBMTime("cloud",2)[1]);
 
 
     }

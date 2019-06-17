@@ -10,6 +10,7 @@ public class JobStatistics{
     private static JobStatistics instance = null;
     private static ConfidenceInterval statistics;
     private static BatchMeans batchMeans;
+    private static TimeStatistics ts;
 
     //POPULATION MEANS
     private double meanGlobalPopulation;
@@ -53,6 +54,7 @@ public class JobStatistics{
         statistics = ConfidenceInterval.getInstance();
         batchMeans = BatchMeans.getInstance();
         batchSize = batchMeans.getBatchSize();
+        ts = TimeStatistics.getInstance();
     }
 
     public static JobStatistics getInstance(){
@@ -150,7 +152,9 @@ public class JobStatistics{
         batchMeans.setBMGlobalPopulation_2                  (this.meanGlobalPopulation_2);
 
         computeThroughputBatch();
+        ts.computeResponseTimeBatch();
         resetMeans();
+        ts.resetStatistics();
     }
 
 
@@ -185,27 +189,27 @@ public class JobStatistics{
     }
 
     public double getCloudletThroughput(){
-        return (completedCloudlet_1 + completedCloudlet_2)/globalTime;
+        return (completedCloudlet_1 + completedCloudlet_2)/actualTime;
     }
 
     public double getCloudletClass1Throughput(){
-        return completedCloudlet_1/globalTime;
+        return completedCloudlet_1/actualTime;
     }
 
     public double getCloudletClass2Throughput(){
-        return completedCloudlet_2/globalTime;
+        return completedCloudlet_2/actualTime;
     }
 
     public double getCloudThroughput(){
-        return (completedCloud_1 + completedCloud_2)/globalTime;
+        return (completedCloud_1 + completedCloud_2)/actualTime;
     }
 
     public double getCloudClass1Throughput(){
-        return completedCloud_1 /globalTime;
+        return completedCloud_1 /actualTime;
     }
 
     public double getCloudClass2Throughput(){
-        return completedCloud_2 /globalTime;
+        return completedCloud_2 /actualTime;
     }
 
 
@@ -331,16 +335,16 @@ public class JobStatistics{
 
     public void updateThroughputStatistics(){
 
-        double sysT = JobStatistics.getInstance().getSystemThroughput();
-        double sysT1 = JobStatistics.getInstance().getSystemClass1Throughput();
-        double sysT2 = JobStatistics.getInstance().getSystemClass2Throughput();
-        double cletT = JobStatistics.getInstance().getCloudletThroughput();
-        double cletT1 = JobStatistics.getInstance().getCloudletClass1Throughput();
-        double cletT2 = JobStatistics.getInstance().getCloudletClass2Throughput();
-        double cloudT = JobStatistics.getInstance().getCloudThroughput();
-        double cloudT1 = JobStatistics.getInstance().getCloudClass1Throughput();
-        double cloudT2 = JobStatistics.getInstance().getCloudClass2Throughput();
-        long iterations = JobStatistics.getInstance().getActuallIteration();
+        double sysT = getSystemThroughput();
+        double sysT1 = getSystemClass1Throughput();
+        double sysT2 = getSystemClass2Throughput();
+        double cletT = getCloudletThroughput();
+        double cletT1 = getCloudletClass1Throughput();
+        double cletT2 = getCloudletClass2Throughput();
+        double cloudT = getCloudThroughput();
+        double cloudT1 = getCloudClass1Throughput();
+        double cloudT2 = getCloudClass2Throughput();
+        long iterations = getActuallIteration();
 
         meanSystemThroughput = statistics.computeWelfordMean(meanSystemThroughput,sysT, iterations);
         meanSystemThroughput1 = statistics.computeWelfordMean(meanSystemThroughput1,sysT1, iterations);
@@ -361,10 +365,6 @@ public class JobStatistics{
      * RESET METHODS
      */
     public void resetStatistics(){
-        this.completedCloudlet_1        = 0;
-        this.completedCloud_1           = 0;
-        this.completedCloudlet_2        = 0;
-        this.completedCloud_2           = 0;
         this.globalTime                 = 0;
         this.actualTime                 = 0;
         this.globalIteration            = 0;
@@ -395,6 +395,11 @@ public class JobStatistics{
 
         this.actualTime                 = 0;
         this.actualIteration            = 0;
+
+        this.completedCloudlet_1        = 0;
+        this.completedCloud_1           = 0;
+        this.completedCloudlet_2        = 0;
+        this.completedCloud_2           = 0;
     }
 
 

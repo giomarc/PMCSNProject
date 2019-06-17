@@ -4,6 +4,7 @@ public class TimeStatistics{
 
 
     private static TimeStatistics instance = null;
+    private static BatchMeans batchMeans;
     private double meanResponseTime;
     private double meanResponseTimeCloudlet;
     private double meanResponseTimeCloud;
@@ -17,6 +18,7 @@ public class TimeStatistics{
 
     private TimeStatistics(){
         resetStatistics();
+        batchMeans = BatchMeans.getInstance();
     }
 
     public static TimeStatistics getInstance()
@@ -64,6 +66,18 @@ public class TimeStatistics{
     }
 
 
+
+    public void computeResponseTimeBatch(){
+        batchMeans.updateTimeBMArray(meanResponseTime,"sys",0);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass1,"sys",1);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass2,"sys",2);
+        batchMeans.updateTimeBMArray(meanResponseTimeCloudlet,"clet",0);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass1Cloudlet,"clet",1);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass2Cloudlet,"clet",2);
+        batchMeans.updateTimeBMArray(meanResponseTimeCloud,"cloud",0);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass1Cloud,"cloud",1);
+        batchMeans.updateTimeBMArray(meanResponseTimeClass2Cloud,"cloud",2);
+    }
 
 
     /**

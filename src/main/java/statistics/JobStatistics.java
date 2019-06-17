@@ -29,6 +29,17 @@ public class JobStatistics{
     private long completedCloud_1;
     private long completedCloud_2;
 
+    //THROUGHPUT MEANS
+    private double meanSystemThroughput;
+    private double meanSystemThroughput1;
+    private double meanSystemThroughput2;
+    private double meanCletThroughput;
+    private double meanCletThroughput1;
+    private double meanCletThroughput2;
+    private double meanCloudThroughput;
+    private double meanCloudThroughput1;
+    private double meanCloudThroughput2;
+
 
     //ITERATIONS
     private long globalIteration;
@@ -102,7 +113,7 @@ public class JobStatistics{
     private void updateClass1(int cloudlet1, int cloud1){
         int totalClass1 = cloudlet1 + cloud1;
         meanGlobalPopulation_1 = statistics.computeWelfordMean(meanGlobalPopulation_1, totalClass1, actualIteration);
-        meanCloudletPopulation_1 = statistics.computeMean(meanCloudletPopulation_1, cloudlet1, actualIteration);
+        meanCloudletPopulation_1 = statistics.computeWelfordMean(meanCloudletPopulation_1, cloudlet1, actualIteration);
         meanCloudPopulation_1 = statistics.computeWelfordMean(meanCloudPopulation_1, cloud1, actualIteration);
     }
 
@@ -153,9 +164,15 @@ public class JobStatistics{
         batchMeans.updateBMAvgCloudTroughputArray(getCloudClass1Throughput(),1);
         batchMeans.updateBMAvgCloudTroughputArray(getCloudClass2Throughput(),2);
 
+        computeThroughputBatch();
 
-        //New throughput
-        double systemT = CompletionHandler.getInstance().getThroughputStatistics(0,"sys");
+        resetMeans();
+        //CompletionHandler.getInstance().resetThroughputStatistics();
+    }
+
+
+    public void computeThroughputBatch(){
+        /*double systemT = CompletionHandler.getInstance().getThroughputStatistics(0,"sys");
         double systemT1 = CompletionHandler.getInstance().getThroughputStatistics(1,"sys");
         double systemT2 = CompletionHandler.getInstance().getThroughputStatistics(2,"sys");
         double cletT = CompletionHandler.getInstance().getThroughputStatistics(0,"clet");
@@ -163,22 +180,19 @@ public class JobStatistics{
         double cletT2 = CompletionHandler.getInstance().getThroughputStatistics(2,"clet");
         double cloudT = CompletionHandler.getInstance().getThroughputStatistics(0,"cloud");
         double cloudT1 = CompletionHandler.getInstance().getThroughputStatistics(1,"cloud");
-        double cloudT2 = CompletionHandler.getInstance().getThroughputStatistics(2,"cloud");
+        double cloudT2 = CompletionHandler.getInstance().getThroughputStatistics(2,"cloud");*/
 
-        batchMeans.updateNewThroughputBMArray(systemT,"sys",0);
-        batchMeans.updateNewThroughputBMArray(systemT1,"sys",1);
-        batchMeans.updateNewThroughputBMArray(systemT2,"sys",2);
-        batchMeans.updateNewThroughputBMArray(cletT,"clet",0);
-        batchMeans.updateNewThroughputBMArray(cletT1,"clet",1);
-        batchMeans.updateNewThroughputBMArray(cletT2,"clet",2);
-        batchMeans.updateNewThroughputBMArray(cloudT,"cloud",0);
-        batchMeans.updateNewThroughputBMArray(cloudT1,"cloud",1);
-        batchMeans.updateNewThroughputBMArray(cloudT2,"cloud",2);
+        batchMeans.updateNewThroughputBMArray(meanSystemThroughput,"sys",0);
+        batchMeans.updateNewThroughputBMArray(meanSystemThroughput1,"sys",1);
+        batchMeans.updateNewThroughputBMArray(meanSystemThroughput2,"sys",2);
+        batchMeans.updateNewThroughputBMArray(meanCletThroughput,"clet",0);
+        batchMeans.updateNewThroughputBMArray(meanCletThroughput1,"clet",1);
+        batchMeans.updateNewThroughputBMArray(meanCletThroughput2,"clet",2);
+        batchMeans.updateNewThroughputBMArray(meanCloudThroughput,"cloud",0);
+        batchMeans.updateNewThroughputBMArray(meanCloudThroughput1,"cloud",1);
+        batchMeans.updateNewThroughputBMArray(meanCloudThroughput2,"cloud",2);
 
-        resetMeans();
-        CompletionHandler.getInstance().resetThroughputStatistics();
     }
-
 
 
 
@@ -342,6 +356,34 @@ public class JobStatistics{
     }
 
 
+    public void updateThroughputStatistics(){
+
+        double sysT = JobStatistics.getInstance().getSystemThroughput();
+        double sysT1 = JobStatistics.getInstance().getSystemClass1Throughput();
+        double sysT2 = JobStatistics.getInstance().getSystemClass2Throughput();
+        double cletT = JobStatistics.getInstance().getCloudletThroughput();
+        double cletT1 = JobStatistics.getInstance().getCloudletClass1Throughput();
+        double cletT2 = JobStatistics.getInstance().getCloudletClass2Throughput();
+        double cloudT = JobStatistics.getInstance().getCloudThroughput();
+        double cloudT1 = JobStatistics.getInstance().getCloudClass1Throughput();
+        double cloudT2 = JobStatistics.getInstance().getCloudClass2Throughput();
+        long iterations = JobStatistics.getInstance().getActuallIteration();
+
+        meanSystemThroughput = Statistics.getInstance().computeWelfordMean(meanSystemThroughput,sysT, iterations);
+        meanSystemThroughput1 = Statistics.getInstance().computeWelfordMean(meanSystemThroughput1,sysT1, iterations);
+        meanSystemThroughput2 = Statistics.getInstance().computeWelfordMean(meanSystemThroughput2,sysT2, iterations);
+
+        meanCletThroughput = Statistics.getInstance().computeWelfordMean(meanCletThroughput,cletT, iterations);
+        meanCletThroughput1 = Statistics.getInstance().computeWelfordMean(meanCletThroughput1,cletT1, iterations);
+        meanCletThroughput2 = Statistics.getInstance().computeWelfordMean(meanCletThroughput2,cletT2, iterations);
+
+        meanCloudThroughput = Statistics.getInstance().computeWelfordMean(meanCloudThroughput,cloudT, iterations);
+        meanCloudThroughput1 = Statistics.getInstance().computeWelfordMean(meanCloudThroughput1,cloudT1, iterations);
+        meanCloudThroughput2 = Statistics.getInstance().computeWelfordMean(meanCloudThroughput2,cloudT2, iterations);
+
+
+    }
+
     /**
      * RESET METHODS
      */
@@ -367,6 +409,16 @@ public class JobStatistics{
         this.meanGlobalPopulation_2     = 0;
         this.meanCloudletPopulation_2   = 0;
         this.meanCloudPopulation_2      = 0;
+
+        this.meanSystemThroughput       = 0;
+        this.meanSystemThroughput1      = 0;
+        this.meanSystemThroughput2      = 0;
+        this.meanCletThroughput         = 0;
+        this.meanCletThroughput1        = 0;
+        this.meanCletThroughput2        = 0;
+        this.meanCloudThroughput        = 0;
+        this.meanCloudThroughput1       = 0;
+        this.meanCloudThroughput2       = 0;
 
         this.actualTime                 = 0;
         this.actualIteration            = 0;

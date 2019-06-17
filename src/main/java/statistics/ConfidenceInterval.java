@@ -18,6 +18,17 @@ public class ConfidenceInterval {
     }
 
 
+    public double computeWelfordMean(double oldMean, double newValue, long n)
+    {
+        double diff = (newValue -  oldMean);
+        double mean = 0.0;
+        if(n!=0){
+            mean = oldMean + (diff / n);
+        }
+        return mean;
+    }
+
+
     public double[] computeConfidenceInterval(ArrayList<Double> givenNumbers) {
 
         double sampleMean = 0.0;

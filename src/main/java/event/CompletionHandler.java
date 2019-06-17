@@ -1,9 +1,8 @@
 package event;
 
-import job.Job;
 import results.CSVlogger;
+import statistics.ConfidenceInterval;
 import statistics.JobStatistics;
-import statistics.Statistics;
 import statistics.TimeStatistics;
 
 
@@ -11,7 +10,7 @@ import statistics.TimeStatistics;
 public class CompletionHandler {
 
     private static CompletionHandler instance = new CompletionHandler();
-    Statistics s = Statistics.getInstance();
+    ConfidenceInterval s = ConfidenceInterval.getInstance();
     private TimeStatistics ts = TimeStatistics.getInstance();
     private JobStatistics js = JobStatistics.getInstance();
 

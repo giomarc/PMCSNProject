@@ -8,7 +8,7 @@ public class JobStatistics{
 
 
     private static JobStatistics instance = null;
-    private static Statistics statistics;
+    private static ConfidenceInterval statistics;
     private static BatchMeans batchMeans;
 
     //POPULATION MEANS
@@ -50,7 +50,7 @@ public class JobStatistics{
 
     private JobStatistics(){
         resetStatistics();
-        statistics = Statistics.getInstance();
+        statistics = ConfidenceInterval.getInstance();
         batchMeans = BatchMeans.getInstance();
         batchSize = batchMeans.getBatchSize();
     }
@@ -342,17 +342,17 @@ public class JobStatistics{
         double cloudT2 = JobStatistics.getInstance().getCloudClass2Throughput();
         long iterations = JobStatistics.getInstance().getActuallIteration();
 
-        meanSystemThroughput = Statistics.getInstance().computeWelfordMean(meanSystemThroughput,sysT, iterations);
-        meanSystemThroughput1 = Statistics.getInstance().computeWelfordMean(meanSystemThroughput1,sysT1, iterations);
-        meanSystemThroughput2 = Statistics.getInstance().computeWelfordMean(meanSystemThroughput2,sysT2, iterations);
+        meanSystemThroughput = statistics.computeWelfordMean(meanSystemThroughput,sysT, iterations);
+        meanSystemThroughput1 = statistics.computeWelfordMean(meanSystemThroughput1,sysT1, iterations);
+        meanSystemThroughput2 = statistics.computeWelfordMean(meanSystemThroughput2,sysT2, iterations);
 
-        meanCletThroughput = Statistics.getInstance().computeWelfordMean(meanCletThroughput,cletT, iterations);
-        meanCletThroughput1 = Statistics.getInstance().computeWelfordMean(meanCletThroughput1,cletT1, iterations);
-        meanCletThroughput2 = Statistics.getInstance().computeWelfordMean(meanCletThroughput2,cletT2, iterations);
+        meanCletThroughput = statistics.computeWelfordMean(meanCletThroughput,cletT, iterations);
+        meanCletThroughput1 = statistics.computeWelfordMean(meanCletThroughput1,cletT1, iterations);
+        meanCletThroughput2 = statistics.computeWelfordMean(meanCletThroughput2,cletT2, iterations);
 
-        meanCloudThroughput = Statistics.getInstance().computeWelfordMean(meanCloudThroughput,cloudT, iterations);
-        meanCloudThroughput1 = Statistics.getInstance().computeWelfordMean(meanCloudThroughput1,cloudT1, iterations);
-        meanCloudThroughput2 = Statistics.getInstance().computeWelfordMean(meanCloudThroughput2,cloudT2, iterations);
+        meanCloudThroughput = statistics.computeWelfordMean(meanCloudThroughput,cloudT, iterations);
+        meanCloudThroughput1 = statistics.computeWelfordMean(meanCloudThroughput1,cloudT1, iterations);
+        meanCloudThroughput2 = statistics.computeWelfordMean(meanCloudThroughput2,cloudT2, iterations);
 
 
     }

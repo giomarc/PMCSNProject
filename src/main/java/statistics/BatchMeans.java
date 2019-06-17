@@ -89,7 +89,7 @@ public class BatchMeans {
 
 
     /*
-     * Return array containing batch sample means
+     * Return array containing batch sample means of population
      */
     public ArrayList<Double> getBMGlobalPopulation(int classId){
         ArrayList<Double> mean = new ArrayList<>();

@@ -162,13 +162,13 @@ public class CSVlogger {
                         }
 
 
-                        if(fileBMP.createNewFile()){
-                            BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
+                        if(fileTBM.createNewFile()){
+                            BufferedWriter outTBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
                             System.out.println("File Throughput Batch Means has been created.");
-                            outBM.write("batch_iteration, distribution, operations, algorithm, treshold, " +
+                            outTBM.write("batch_iteration, distribution, operations, algorithm, treshold, " +
                                     "iterations, seed, n_server, System throughput, Sys class 1, Sys class 2, Cloudlet Throughput, " +
                                     "Clet class 1, Clet class 2, Cloud Throughput. Cloud class 1, Cloud class 2");
-                            outBM.flush();
+                            outTBM.flush();
                         }
                     }
                 }

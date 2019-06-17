@@ -111,15 +111,14 @@ public class PerformanceLogger implements Runnable {
         Printer.getInstance().print("\n\nCLOUDLET P_LOSS", "yellow");
         System.out.println(js.calculatePLoss());
         if(SystemConfiguration.VERBOSE && !SystemConfiguration.MULTI_RUN) {
-            printThroughputResults(js);
-            printCompletedJobs(js);
-            printResponseTime(ts);
             if(SystemConfiguration.BATCH) {
                 printMeanBatchPopulation(bm);
                 printThroughputBatch(bm);
                 printResponseTimeBatch(bm);
             }else{
                 printMeanPopulation(js);
+                printThroughputResults(js);
+                printResponseTime(ts);
             }
         }
         PerformanceLogger.getInstance().endTest(js.getGlobalTime());

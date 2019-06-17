@@ -269,10 +269,7 @@ public class JobStatistics{
      * Computes Cloudlet Ploss
      */
     public double calculatePLoss(){
-        double allPackets = completedCloudlet_1 +
-                completedCloudlet_2 +
-                completedCloud_1 +
-                completedCloud_2;
+        double allPackets = getGlobalCompleted(0);
         double packetLoss = completedCloud_1 + completedCloud_2;
         return packetLoss/allPackets;
     }

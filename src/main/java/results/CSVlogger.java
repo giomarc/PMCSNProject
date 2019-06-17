@@ -32,7 +32,8 @@ public class CSVlogger {
     private String fileSystemSimulation;
     private String fileResponseTimeMeansInOneSimulation;
     private String fileBatchMeansPopulation;
-
+    private String fileCIThroughput;
+    private String fileCIResponseTime;
 
     private CSVlogger(){}
 
@@ -51,10 +52,12 @@ public class CSVlogger {
             this.fileMeansInOneSimulation = "MeansInOneSimulation.csv";
             this.fileServerStatus = "ServerStatus.csv";
             this.fileBatchMeans = "BatchMeans.csv";
-            this.fileThroughputBatch = "ThoughputBatch.csv";
+            this.fileThroughputBatch = "ThroughputBatch.csv";
             this.fileSystemSimulation = "SystemSimulation.csv";
             this.fileResponseTimeMeansInOneSimulation = "ResponseTimeMeansInOneSimulation.csv";
             this.fileBatchMeansPopulation =  "BatchMeansPopulationCI.csv";
+            this.fileCIThroughput = "ConfidenceIntervalThroughput.csv";
+            this.fileCIResponseTime = "ConfidenceIntervalResponseTime.csv";
 
 
             try {
@@ -75,6 +78,8 @@ public class CSVlogger {
                 File fileTBM = new File("./RESULT_OUTPUT/" + fileThroughputBatch);
                 File fileSS = new File("./RESULT_OUTPUT/" + fileSystemSimulation);
                 File fileBMP = new File("./RESULT_OUTPUT/" + fileBatchMeansPopulation);
+                File fileCIT = new File("./RESULT_OUTPUT/" + fileCIThroughput);
+                File fileCITime = new File("./RESULT_OUTPUT/" + fileCIResponseTime);
 
 
                 if (fileRT.createNewFile()) {
@@ -170,6 +175,26 @@ public class CSVlogger {
                                     "Clet class 1, Clet class 2, Cloud Throughput. Cloud class 1, Cloud class 2");
                             outTBM.flush();
                         }
+
+                        if(fileCIT.createNewFile()){
+                            BufferedWriter outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
+                            System.out.println("File Confidence Interval Throughput has been created.");
+                            outCIT.write("distribution, operations, algorithm, treshold, " +
+                                    "iterations, seed, n_server, System throughput, sys_width, Sys class 1, sys1_width, Sys class 2, sys2_width, Cloudlet Throughput, " +
+                                    "clet_widt, Clet class 1, clet1_width, Clet class 2, clet2_width, Cloud Throughput, cloud_width Cloud class 1, cloud1_width, Cloud class 2, cloud2_width");
+                            outCIT.flush();
+                        }
+
+                        if(fileCITime.createNewFile()){
+                            BufferedWriter outCITime = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIResponseTime, true));
+                            System.out.println("File Confidence Interval Response Time has been created.");
+                            outCITime.write("distribution, operations, algorithm, treshold, " +
+                                    "iterations, seed, n_server, System response time, sys_width, Sys class 1, sys1_width, Sys class 2, sys2_width, Cloudlet Response time, " +
+                                    "clet_widt, Clet class 1, clet1_width, Clet class 2, clet2_width, Cloud Response time, cloud_width Cloud class 1, cloud1_width, Cloud class 2, cloud2_width");
+                            outCITime.flush();
+                        }
+
+
                     }
                 }
             } catch (IOException e) {
@@ -198,6 +223,8 @@ public class CSVlogger {
                     writeBatchMeansjobs(bm);
                     writeCIBatchMeansPopulation(bm);
                     writeBatchMeansThroughput(bm);
+                    writeCIThroughput(bm);
+                    writeCITime(bm);
                 }
             }
         }
@@ -244,6 +271,98 @@ public class CSVlogger {
                         ","+ cloudThroughput.get(i) +  ","+ cloudThroughput1.get(i) +  ","+ cloudThroughput2.get(i) );
             }
             outAVG.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    /**
+     * write the file related to confidence interval throughput
+     * @param bm
+     */
+    private void writeCIThroughput(BatchMeans bm) {
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
+        double[] sysT = bm.getBMThroughput("sys",0);
+        double[] sysT1 = bm.getBMThroughput("sys",1);
+        double[] sysT2 = bm.getBMThroughput("sys",2);
+        double[] cletT = bm.getBMThroughput("clet",0);
+        double[] cletT1 = bm.getBMThroughput("clet",1);
+        double[] cletT2 = bm.getBMThroughput("clet",2);
+        double[] cloudT = bm.getBMThroughput("cloud",0);
+        double[] cloudT1 = bm.getBMThroughput("cloud",1);
+        double[] cloudT2 = bm.getBMThroughput("cloud",2);
+
+
+        BufferedWriter outCIT;
+        try {
+            outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
+            outCIT.write("\n" + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
+                        threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
+                        sysT[0] +  "," + sysT[1] + "," + sysT1[0] + "," + sysT1[1] + "," + sysT2[0] + "," + sysT2[1] +
+                        "," + cletT[0] + "," + cletT[1] + "," + cletT1[0] + "," + cletT1[1] + "," + cletT2[0] + "," + cletT2[1] +
+                        "," + cloudT[0] + "," + cloudT[1] + "," + cloudT1[0] + "," + cloudT1[1] + "," + cloudT2[0] + "," + cloudT2[1]);
+
+            outCIT.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    /**
+     * write the file related to confidence interval throughput
+     * @param bm
+     */
+    private void writeCITime(BatchMeans bm) {
+        long seed = SystemConfiguration.SEED;
+        long iterations = SystemConfiguration.ITERATIONS;
+        int algorithm = SystemConfiguration.ALGORITHM;
+        int threshold = -1;
+        if(algorithm == 4)
+            threshold = SystemConfiguration.THRESHOLD;
+        String distribution;
+        if (SystemConfiguration.HYPEREXPO_ENABLED)
+            distribution = "hyperexponential";
+        else
+            distribution = "exponential";
+        boolean operations = SystemConfiguration.OPERATIONS_ENABLED;
+        int numberOfServers = SystemConfiguration.N;
+        double[] sysT = bm.getBMTime("sys",0);
+        double[] sysT1 = bm.getBMTime("sys",1);
+        double[] sysT2 = bm.getBMTime("sys",2);
+        double[] cletT = bm.getBMTime("clet",0);
+        double[] cletT1 = bm.getBMTime("clet",1);
+        double[] cletT2 = bm.getBMTime("clet",2);
+        double[] cloudT = bm.getBMTime("cloud",0);
+        double[] cloudT1 = bm.getBMTime("cloud",1);
+        double[] cloudT2 = bm.getBMTime("cloud",2);
+
+
+        BufferedWriter outCIT;
+        try {
+            outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
+            outCIT.write("\n" + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
+                    threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
+                    sysT[0] +  "," + sysT[1] + "," + sysT1[0] + "," + sysT1[1] + "," + sysT2[0] + "," + sysT2[1] +
+                    "," + cletT[0] + "," + cletT[1] + "," + cletT1[0] + "," + cletT1[1] + "," + cletT2[0] + "," + cletT2[1] +
+                    "," + cloudT[0] + "," + cloudT[1] + "," + cloudT1[0] + "," + cloudT1[1] + "," + cloudT2[0] + "," + cloudT2[1]);
+
+            outCIT.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

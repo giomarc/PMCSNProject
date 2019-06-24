@@ -116,6 +116,58 @@ public class CSVlogger {
                             " Real_time, Simulation_time, RAM_Usage");
                     outSS.flush();
                 }
+
+                if(SystemConfiguration.BATCH) {
+                    if (fileBM.createNewFile()) {
+                        BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
+                        System.out.println("File Batch Means Mean Population has been created.");
+                        outBM.write("batch_iteration, distribution, operations, algorithm, threshold, " +
+                                "iterations, seed, n_server, " +
+                                " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs,"
+                                + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs, "
+                                + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs,");
+                        outBM.flush();
+                    }
+                    if (fileBMP.createNewFile()) {
+                        BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeansPopulation, true));
+                        System.out.println("File Batch Means Mean Population has been created.");
+                        outBM.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, " +
+                                " Global_sys_avg_jobs, g_width, Cloud_avg_jobs, cd_width, Cloudlet_avg_jobs, cl_width, "
+                                + "Global_class1_avg_jobs, g1_width, Cloud_class1_avg_jobs, cd1_width, Cloudlet_class1_avg_jobs, cl1_width,"
+                                + "Global_class2_avg_jobs, g2_width, Cloud_class2_avg_jobs, cd2_width, Cloudlet_class2_avg_jobs cl2_width");
+                        outBM.flush();
+                    }
+                    if(fileTBM.createNewFile()){
+                        BufferedWriter outTBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
+                        System.out.println("File Throughput Batch Means has been created.");
+                        outTBM.write("batch_iteration, distribution, operations, algorithm, treshold, " +
+                                "iterations, seed, n_server, System throughput, Sys class 1, Sys class 2, Cloudlet Throughput, " +
+                                "Clet class 1, Clet class 2, Cloud Throughput. Cloud class 1, Cloud class 2");
+                        outTBM.flush();
+                    }
+                    if(fileCIT.createNewFile()){
+                        BufferedWriter outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
+                        System.out.println("File Confidence Interval Throughput has been created.");
+                        outCIT.write("distribution, operations, algorithm, treshold, " +
+                                "iterations, seed, n_server, global, CI_global, Class_1, CI_class1, Class_2, CI_class2, " +
+                                "cloudlet, " +
+                                "CI_cloudlet, cloudlet_class1, CI_cloudlet_class1, cloudlet_class2, CI_cloudlet_class2, " +
+                                "cloud, CI_cloud, cloud_class1, CI_cloud_class1, cloud_class2, CI_cloud_class2");
+                        outCIT.flush();
+                    }
+                    if(fileCITime.createNewFile()){
+                        BufferedWriter outCITime = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIResponseTime, true));
+                        System.out.println("File Confidence Interval Response Time has been created.");
+                        outCITime.write("distribution, operations, algorithm, treshold, " +
+                                "iterations, seed, n_server, global, CI_global, Class_1, CI_class1, Class_2, CI_class2, " +
+                                "cloudlet, " +
+                                "CI_cloudlet, cloudlet_class1, CI_cloudlet_class1, cloudlet_class2, CI_cloudlet_class2, " +
+                                "cloud, CI_cloud, cloud_class1, CI_cloud_class1, cloud_class2, CI_cloud_class2");
+                        outCITime.flush();
+                    }
+                }
+
+
                 if(!SystemConfiguration.MULTI_RUN) {
                     fileMS.delete();
                     if (fileMS.createNewFile()) {
@@ -143,59 +195,51 @@ public class CSVlogger {
                     }
                     fileBM.delete();
                     fileTBM.delete();
-                    if(SystemConfiguration.BATCH) {
-                        if (fileBM.createNewFile()) {
-                            BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
-                            System.out.println("File Batch Means Mean Population has been created.");
-                            outBM.write("batch_iteration, distribution, operations, algorithm, threshold, " +
-                                    "iterations, seed, n_server, " +
-                                    " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs,"
-                                    + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs, "
-                                    + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs,");
-                            outBM.flush();
-                        }
-
-
-                        if (fileBMP.createNewFile()) {
-                            BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeansPopulation, true));
-                            System.out.println("File Batch Means Mean Population has been created.");
-                            outBM.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, " +
-                                    " Global_sys_avg_jobs, g_width, Cloud_avg_jobs, cd_width, Cloudlet_avg_jobs, cl_width, "
-                                            + "Global_class1_avg_jobs, g1_width, Cloud_class1_avg_jobs, cd1_width, Cloudlet_class1_avg_jobs, cl1_width,"
-                                            + "Global_class2_avg_jobs, g2_width, Cloud_class2_avg_jobs, cd2_width, Cloudlet_class2_avg_jobs cl2_width");
-                            outBM.flush();
-                        }
-
-
-                        if(fileTBM.createNewFile()){
-                            BufferedWriter outTBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
-                            System.out.println("File Throughput Batch Means has been created.");
-                            outTBM.write("batch_iteration, distribution, operations, algorithm, treshold, " +
-                                    "iterations, seed, n_server, System throughput, Sys class 1, Sys class 2, Cloudlet Throughput, " +
-                                    "Clet class 1, Clet class 2, Cloud Throughput. Cloud class 1, Cloud class 2");
-                            outTBM.flush();
-                        }
-
-                        if(fileCIT.createNewFile()){
-                            BufferedWriter outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
-                            System.out.println("File Confidence Interval Throughput has been created.");
-                            outCIT.write("distribution, operations, algorithm, treshold, " +
-                                    "iterations, seed, n_server, System throughput, sys_width, Sys class 1, sys1_width, Sys class 2, sys2_width, Cloudlet Throughput, " +
-                                    "clet_widt, Clet class 1, clet1_width, Clet class 2, clet2_width, Cloud Throughput, cloud_width Cloud class 1, cloud1_width, Cloud class 2, cloud2_width");
-                            outCIT.flush();
-                        }
-
-                        if(fileCITime.createNewFile()){
-                            BufferedWriter outCITime = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIResponseTime, true));
-                            System.out.println("File Confidence Interval Response Time has been created.");
-                            outCITime.write("distribution, operations, algorithm, treshold, " +
-                                    "iterations, seed, n_server, System response time, sys_width, Sys class 1, sys1_width, Sys class 2, sys2_width, Cloudlet Response time, " +
-                                    "clet_widt, Clet class 1, clet1_width, Clet class 2, clet2_width, Cloud Response time, cloud_width Cloud class 1, cloud1_width, Cloud class 2, cloud2_width");
-                            outCITime.flush();
-                        }
-
-
-                    }
+//                    if(SystemConfiguration.BATCH) {
+//                        if (fileBM.createNewFile()) {
+//                            BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeans, true));
+//                            System.out.println("File Batch Means Mean Population has been created.");
+//                            outBM.write("batch_iteration, distribution, operations, algorithm, threshold, " +
+//                                    "iterations, seed, n_server, " +
+//                                    " Global_sys_avg_jobs, Cloud_avg_jobs, Cloudlet_avg_jobs,"
+//                                    + "Global_class1_avg_jobs, Cloud_class1_avg_jobs, Cloudlet_class1_avg_jobs, "
+//                                    + "Global_class2_avg_jobs, Cloud_class2_avg_jobs, Cloudlet_class2_avg_jobs,");
+//                            outBM.flush();
+//                        }
+//                        if (fileBMP.createNewFile()) {
+//                            BufferedWriter outBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileBatchMeansPopulation, true));
+//                            System.out.println("File Batch Means Mean Population has been created.");
+//                            outBM.write("distribution, operations, algorithm, threshold, iterations, seed, n_server, " +
+//                                    " Global_sys_avg_jobs, g_width, Cloud_avg_jobs, cd_width, Cloudlet_avg_jobs, cl_width, "
+//                                            + "Global_class1_avg_jobs, g1_width, Cloud_class1_avg_jobs, cd1_width, Cloudlet_class1_avg_jobs, cl1_width,"
+//                                            + "Global_class2_avg_jobs, g2_width, Cloud_class2_avg_jobs, cd2_width, Cloudlet_class2_avg_jobs cl2_width");
+//                            outBM.flush();
+//                        }
+//                        if(fileTBM.createNewFile()){
+//                            BufferedWriter outTBM = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileThroughputBatch, true));
+//                            System.out.println("File Throughput Batch Means has been created.");
+//                            outTBM.write("batch_iteration, distribution, operations, algorithm, treshold, " +
+//                                    "iterations, seed, n_server, System throughput, Sys class 1, Sys class 2, Cloudlet Throughput, " +
+//                                    "Clet class 1, Clet class 2, Cloud Throughput. Cloud class 1, Cloud class 2");
+//                            outTBM.flush();
+//                        }
+//                        if(fileCIT.createNewFile()){
+//                            BufferedWriter outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
+//                            System.out.println("File Confidence Interval Throughput has been created.");
+//                            outCIT.write("distribution, operations, algorithm, treshold, " +
+//                                    "iterations, seed, n_server, System throughput, sys_width, Sys class 1, sys1_width, Sys class 2, sys2_width, Cloudlet Throughput, " +
+//                                    "clet_widt, Clet class 1, clet1_width, Clet class 2, clet2_width, Cloud Throughput, cloud_width Cloud class 1, cloud1_width, Cloud class 2, cloud2_width");
+//                            outCIT.flush();
+//                        }
+//                        if(fileCITime.createNewFile()){
+//                            BufferedWriter outCITime = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIResponseTime, true));
+//                            System.out.println("File Confidence Interval Response Time has been created.");
+//                            outCITime.write("distribution, operations, algorithm, treshold, " +
+//                                    "iterations, seed, n_server, System response time, sys_width, Sys class 1, sys1_width, Sys class 2, sys2_width, Cloudlet Response time, " +
+//                                    "clet_widt, Clet class 1, clet1_width, Clet class 2, clet2_width, Cloud Response time, cloud_width Cloud class 1, cloud1_width, Cloud class 2, cloud2_width");
+//                            outCITime.flush();
+//                        }
+//                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -217,14 +261,21 @@ public class CSVlogger {
             writeAVGjobsPopulation(js);
             writeThroughput(js);
             writeSystemSimulation();
+
+            if(SystemConfiguration.BATCH) {
+                writeCIBatchMeansPopulation(bm);
+                writeCIThroughput(bm);
+                writeCITime(bm);
+            }
+
             if(!SystemConfiguration.MULTI_RUN) {
                 writeServerStatistics(globaltime);
                 if(SystemConfiguration.BATCH) {
                     writeBatchMeansjobs(bm);
-                    writeCIBatchMeansPopulation(bm);
+//                    writeCIBatchMeansPopulation(bm);
                     writeBatchMeansThroughput(bm);
-                    writeCIThroughput(bm);
-                    writeCITime(bm);
+//                    writeCIThroughput(bm);
+//                    writeCITime(bm);
                 }
             }
         }
@@ -310,7 +361,7 @@ public class CSVlogger {
         BufferedWriter outCIT;
         try {
             outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
-            outCIT.write("\n" + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
+            outCIT.write("\n" + distribution + ", " + operations + ", " + algorithm + ", " +
                         threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                         sysT[0] +  "," + sysT[1] + "," + sysT1[0] + "," + sysT1[1] + "," + sysT2[0] + "," + sysT2[1] +
                         "," + cletT[0] + "," + cletT[1] + "," + cletT1[0] + "," + cletT1[1] + "," + cletT2[0] + "," + cletT2[1] +
@@ -355,8 +406,8 @@ public class CSVlogger {
 
         BufferedWriter outCIT;
         try {
-            outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIThroughput, true));
-            outCIT.write("\n" + ", " + distribution + ", " + operations + ", " + algorithm + ", " +
+            outCIT = new BufferedWriter(new FileWriter("./RESULT_OUTPUT/" + fileCIResponseTime, true));
+            outCIT.write("\n" +  distribution + ", " + operations + ", " + algorithm + ", " +
                     threshold + ", " + iterations + "," + seed + "," + numberOfServers + ',' +
                     sysT[0] +  "," + sysT[1] + "," + sysT1[0] + "," + sysT1[1] + "," + sysT2[0] + "," + sysT2[1] +
                     "," + cletT[0] + "," + cletT[1] + "," + cletT1[0] + "," + cletT1[1] + "," + cletT2[0] + "," + cletT2[1] +

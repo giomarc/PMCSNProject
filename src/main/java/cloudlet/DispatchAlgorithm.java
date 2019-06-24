@@ -67,7 +67,6 @@ public class DispatchAlgorithm {
         int totalJobsInCloudlet = numberOfJobsInCloudlet[0] + numberOfJobsInCloudlet[1];
 
         if((totalJobsInCloudlet >= numberOfServers) || (totalJobsInCloudlet > soglia && jobClass == 2)){
-            if(totalJobsInCloudlet > soglia && jobClass == 2)
             Cloud.getInstance().processArrival(e);
         }else{
             Cloudlet.getInstance().processArrival(e);

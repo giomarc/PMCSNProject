@@ -79,8 +79,8 @@ public class JobStatistics{
         updateClass2(cloudletPopulation[1],cloudPopulation[1]);
 
         CSVlogger.getInstance().writePopulationMeanInOneSimulation(this);
-        if(SystemConfiguration.BATCH &&
-                ((actualIteration >= batchSize))){ // devo considerare sia gli arrivi che i completamenti
+        if(SystemConfiguration.BATCH && ((actualIteration >= batchSize))){
+
             computeBatch();
             setBatchSize();
             actualBatch++;
@@ -392,6 +392,9 @@ public class JobStatistics{
      * RESET statistics
      */
     public void resetStatistics(){
+        batchMeans = BatchMeans.getInstance();
+        batchSize = batchMeans.getBatchSize();
+
         this.globalTime                 = 0;
         this.actualTime                 = 0;
         this.globalIteration            = 0;

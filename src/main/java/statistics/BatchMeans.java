@@ -63,7 +63,6 @@ public class BatchMeans {
         return instance;
     }
 
-
     /*
      * computes batch size
      */
@@ -78,15 +77,12 @@ public class BatchMeans {
      */
     public double[] getBMMean(ArrayList<Double> values) {
 
-            if(values.size()!=num_batch){
-                System.out.println("cicli: " + values.size() +  ", num_batch: " + num_batch);
-                System.exit(-1);
-            }
-            return confidenceInterval.computeConfidenceInterval(values);
+        if(values.size()!=num_batch){
+            System.out.println("cicli: " + values.size() +  ", num_batch: " + num_batch + "  ");
+            System.exit(-1);
+        }
+        return confidenceInterval.computeConfidenceInterval(values);
     }
-
-
-
 
     /*
      * Return array containing batch sample means of population
@@ -174,7 +170,6 @@ public class BatchMeans {
      * @param s sys = system, clet = cloudlet, cloud = cloud
      * @param index 0: both class 1 and 2, 1: class 1, 2: class 2
      */
-
     public void updateThroughputBMArray(double value, String s, int index){
         switch(s){
             case "sys":
@@ -286,7 +281,6 @@ public class BatchMeans {
         }
     }
 
-
     /**
      * Compute confidence interval for Response time
      */
@@ -314,8 +308,6 @@ public class BatchMeans {
         }
         return res;
     }
-
-
 
     /**
      * SETTER
@@ -366,37 +358,34 @@ public class BatchMeans {
 
     private void init(){
 
-        BMGlobalPopulation = new ArrayList<>();
-        BMCloudletPopulation = new ArrayList<>();
-        BMCloudPopulation = new ArrayList<>();
-        BMGlobalPopulation_1 = new ArrayList<>();
-        BMCloudletPopulation_1 = new ArrayList<>();
-        BMCloudPopulation_1 = new ArrayList<>();
-        BMGlobalPopulation_2 = new ArrayList<>();
-        BMCloudletPopulation_2 = new ArrayList<>();
-        BMCloudPopulation_2 = new ArrayList<>();
+        this.BMGlobalPopulation = new ArrayList<>();
+        this.BMCloudletPopulation = new ArrayList<>();
+        this.BMCloudPopulation = new ArrayList<>();
+        this.BMGlobalPopulation_1 = new ArrayList<>();
+        this.BMCloudletPopulation_1 = new ArrayList<>();
+        this.BMCloudPopulation_1 = new ArrayList<>();
+        this.BMGlobalPopulation_2 = new ArrayList<>();
+        this.BMCloudletPopulation_2 = new ArrayList<>();
+        this.BMCloudPopulation_2 = new ArrayList<>();
 
-        BMSysThroughput = new ArrayList<>();
-        BMSysThroughput1 = new ArrayList<>();
-        BMSysThroughput2= new ArrayList<>();
-        BMCletThroughput = new ArrayList<>();
-        BMCletThroughput1 = new ArrayList<>();
-        BMCletThroughput2 = new ArrayList<>();
-        BMCloudThroughput = new ArrayList<>();
-        BMCloudThroughput1 = new ArrayList<>();
-        BMCloudThroughput2 = new ArrayList<>();
+        this.BMSysThroughput = new ArrayList<>();
+        this.BMSysThroughput1 = new ArrayList<>();
+        this.BMSysThroughput2= new ArrayList<>();
+        this.BMCletThroughput = new ArrayList<>();
+        this.BMCletThroughput1 = new ArrayList<>();
+        this.BMCletThroughput2 = new ArrayList<>();
+        this.BMCloudThroughput = new ArrayList<>();
+        this.BMCloudThroughput1 = new ArrayList<>();
+        this.BMCloudThroughput2 = new ArrayList<>();
 
-        BMSysTime = new ArrayList<>();
-        BMSysTime1 = new ArrayList<>();
-        BMSysTime2 = new ArrayList<>();
-        BMCletTime = new ArrayList<>();
-        BMCletTime1 = new ArrayList<>();
-        BMCletTime2 = new ArrayList<>();
-        BMCloudTime = new ArrayList<>();
-        BMCloudTime1 = new ArrayList<>();
-        BMCloudTime2 = new ArrayList<>();
-
-
-
+        this.BMSysTime = new ArrayList<>();
+        this.BMSysTime1 = new ArrayList<>();
+        this.BMSysTime2 = new ArrayList<>();
+        this.BMCletTime = new ArrayList<>();
+        this.BMCletTime1 = new ArrayList<>();
+        this.BMCletTime2 = new ArrayList<>();
+        this.BMCloudTime = new ArrayList<>();
+        this.BMCloudTime1 = new ArrayList<>();
+        this.BMCloudTime2 = new ArrayList<>();
     }
 }

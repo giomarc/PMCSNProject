@@ -56,7 +56,7 @@ public class ConfidenceInterval {
             variance += (diff * diff * (n - 1) / n);
             sampleMean += (diff / n);
         }
-        stddev = Math.sqrt(variance);
+        stddev = Math.sqrt(variance/n);
 
         if(n>1){
             double u = 1.0 - 0.5*(1.0 - confidence);

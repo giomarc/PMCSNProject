@@ -65,7 +65,8 @@ public class Cloudlet {
             System.exit(-1);
         s.setBusy(false);
         decreaseN(s.getJobInService().getJobClass());
-        CompletionHandler.getInstance().handleCompletion(EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
+        CompletionHandler.getInstance().handleCompletion(
+                EventGenerator.getInstance().generateCompletion(1, s.getJobInService()));
     }
 
     /**

@@ -68,17 +68,13 @@ public class Simulation {
         initialize();
         PerformanceLogger.getInstance().printInitialConfiguration();
         for(int i = 0; i < SystemConfiguration.ITERATIONS; i++){
-
-            //print the percentage to the console
             PerformanceLogger.getInstance().updateProgress(i, SystemConfiguration.ITERATIONS);
-
             Event e = EventGenerator.getInstance().generateArrival();
             eventList.add(e);
             sortEventList();
             handleEvent();
         }
         jobStatistics.setGlobalTime(jobStatistics.getGlobalTime() + handleEvent());
-
         PerformanceLogger.getInstance().printFinalResults(jobStatistics,timeStatistics, batchMeans);
     }
 
@@ -119,14 +115,11 @@ public class Simulation {
         int[] numberOfJobsInCloudlet = {0,0};
         int[] numberOfJobsInCloud = {0,0};
         while(i.hasNext()){
-
             //retrieve the system state
             numberOfJobsInCloudlet =  Cloudlet.getInstance().getJobsInCloudlet();
             numberOfJobsInCloud =     Cloud.getInstance().returnJobsInCloud();
-
             Event e = (Event) i.next();
             time = e.getEventTime();
-
             if(e.getType() == 0){               // arrival
                 break;
             }

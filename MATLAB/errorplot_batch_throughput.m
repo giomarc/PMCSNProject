@@ -1,21 +1,31 @@
 function errorplot_batch_throughput()
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\Throughput.csv');
+M = readmatrix('..\RESULT_OUTPUT_062019\Throughput.csv');
 
-m50   = M(((M(:, 5) == 50)),   10);
-m100  = M(((M(:, 5) == 100)),  10);
-m150  = M(((M(:, 5) == 150)),  10);
-m200  = M(((M(:, 5) == 200)),  10);
-m250  = M(((M(:, 5) == 250)),  10);
-m300  = M(((M(:, 5) == 300)),  10);
-m350  = M(((M(:, 5) == 350)),  10);
-m400  = M(((M(:, 5) == 400)),  10);
-m600  = M(((M(:, 5) == 600)),  10);
-m1000 = M(((M(:, 5) == 1000)), 10);
-m1500 = M(((M(:, 5) == 1500)), 10);
-m2000 = M(((M(:, 5) == 2000)), 10);
-m3000 = M(((M(:, 5) == 3000)), 10);
-m5000 = M(((M(:, 5) == 5000)), 10);
+%linea_y = 12.25;  column = 8; text  = 'Finite Horizon Throughput - Global';
+%linea_y = 6; column = 11; text = 'Finite Horizon Throughput - Class 1';
+%linea_y = 6.25; column = 14; text = 'Finite Horizon Throughput - Class 2';
+linea_y = 0.97906; column = 10; text = 'Finite Horizon Throughput - Cloudlet';
+%linea_y = 0.47954; column = 13; text = 'Finite Horizon Throughput - Cloudlet Class 1';
+%linea_y = 0.49952; column = 16; text = 'Finite Horizon Throughput - Cloudlet Class 2';
+%linea_y = 11.27094; column = 9; text  = 'Finite Horizon Throughput - Cloud';
+%linea_y = 5.51796; column = 12; text = 'Finite Horizon Throughput - Cloud Class 1';
+%linea_y = 5.75348; column = 15; text = 'Finite Horizon Throughput - Cloud Class 2';
+
+m50   = M(((M(:, 5) == 50)),   column);
+m100  = M(((M(:, 5) == 100)),  column);
+m150  = M(((M(:, 5) == 150)),  column);
+m200  = M(((M(:, 5) == 200)),  column);
+m250  = M(((M(:, 5) == 250)),  column);
+m300  = M(((M(:, 5) == 300)),  column);
+m350  = M(((M(:, 5) == 350)),  column);
+m400  = M(((M(:, 5) == 400)),  column);
+m600  = M(((M(:, 5) == 600)),  column);
+m1000 = M(((M(:, 5) == 1000)), column);
+m1500 = M(((M(:, 5) == 1500)), column);
+m2000 = M(((M(:, 5) == 2000)), column);
+m3000 = M(((M(:, 5) == 3000)), column);
+m5000 = M(((M(:, 5) == 5000)), column);
 
 
 y50 = mean(m50);
@@ -55,11 +65,11 @@ x=[50 100 150 200 250 300 350 400 600 1000 1500 2000 3000 5000];
 figure;
 errorbar(x,y,e, 'k.');
 %yline(12.25);
-yline(0.979054);
+yline(linea_y);
 %yline(11.270946);
 xlim([0 5100])
 legend('replications', 'analytical')
-title('Finite Horizon Throughput');
+title(text);
 xlabel('iteration');
 ylabel('Throughput (j/s)');
 

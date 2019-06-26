@@ -48,6 +48,11 @@ public class JobStatistics{
     private long completedCloud_1;
     private long completedCloud_2;
 
+    private long completedCloudlet_1_ploss;
+    private long completedCloudlet_2_ploss;
+    private long completedCloud_1_ploss;
+    private long completedCloud_2_ploss;
+
 
 
     private JobStatistics(){
@@ -270,7 +275,7 @@ public class JobStatistics{
      */
     public double calculatePLoss(){
         double allPackets = getGlobalCompleted(0);
-        double packetLoss = completedCloud_1 + completedCloud_2;
+        double packetLoss = completedCloud_1_ploss + completedCloud_2_ploss;
         return packetLoss/allPackets;
     }
 
@@ -320,18 +325,18 @@ public class JobStatistics{
 
     public void updateCompletedCloudlet(int jobclass){
         switch(jobclass){
-            case 1: completedCloudlet_1++;
+            case 1: completedCloudlet_1++; completedCloudlet_1_ploss ++;
                 break;
-            case 2: completedCloudlet_2++;
+            case 2: completedCloudlet_2++; completedCloudlet_2_ploss ++;
                 break;
         }
     }
 
     public void updateCompletedCloud(int jobclass){
         switch(jobclass){
-            case 1: completedCloud_1++;
+            case 1: completedCloud_1++; completedCloud_1_ploss ++;
                 break;
-            case 2: completedCloud_2++;
+            case 2: completedCloud_2++; completedCloud_2_ploss ++;
                 break;
         }
     }
@@ -339,7 +344,7 @@ public class JobStatistics{
 
     public long getGlobalCompleted(int jobclass){
         if(jobclass == 0)
-            return  completedCloudlet_1 + completedCloudlet_2 + completedCloud_1 + completedCloud_2;
+            return  completedCloudlet_1_ploss + completedCloudlet_2_ploss + completedCloud_1_ploss + completedCloud_2_ploss;
         else if(jobclass == 1)
             return completedCloudlet_1 + completedCloud_1;
         else

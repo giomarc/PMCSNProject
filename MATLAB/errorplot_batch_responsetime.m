@@ -1,21 +1,31 @@
 function errorplot_batch_responsetime()
 digits(15);
-M = readmatrix('..\RESULT_OUTPUT\ResponseTime.csv');
+M = readmatrix('..\RESULT_OUTPUT_062019\ResponseTime.csv');
 
-m50   = M(((M(:, 5) == 50)),   10);
-m100  = M(((M(:, 5) == 100)),  10);
-m150  = M(((M(:, 5) == 150)),  10);
-m200  = M(((M(:, 5) == 200)),  10);
-m250  = M(((M(:, 5) == 250)),  10);
-m300  = M(((M(:, 5) == 300)),  10);
-m350  = M(((M(:, 5) == 350)),  10);
-m400  = M(((M(:, 5) == 400)),  10);
-m600  = M(((M(:, 5) == 600)),  10);
-m1000 = M(((M(:, 5) == 1000)), 10);
-m1500 = M(((M(:, 5) == 1500)), 10);
-m2000 = M(((M(:, 5) == 2000)), 10);
-m3000 = M(((M(:, 5) == 3000)), 10);
-m5000 = M(((M(:, 5) == 5000)), 10);
+%linea_y = 4.17437;  column = 8; text  = 'Finite Horizon Response Time - Global';
+%linea_y = 3.85791; column = 11; text = 'Finite Horizon Response Time - Class 1';
+%linea_y = 4.47818; column = 14; text = 'Finite Horizon Response Time - Class 2';
+%linea_y = 2.97808; column = 10; text = 'Finite Horizon Response Time - Cloudlet';
+%linea_y = 2.22222; column = 13; text = 'Finite Horizon Response Time - Cloudlet Class 1';
+%linea_y = 3.70370; column = 16; text = 'Finite Horizon Response Time - Cloudlet Class 2';
+%linea_y = 4.27929; column = 9; text  = 'Finite Horizon Response Time - Cloud';
+%linea_y = 4.00000; column = 12; text = 'Finite Horizon Response Time - Cloud Class 1';
+linea_y = 4.54545; column = 15; text = 'Finite Horizon Response Time - Cloud Class 2';
+
+m50   = M(((M(:, 5) == 50)),   column);
+m100  = M(((M(:, 5) == 100)),  column);
+m150  = M(((M(:, 5) == 150)),  column);
+m200  = M(((M(:, 5) == 200)),  column);
+m250  = M(((M(:, 5) == 250)),  column);
+m300  = M(((M(:, 5) == 300)),  column);
+m350  = M(((M(:, 5) == 350)),  column);
+m400  = M(((M(:, 5) == 400)),  column);
+m600  = M(((M(:, 5) == 600)),  column);
+m1000 = M(((M(:, 5) == 1000)), column);
+m1500 = M(((M(:, 5) == 1500)), column);
+m2000 = M(((M(:, 5) == 2000)), column);
+m3000 = M(((M(:, 5) == 3000)), column);
+m5000 = M(((M(:, 5) == 5000)), column);
 
 
 y50 = mean(m50);
@@ -55,10 +65,10 @@ figure;
 errorbar(x,y,e, 'k.');
 %yline(4.174377);
 %yline(4.278293);
-yline(2.978080);
+yline(linea_y);
 xlim([0 3100])
 legend('replications', 'analytical')
-title('Finite Horizon Response Time');
+title(text);
 xlabel('iteration');
 ylabel('response time (s)');
 

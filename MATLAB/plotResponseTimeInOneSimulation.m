@@ -18,6 +18,8 @@ avgRMSClass2Cloud =     tmpRSMClass2((tmpRSMClass1(:, 1) == 2), 2);
 avgRMSCloudlet =        M((M(:, 3) == 1), 4);
 avgRMSCloud =           M((M(:, 3) == 2), 4);
 
+avgRMSClass1 = (avgRMSClass1-mean(avgRMSClass1))/(std(avgRMSClass1)*sqrt(length(avgRMSClass1)))
+
 figure;
 subplot(2,1,1)
 histogram(avgRMSClass1);
@@ -29,6 +31,7 @@ figure;
 subplot(2,1,1)
 histogram(avgRMSClass1Cloudlet);
 title('Response Time Class 1 on Cloudlet');
+xlabel('s');
 subplot(2,1,2)
 histogram(avgRMSClass1Cloud);
 title('Response Time Class 1 on Cloud');
@@ -43,9 +46,12 @@ figure;
 subplot(2,1,1)
 histogram(avgRMSCloudlet);
 title('Response Time on Cloudlet');
+xlabel('s');
 subplot(2,1,2)
 h = histogram(avgRMSCloud);
 title('Response Time on Cloud');
+xlabel('s');
+
 
 
 end
